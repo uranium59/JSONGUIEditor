@@ -51,6 +51,11 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Parser\Exception\JSONException.cs" />
+    <Compile Include="Parser\Exception\JSONNotArrayException.cs" />
+    <Compile Include="Parser\Exception\JSONNotBooleanException.cs" />
+    <Compile Include="Parser\Exception\JSONNotNumberException.cs" />
+    <Compile Include="Parser\Exception\JSONNotObjectException.cs" />
     <Compile Include="Parser\JSONNode.cs" />
     <Compile Include="Parser\Exception\JSONWrongTypeException.cs" />
     <Compile Include="Parser\IJSON.cs" />
