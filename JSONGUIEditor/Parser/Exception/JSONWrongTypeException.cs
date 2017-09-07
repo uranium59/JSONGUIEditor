@@ -8,17 +8,13 @@ namespace JSONGUIEditor.Parser.Exception
 {
     public class JSONWrongTypeException : JSONException
     {
-        public int Line { get; set; }
-        public int Position { get; set; }
-        public JSONWrongTypeException()
+        JSONParsePosition position;
+        public JSONWrongTypeException():base()
         {
-            Line = 0;
-            Position = 0;
         }
-        public JSONWrongTypeException(int line, int position)
+        public JSONWrongTypeException(JSONParsePosition p):base()
         {
-            Line = line;
-            Position = position;
+            
         }
     }
 }

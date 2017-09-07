@@ -56,12 +56,15 @@
     <Compile Include="Parser\Exception\JSONNotBooleanException.cs" />
     <Compile Include="Parser\Exception\JSONNotNumberException.cs" />
     <Compile Include="Parser\Exception\JSONNotObjectException.cs" />
+    <Compile Include="Parser\JSONComplexityTree.cs" />
     <Compile Include="Parser\JSONNode.cs" />
     <Compile Include="Parser\Exception\JSONWrongTypeException.cs" />
     <Compile Include="Parser\IJSON.cs" />
     <Compile Include="Parser\JSON.cs" />
     <Compile Include="Parser\JSONArray.cs" />
     <Compile Include="Parser\JSONParser.cs" />
+    <Compile Include="Parser\JSONParserDEFINE.cs" />
+    <Compile Include="Parser\JSONParseThread.cs" />
     <Compile Include="Parser\State\JSONType.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
