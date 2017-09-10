@@ -8,6 +8,9 @@ namespace JSONGUIEditor.Parser
 {
     interface IJSON
     {
+        JSONNode parent { get; set; }
+        int depth { get; set; }
+
         bool IsArray();
         bool IsNumber();
         bool IsString();
@@ -15,6 +18,6 @@ namespace JSONGUIEditor.Parser
         bool IsNull();
         bool IsObject();
 
-        
+        string Stringify();
     }
 }

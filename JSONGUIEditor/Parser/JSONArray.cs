@@ -11,10 +11,6 @@ namespace JSONGUIEditor.Parser
         public JSONArray()
         {
         }
-        public JSONArray(string str)
-        {
-            
-        }
 
         //isxxx 함수들을 정리한 파트
         #region 
