@@ -44,6 +44,14 @@ namespace JSONGUIEditor.Parser
         {
             return !(a == b);
         }
+        public override bool Equals(object obj)
+        {
+            return this == obj;
+        }
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
         public override string ToString()
         {
             return base.ToString();
@@ -51,6 +59,20 @@ namespace JSONGUIEditor.Parser
         public virtual string Stringify()
         {
             return "";
+        }
+        public virtual string value
+        {
+            get;
+            set;
+        }
+
+        public static implicit operator JSONNode(string s)
+        {
+            return new JSONString(s);
+        }
+        public static implicit operator string(JSONNode n)
+        {
+            return (n == null) ? null : n.value;
         }
         #endregion
 

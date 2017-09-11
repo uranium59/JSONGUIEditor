@@ -19,5 +19,7 @@ namespace JSONGUIEditor.Parser
         bool IsObject();
 
         string Stringify();
+
+        string value { get; set; }
     }
 }

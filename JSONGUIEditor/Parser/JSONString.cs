@@ -26,7 +26,8 @@ namespace JSONGUIEditor.Parser
         {
             return _data;
         }
-        
+        public override string value { get => _data; set => _data = value; }
+
         //문자열 생성용
         public override string Stringify()
         {
