@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace JSONGUIEditor
+namespace JSON_GUI_Editor
 {
     public partial class Form1 : Form
     {

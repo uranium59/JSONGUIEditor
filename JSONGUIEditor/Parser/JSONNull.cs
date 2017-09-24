@@ -10,7 +10,7 @@ namespace JSONGUIEditor.Parser
     {
         public JSONNull()
         {
-
+            this.type = State.JSONType.Null;
         }
 
         //데이터
@@ -25,7 +25,7 @@ namespace JSONGUIEditor.Parser
         //문자열 생성용
         public override string Stringify()
         {
-            return "Null";
+            return "null";
         }
     }
 }

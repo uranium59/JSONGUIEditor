@@ -11,10 +11,11 @@ namespace JSONGUIEditor.Parser.Exception
         JSONParsePosition position;
         public JSONWrongTypeException():base()
         {
+            _Message = "Cannot Convert Type into JSONNode";
         }
         public JSONWrongTypeException(JSONParsePosition p):base()
         {
-            
+            _Message = string.Format("Cannot Convert Type into JSONNode at {0} line, {1} position", p.line, p.position);
         }
     }
 }

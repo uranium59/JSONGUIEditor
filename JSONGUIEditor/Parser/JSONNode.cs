@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace JSONGUIEditor.Parser
 {
     using JSONGUIEditor.Parser.State;
+    using JSONGUIEditor.Parser.Exception;
     public class JSONNode : IJSON
     {
         public JSONNode()
@@ -16,8 +17,9 @@ namespace JSONGUIEditor.Parser
         //내부 변수 선언
         #region
         public JSONNode parent { get; set; }
-        public int depth { get; set; }
         public JSONType type { get; protected set; }
+        public int depth { get; set; }
+        public virtual int Count { get => 0; }
         #endregion
 
         //isxxx 함수들을 정리한 파트
@@ -65,17 +67,111 @@ namespace JSONGUIEditor.Parser
             get;
             set;
         }
+        public virtual JSONNode this[string s]
+        {
+            get { return null;}
+            set { }
+        }
+        public virtual JSONNode this[int i]
+        {
+            get { return null; }
+            set { }
+        }
+        public virtual void Add(string key, JSONNode value)
+        {
 
+        }
+        public virtual void Add(JSONNode value)
+        {
+
+        }
+        public virtual JSONNode remove(string key)
+        {
+            return null;
+        }
+        public virtual JSONNode remove(int index)
+        {
+            return null;
+        }
+
+        //implicit functions
+        #region
         public static implicit operator JSONNode(string s)
         {
             return new JSONString(s);
         }
         public static implicit operator string(JSONNode n)
         {
-            return (n == null) ? null : n.value;
+            return n?.value;
+        }
+        public static implicit operator JSONNode(int i)
+        {
+            return new JSONNumber(i);
+        }
+        public static implicit operator int(JSONNode n)
+        {
+            return (n == null) ? 0 : n.asInt;
+        }
+        public static implicit operator JSONNode(double i)
+        {
+            return new JSONNumber(i);
+        }
+        public static implicit operator double(JSONNode n)
+        {
+            return (n == null) ? 0 : n.asDouble;
+        }
+        public static implicit operator JSONNode(float i)
+        {
+            return new JSONNumber(i);
+        }
+        public static implicit operator float(JSONNode n)
+        {
+            return (n == null) ? 0f : n.asFloat;
+        }
+        public static implicit operator JSONNode(bool b)
+        {
+            return new JSONBool(b);
+        }
+        public static implicit operator bool(JSONNode n)
+        {
+            return (n == null) ? false : n.asBool;
         }
         #endregion
+        #endregion
 
+        //캐스팅
+        #region
+        public virtual int asInt
+        {
+            get => new JSONNull();
+            set => this.value = value.ToString();
+        }
+        public virtual double asDouble
+        {
+            get => new JSONNull();
+            set => this.value = value.ToString();
+        }
+        public virtual float asFloat
+        {
+            get => new JSONNull();
+            set => this.value = value.ToString();
+        }
+        public virtual bool asBool
+        {
+            get => new JSONNull();
+            set => this.value = value.ToString();
+        }
+        public virtual JSONNode asArray
+        {
+            get => new JSONNull();
+            set => this.value = value.ToString();
+        }
+        public virtual JSONNode asObject
+        {
+            get => new JSONNull();
+            set => this.value = value.ToString();
+        }
+        #endregion
 
 
         //검증용 함수들
@@ -84,7 +180,12 @@ namespace JSONGUIEditor.Parser
         {
             if (a is JSONNull) return true;
             if (a == null) return true;
-            //if(a is JSONString && a.value == "")return true;//빈 문자열도 null 값으로 취급
+            if (a is JSONString)
+            {
+                JSONString s = (JSONString)a;
+                if(string.IsNullOrEmpty(s.value))
+                    return true;//빈 문자열도 null 값으로 취급
+            }
             return false;
         }
         #endregion
