@@ -12,15 +12,24 @@ namespace JSONGUIEditor.Parser
     {
         public JSONNode()
         {
-
+            depth = 0;
         }
         //내부 변수 선언
         #region
         public JSONNode parent { get; set; }
         public JSONType type { get; protected set; }
-        public int depth { get; set; }
+        public int depth { get; set; } = 0;
         public virtual int Count { get => 0; }
         #endregion
+
+        //내부연산 함수
+        #region
+        public virtual void RefreshDepth(int p)
+        {
+            depth = ++p;
+        }
+        #endregion
+
 
         //isxxx 함수들을 정리한 파트
         #region 
@@ -69,7 +78,7 @@ namespace JSONGUIEditor.Parser
         }
         public virtual JSONNode this[string s]
         {
-            get { return null;}
+            get { return null; }
             set { }
         }
         public virtual JSONNode this[int i]
@@ -183,7 +192,7 @@ namespace JSONGUIEditor.Parser
             if (a is JSONString)
             {
                 JSONString s = (JSONString)a;
-                if(string.IsNullOrEmpty(s.value))
+                if (string.IsNullOrEmpty(s.value))
                     return true;//빈 문자열도 null 값으로 취급
             }
             return false;

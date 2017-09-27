@@ -18,6 +18,8 @@ namespace JSONGUIEditor.Parser
         bool IsNull();
         bool IsObject();
 
+        void RefreshDepth(int p);
+
         string Stringify();
 
         string value { get; set; }
