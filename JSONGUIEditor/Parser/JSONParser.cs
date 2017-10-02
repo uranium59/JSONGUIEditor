@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace JSONGUIEditor.Parser
 {
     using JSONGUIEditor.Parser.State;
-    class JSONParser
+    public class JSONParser
     {
         public JSONParser()
         {
@@ -15,29 +15,65 @@ namespace JSONGUIEditor.Parser
         }
 
         //문자열 파싱용 함수
-#region
-        static public JSONNode ParseStart(JSON.ParseCallback c)
+        #region
+        static public void ParseStart(JSON.ParseCallback c)
         {
-            return ParseStart(c, "");
+            ParseStart(c, "");
         }
-        static public JSONNode ParseStart(JSON.ParseCallback c, string s)
+        static public void ParseStart(JSON.ParseCallback c, string s)
         {
+            MyTree<int, object> CompTree = CalculateComplexity(s);
+
+
             throw new NotImplementedException();
-        }
-        
-        static private MyTree<int, int> CalculateComplexity(string s)
-        {
-            throw new NotImplementedException();
+
         }
 
+        static public MyTree<int, object> CalculateComplexity(string s)
+        {
+            bool isQuote = false;
+            MyTree<int, object> rtn = new MyTree<int, object>();
+            MyTree<int, object> cursor = rtn;
+            for (int i = 0; i < s.Length; i++)
+            {
+                if (cursor == null) throw new JSONGUIEditor.Parser.Exception.JSONSyntaxErrorNotClose(i - 1);
+                switch(s[i])
+                {
+                    case '{':
+                    case '[':
+                        {
+                            if (isQuote) break;
+                            cursor.AddComplex();
+                            MyTree<int, object> child = new MyTree<int, object>();
+                            child.Index = i;
+                            cursor[cursor.Count] = child;
+                            child.parent = cursor;
+                            cursor = child;
+                            break;
+                        }
+                    case ']':
+                    case '}':
+                        if (isQuote) break;
+                        cursor.StrCount = i - cursor.Index;
+                        cursor = cursor.parent;
+                        break;
+                    case '"':
+                        isQuote = !isQuote;
+                        break;
+                }
+            }
+
+            throw new NotImplementedException();
+        }
 
         static private JSONType ValueTypeDetect(string s)
         {
             return 0;
         }
-#endregion
+        #endregion
 
         //stringify 관련 함수
+        #region
         static public string StringWithEscape(string s)
         {
             string rtn = "";
@@ -73,6 +109,8 @@ namespace JSONGUIEditor.Parser
             }
             return rtn;
         }
+        #endregion
+
 
     }
 }

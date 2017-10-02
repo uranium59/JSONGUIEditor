@@ -56,6 +56,7 @@
     <Compile Include="Parser\Exception\JSONNotBooleanException.cs" />
     <Compile Include="Parser\Exception\JSONNotNumberException.cs" />
     <Compile Include="Parser\Exception\JSONNotObjectException.cs" />
+    <Compile Include="Parser\Exception\JSONSyntaxErrorNotClose.cs" />
     <Compile Include="Parser\JSONBool.cs" />
     <Compile Include="Parser\JSONComplexityTree.cs" />
     <Compile Include="Parser\JSONNode.cs" />

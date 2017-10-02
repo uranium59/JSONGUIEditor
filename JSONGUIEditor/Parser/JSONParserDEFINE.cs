@@ -21,6 +21,8 @@ namespace JSONGUIEditor.Parser
         static public string Token_Escape = "\\";
         static public string Token_Number = "0-9";
         static public string Token_Alphabet = "a-zA-Z";
+        static public string Token_Exponential = "[eE][+-]?";
+
     }
 
     public class JSONParsePosition
