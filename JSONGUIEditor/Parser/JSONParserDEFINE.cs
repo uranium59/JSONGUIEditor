@@ -19,10 +19,13 @@ namespace JSONGUIEditor.Parser
         static public string Token_Comma = ",";
         static public string Token_Quote = "\"";
         static public string Token_Escape = "\\";
-        static public string Token_Number = "0-9";
+        static public string Token_WhiteSpace = "\\s";
+        static public string Token_Number = "[0-9]";
         static public string Token_Alphabet = "a-zA-Z";
         static public string Token_Exponential = "[eE][+-]?";
 
+        static public string Full_Exponential_number = "[-+]?"+Token_Number+ "*\\.?" + Token_Number + "+(" + Token_Exponential+ "?" + Token_Number + "+)?";
+        static public string Full_Object_Regex = "(?=\"([^\"]*)\"\\s*:\\s*([0-9]*|true|false|\"[^\"]*\")\\s*(}|,)\\s*)";
     }
 
     public class JSONParsePosition

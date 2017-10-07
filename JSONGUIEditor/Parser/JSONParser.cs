@@ -20,13 +20,12 @@ namespace JSONGUIEditor.Parser
         {
             ParseStart(c, "");
         }
-        static public void ParseStart(JSON.ParseCallback c, string s)
+        static async public void ParseStart(JSON.ParseCallback c, string s)
         {
             MyTree<int, object> CompTree = CalculateComplexity(s);
-
-
-            throw new NotImplementedException();
-
+            Task<JSONNode> t = JSONParseThread.ParseThread(CompTree, s);
+            t.Wait();
+            c(t.Result);
         }
 
         static public MyTree<int, object> CalculateComplexity(string s)
@@ -62,8 +61,7 @@ namespace JSONGUIEditor.Parser
                         break;
                 }
             }
-
-            throw new NotImplementedException();
+            return rtn;
         }
 
         static private JSONType ValueTypeDetect(string s)

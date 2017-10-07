@@ -12,6 +12,7 @@ namespace JSONGUIEditor.Parser
         public int StrCount { get; set; } = 0;
         public int Complex { get; set; } = 0;
         public MyTree<K, V> parent { get; set; } = null;
+        public JSONNode parsedNode { get; set; } = null;
         public void AddComplex()
         {
             Complex++;
