@@ -26,10 +26,30 @@ namespace JSONParserUnitTest
         [Test, Order(1)]
         public void ParseTest1()
         {
-            Task t = Task.Run(() => { JSONParser.ParseStart((JSONNode n) => { Console.WriteLine("finished"); return null; }, "{\"test\":123}"); });
+            JSONParser.ParseStart((JSONNode n) => { Console.WriteLine("finished"); return null; }, "{\"test\":123}");
             
             Console.WriteLine("test function finished");
-            t.Wait();
+        }
+
+        [Test, Order(2)]
+        public void ParseTest2()
+        {
+            string jsonstring = "{\"test\":12345}";
+            MyTree<int, object> t = JSONParser.CalculateComplexity(jsonstring);
+            JSONNode n = JSONParseThread.Parse(t[0], jsonstring);
+        }
+        [Test, Order(3)]
+        public void ParseTest3()
+        {
+            string jsonstring = "[1,\"t\",true]";
+            MyTree<int, object> t = JSONParser.CalculateComplexity(jsonstring);
+            JSONNode n = JSONParseThread.Parse(t[0], jsonstring);
+        }
+
+        [Test, Order(100)]
+        public void TestReallyBigString()
+        {
+
         }
     }
 }

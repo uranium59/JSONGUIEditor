@@ -9,6 +9,7 @@ namespace JSONGUIEditor.Parser.Exception
     public class JSONException : System.Exception
     {
         protected string _Message;
+        public JSONParsePosition position { get; protected set; }
 
         public override string Message
         {

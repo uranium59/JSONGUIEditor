@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace JSONGUIEditor.Parser
 {
     using JSONGUIEditor.Parser.State;
+    using JSONGUIEditor.Parser.Exception;
     public class JSONParser
     {
         public JSONParser()
@@ -22,9 +23,23 @@ namespace JSONGUIEditor.Parser
         }
         static async public void ParseStart(JSON.ParseCallback c, string s)
         {
-            MyTree<int, object> CompTree = CalculateComplexity(s);
-            Task<JSONNode> t = JSONParseThread.ParseThread(CompTree, s);
-            t.Wait();
+            MyTree<int, object> CompTree = null ;
+            try
+            {
+                CompTree = CalculateComplexity(s);
+            }
+            catch(JSONSyntaxErrorNotClose e)
+            {
+
+            }
+            if (CompTree == null || CompTree.Count == 0)
+            {//파싱할 트리구조 자체가 없을 경우. 빈 오브젝트 하나를 반환한다.
+                c(new JSONObject());
+                return;
+            }
+            Task<JSONNode> t = new Task<JSONNode>(() => { return JSONParseThread.ParseThread(CompTree[0], s); });
+            t.Start();
+            await t;
             c(t.Result);
         }
 
@@ -35,8 +50,8 @@ namespace JSONGUIEditor.Parser
             MyTree<int, object> cursor = rtn;
             for (int i = 0; i < s.Length; i++)
             {
-                if (cursor == null) throw new JSONGUIEditor.Parser.Exception.JSONSyntaxErrorNotClose(i - 1);
-                switch(s[i])
+                if (cursor == null) throw new JSONSyntaxErrorNotClose(i - 1);
+                switch (s[i])
                 {
                     case '{':
                     case '[':

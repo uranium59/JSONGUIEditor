@@ -8,7 +8,6 @@ namespace JSONGUIEditor.Parser.Exception
 {
     public class JSONNotBooleanException : JSONWrongTypeException
     {
-        JSONParsePosition position;
         public JSONNotBooleanException()
         {
             position = new JSONParsePosition();

@@ -59,6 +59,7 @@
     <Compile Include="TimeConsumeTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="FakeJSON.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
