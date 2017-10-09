@@ -13,11 +13,11 @@ namespace JSONGUIEditor.Parser
     {
         public delegate JSONNode ParseCallback(JSONNode n);
 
-        public void Parse(ParseCallback c)
+        static public void Parse(ParseCallback c)
         {
             JSONParser.ParseStart(c);
         }
-        public void Parse(ParseCallback c, string s)
+        static public void Parse(ParseCallback c, string s)
         {
             try
             {
@@ -32,10 +32,15 @@ namespace JSONGUIEditor.Parser
             }
         }
 
-        public string Stringify(JSONNode n)
+        static public string Stringify(JSONNode n)
+        {
+            return Stringify(n, new JSONStringifyOption());
+        }
+        static public string Stringify(JSONNode n, JSONStringifyOption o)
         {
             throw new NotImplementedException();
         }
+
         public string SerializationStringify(JSONNode n)
         {
             throw new NotImplementedException();

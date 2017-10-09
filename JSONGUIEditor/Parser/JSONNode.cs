@@ -67,10 +67,6 @@ namespace JSONGUIEditor.Parser
         {
             return base.ToString();
         }
-        public virtual string Stringify()
-        {
-            return "";
-        }
         public virtual string value
         {
             get;
@@ -198,5 +194,18 @@ namespace JSONGUIEditor.Parser
             return false;
         }
         #endregion
+
+        #region
+        //stringify 관련
+        public virtual string Stringify()
+        {
+            return Stringify(new JSONStringifyOption());
+        }
+        public virtual string Stringify(JSONStringifyOption o)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+
     }
 }

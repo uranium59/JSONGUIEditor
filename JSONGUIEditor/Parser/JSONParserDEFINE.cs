@@ -74,4 +74,11 @@ namespace JSONGUIEditor.Parser
             return String.Format("at {0} line, {1} character", line, position);
         }
     }
+
+    public class JSONStringifyOption
+    {//아무것도 설정하지 않은 기본 옵션은 최대 최적화를 의미합니다.
+        public bool indent { get; set; } = false;//들여쓰기
+        public bool colonspace { get; set; } = false;// ':' 좌우에 띄어쓰기 추가
+        public bool addnullobject { get; set; } = false;//null 오브젝트를 문자열화 시키는지
+    }
 }

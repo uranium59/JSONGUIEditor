@@ -23,7 +23,7 @@ namespace JSONGUIEditor.Parser
 
         //isxxx 함수들을 정리한 파트
         #region 
-        public override bool IsArray(){ return true; }
+        public override bool IsArray() { return true; }
 
         #endregion
 
@@ -33,6 +33,7 @@ namespace JSONGUIEditor.Parser
         }
 
         //연산자 오버라이딩
+        #region
         public override void RefreshDepth(int p)
         {
             base.RefreshDepth(p);
@@ -47,9 +48,9 @@ namespace JSONGUIEditor.Parser
             get
             {
                 int i;
-                if(int.TryParse(s, out i))
+                if (int.TryParse(s, out i))
                 {
-                    if(i > -1 && i < _data.Count)
+                    if (i > -1 && i < _data.Count)
                     {
                         return _data[i];
                     }
@@ -97,5 +98,26 @@ namespace JSONGUIEditor.Parser
             value.parent = this;
             _data.Add(value);
         }
+        #endregion
+        //stringify
+        #region
+        public override string Stringify()
+        {
+            return Stringify(new JSONStringifyOption());
+        }
+        public override string Stringify(JSONStringifyOption o)
+        {
+            string rtn = "[";
+            foreach(JSONNode n in _data)
+            {
+                if (!o.addnullobject && n == null) continue;
+                rtn += n.Stringify(o);
+                rtn += ',';
+            }
+            rtn = rtn.Substring(0, rtn.Length - 1);
+            rtn += ']';
+            return rtn;
+        }
+        #endregion
     }
 }

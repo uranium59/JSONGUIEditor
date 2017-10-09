@@ -97,11 +97,16 @@ namespace JSONGUIEditor.Parser
         //문자열 생성용
         public override string Stringify()
         {
+            return Stringify(new JSONStringifyOption());
+        }
+        public override string Stringify(JSONStringifyOption o)
+        {
             string rtn = "{";
             foreach(var e in _data)
             {
+                if (!o.addnullobject && e.Value == null) continue;
                 rtn += JSONParser.StringWithEscape(e.Key) + ":";
-                rtn += e.Value.Stringify();
+                rtn += e.Value.Stringify(o);
             }
             rtn += "}";
             return rtn;

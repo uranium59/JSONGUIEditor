@@ -21,6 +21,7 @@ namespace JSONGUIEditor.Parser
         void RefreshDepth(int p);
 
         string Stringify();
+        string Stringify(JSONStringifyOption o);
 
         string value { get; set; }
     }

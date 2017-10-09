@@ -89,7 +89,7 @@ namespace JSONGUIEditor.Parser
         #region
         static public string StringWithEscape(string s)
         {
-            string rtn = "";
+            string rtn = "\"";
             foreach (char c in s)
             {
                 switch (c)
@@ -120,7 +120,7 @@ namespace JSONGUIEditor.Parser
                         break;
                 }
             }
-            return rtn;
+            return rtn + '\"';
         }
         #endregion
 

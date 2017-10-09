@@ -36,14 +36,14 @@ namespace JSONGUIEditor.Parser
                     ni = (m.Length + m.Index);
                     if(m.Groups[3].Value == "{" || m.Groups[3].Value == "[")
                     {
-                        rtn[m.Groups[1].Value] = Parse(t[ti], s);
+                        rtn[m.Groups[1].Value.Substring(1, m.Groups[1].Value.Length - 2)] = Parse(t[ti], s);
                         ni = t[ti].Index + t[ti].StrCount;
                         while (char.IsWhiteSpace(s[ni])) ni++;//find next non whitespace
                         ti++;
                     }
                     else
                     {
-                        rtn[m.Groups[1].Value] = m.Groups[3].Value;
+                        rtn[m.Groups[1].Value.Substring(1, m.Groups[1].Value.Length-2)] = m.Groups[3].Value.ParseValue();
                     }
                     if(s[ni] != ',' && s[ni] != '}')
                     {
@@ -73,7 +73,7 @@ namespace JSONGUIEditor.Parser
                     }
                     else
                     {
-                        rtn.Add(m.Groups[1].Value);
+                        rtn.Add(m.Groups[1].Value.ParseValue());
                     }
                     if (s[ni] != ',' && s[ni] != ']')
                     {
@@ -125,12 +125,12 @@ namespace JSONGUIEditor.Parser
                     {
                         if (t[ti].Complex > ComplexityThreshold)
                         {
-                            rtn[m.Groups[1].Value] = l[li].Result;//wait for child parsing
+                            rtn[m.Groups[1].Value.Substring(1, m.Groups[1].Value.Length - 2)] = l[li].Result;//wait for child parsing
                             li++;
                         }
                         else
                         {
-                            rtn[m.Groups[1].Value] = t[ti].parsedNode;
+                            rtn[m.Groups[1].Value.Substring(1, m.Groups[1].Value.Length - 2)] = t[ti].parsedNode;
                         }
                         ni = t[ti].Index + t[ti].StrCount;
                         while (char.IsWhiteSpace(s[ni])) ni++;//find next non whitespace
@@ -138,7 +138,7 @@ namespace JSONGUIEditor.Parser
                     }
                     else
                     {
-                        rtn[m.Groups[1].Value] = m.Groups[3].Value;
+                        rtn[m.Groups[1].Value.Substring(1, m.Groups[1].Value.Length - 2)] = m.Groups[3].Value.ParseValue();
                     }
                     if (s[ni] != ',' && s[ni] != '}')
                     {
@@ -176,7 +176,7 @@ namespace JSONGUIEditor.Parser
                     }
                     else
                     {
-                        rtn.Add(m.Groups[1].Value);
+                        rtn.Add(m.Groups[1].Value.ParseValue());
                     }
                     if (s[ni] != ',' && s[ni] != ']')
                     {
@@ -191,6 +191,21 @@ namespace JSONGUIEditor.Parser
 
         static public JSONNode ParseValue(this string s)
         {//실제 값을 파싱하는 부분
+            if(s[0] == '\"' && s[s.Length-1] == '\"')
+            {
+                return new JSONString(s.Substring(1, s.Length - 2));
+            }
+            double d;
+            if(double.TryParse(s, out d))
+            {
+                return new JSONNumber(d);
+            }
+            bool b;
+            if(bool.TryParse(s, out b))
+            {
+                return new JSONBool(b);
+            }
+
             return new JSONNull();
         }
 
