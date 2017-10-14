@@ -11,10 +11,10 @@ namespace JSONGUIEditor.Parser
     public static class JSONParseThread
     {
         //if complexity is bigger than threshold, add thread into threadpool
-        public const int ComplexityThreshold = 10;
+        public const int ComplexityThreshold = 7;
         public const bool UsingThread = true;
         
-        static public JSONNode Parse(MyTree<int, object> t, string s)
+        static public JSONNode Parse(MyTree<object> t, string s)
         {
             JSONNode rtn = null;
             int si = t.Index;//startindex
@@ -28,13 +28,14 @@ namespace JSONGUIEditor.Parser
                 rg = new Regex(JSONParserDEFINE.Key_ValueMatch);
                 while(ni < ei)
                 {
+                    while (char.IsWhiteSpace(s[ni])) ni++;//find next non whitespace
                     Match m = rg.Match(s, ni);
                     if(m.Index != ni)
                     {
                         throw new JSONSyntaxErrorKeyValueNotExist();
                     }
                     ni = (m.Length + m.Index);
-                    if(m.Groups[3].Value == "{" || m.Groups[3].Value == "[")
+                    if(m.Groups[3].Value[0] == '{' || m.Groups[3].Value[0] == '[')
                     {
                         rtn[m.Groups[1].Value.Substring(1, m.Groups[1].Value.Length - 2)] = Parse(t[ti], s);
                         ni = t[ti].Index + t[ti].StrCount;
@@ -58,13 +59,14 @@ namespace JSONGUIEditor.Parser
                 rg = new Regex(JSONParserDEFINE.ValuesMatch);
                 while (ni < ei)
                 {
+                    while (char.IsWhiteSpace(s[ni])) ni++;//find next non whitespace
                     Match m = rg.Match(s, ni);
                     if(m.Index != ni)
                     {
                         throw new JSONSyntaxErrorKeyValueNotExist();
                     }
                     ni = (m.Length + m.Index);
-                    if (m.Groups[1].Value == "{" || m.Groups[1].Value == "[")
+                    if (m.Groups[1].Value[0] == '{' || m.Groups[1].Value[0] == '[')
                     {
                         rtn.Add(Parse(t[ti], s));
                         ni = t[ti].Index + t[ti].StrCount;
@@ -86,7 +88,7 @@ namespace JSONGUIEditor.Parser
             return rtn;
         }//for single thread
         
-        static public JSONNode ParseThread(MyTree<int, object> t, string s)
+        static public JSONNode ParseThread(MyTree<object> t, string s)
         {
             JSONNode rtn = null;
             int si = t.Index;//startindex
@@ -96,9 +98,8 @@ namespace JSONGUIEditor.Parser
             int li = 0;//task list index
             Regex rg;
             List<Task<JSONNode>> l = new List<Task<JSONNode>>();
-            foreach (KeyValuePair<int, MyTree<int, object>> o in t)
+            foreach (MyTree<object> c in t)
             {
-                MyTree<int, object> c = (MyTree<int, object>)o.Value;
                 if (c.Complex > ComplexityThreshold)
                 {
                     l.Add(Task<JSONNode>.Factory.StartNew(()=>ParseThread(c, s)));

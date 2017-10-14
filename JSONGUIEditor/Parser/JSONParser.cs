@@ -23,7 +23,7 @@ namespace JSONGUIEditor.Parser
         }
         static async public void ParseStart(JSON.ParseCallback c, string s)
         {
-            MyTree<int, object> CompTree = null ;
+            MyTree<object> CompTree = null ;
             try
             {
                 CompTree = CalculateComplexity(s);
@@ -43,11 +43,11 @@ namespace JSONGUIEditor.Parser
             c(t.Result);
         }
 
-        static public MyTree<int, object> CalculateComplexity(string s)
+        static public MyTree<object> CalculateComplexity(string s)
         {
             bool isQuote = false;
-            MyTree<int, object> rtn = new MyTree<int, object>();
-            MyTree<int, object> cursor = rtn;
+            MyTree<object> rtn = new MyTree<object>();
+            MyTree<object> cursor = rtn;
             for (int i = 0; i < s.Length; i++)
             {
                 if (cursor == null) throw new JSONSyntaxErrorNotClose(i - 1);
@@ -58,17 +58,19 @@ namespace JSONGUIEditor.Parser
                         {
                             if (isQuote) break;
                             cursor.AddComplex();
-                            MyTree<int, object> child = new MyTree<int, object>();
-                            child.Index = i;
-                            cursor[cursor.Count] = child;
-                            child.parent = cursor;
+                            MyTree<object> child = new MyTree<object>()
+                            {
+                                Index = i,
+                                parent = cursor
+                            };
+                            cursor.Add(child);
                             cursor = child;
                             break;
                         }
                     case ']':
                     case '}':
                         if (isQuote) break;
-                        cursor.StrCount = i - cursor.Index;
+                        cursor.StrCount = (++i) - cursor.Index;
                         cursor = cursor.parent;
                         break;
                     case '"':

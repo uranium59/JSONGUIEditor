@@ -1,4 +1,4 @@
-﻿namespace JSON_GUI_Editor
+﻿namespace JSONGUIEditor
 {
     partial class Form1
     {
@@ -33,6 +33,8 @@
             this.itemFile = new System.Windows.Forms.ToolStripMenuItem();
             this.itemEdit = new System.Windows.Forms.ToolStripMenuItem();
             this.itemTemplate = new System.Windows.Forms.ToolStripMenuItem();
+            this.selectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.selectTemplateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.itemView = new System.Windows.Forms.ToolStripMenuItem();
             this.itemHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.tview_object = new System.Windows.Forms.TreeView();
@@ -69,9 +71,26 @@
             // 
             // itemTemplate
             // 
+            this.itemTemplate.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.selectToolStripMenuItem,
+            this.selectTemplateToolStripMenuItem});
             this.itemTemplate.Name = "itemTemplate";
             this.itemTemplate.Size = new System.Drawing.Size(68, 20);
             this.itemTemplate.Text = "&Template";
+            // 
+            // selectToolStripMenuItem
+            // 
+            this.selectToolStripMenuItem.Name = "selectToolStripMenuItem";
+            this.selectToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.selectToolStripMenuItem.Text = "ManageTemplate";
+            this.selectToolStripMenuItem.Click += new System.EventHandler(this.selectToolStripMenuItem_Click);
+            // 
+            // selectTemplateToolStripMenuItem
+            // 
+            this.selectTemplateToolStripMenuItem.Name = "selectTemplateToolStripMenuItem";
+            this.selectTemplateToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.selectTemplateToolStripMenuItem.Text = "SelectTemplate";
+            this.selectTemplateToolStripMenuItem.Click += new System.EventHandler(this.selectTemplateToolStripMenuItem_Click);
             // 
             // itemView
             // 
@@ -122,6 +141,8 @@
         private System.Windows.Forms.ToolStripMenuItem itemHelp;
         private System.Windows.Forms.TreeView tview_object;
         private System.Windows.Forms.BindingSource bindingSource1;
+        private System.Windows.Forms.ToolStripMenuItem selectToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem selectTemplateToolStripMenuItem;
     }
 }
 

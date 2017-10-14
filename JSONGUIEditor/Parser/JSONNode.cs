@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -63,6 +64,11 @@ namespace JSONGUIEditor.Parser
         {
             return base.GetHashCode();
         }
+        public virtual IEnumerator GetEnumerator()
+        {
+            return null;
+        }
+
         public override string ToString()
         {
             return base.ToString();

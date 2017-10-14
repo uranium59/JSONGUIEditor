@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -91,6 +92,13 @@ namespace JSONGUIEditor.Parser
             JSONNode rtn = _data[key];
             _data.Remove(key);
             return rtn;
+        }
+        public override IEnumerator GetEnumerator()
+        {
+            foreach(KeyValuePair<string, JSONNode> n in _data)
+            {
+                yield return n.Value;
+            }
         }
         #endregion
 

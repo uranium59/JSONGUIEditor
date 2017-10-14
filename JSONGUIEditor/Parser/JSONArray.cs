@@ -29,7 +29,10 @@ namespace JSONGUIEditor.Parser
 
         public IEnumerator GetEnumerator()
         {
-            throw new NotImplementedException();
+            foreach(JSONNode n in _data)
+            {
+                yield return n;
+            }
         }
 
         //연산자 오버라이딩

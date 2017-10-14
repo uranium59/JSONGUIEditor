@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace JSONGUIEditor.Parser
 {
-    public class MyTree<K, V> : Dictionary<K, MyTree<K, V>>
+    public class MyTree<V> : List<MyTree<V>>
     {
         public int Index { get; set; } = 0;
         public int StrCount { get; set; } = 0;
         public int Complex { get; set; } = 0;
-        public MyTree<K, V> parent { get; set; } = null;
+        public MyTree<V> parent { get; set; } = null;
         public JSONNode parsedNode { get; set; } = null;
         public void AddComplex()
         {

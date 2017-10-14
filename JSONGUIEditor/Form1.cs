@@ -9,12 +9,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace JSON_GUI_Editor
+namespace JSONGUIEditor
 {
+    using JSONGUIEditor.TemplateForm;
     public partial class Form1 : Form
     {
         private List<string> typeList;
         private List<Control> controlList;
+
+        private Font smallFont = new Font(FontFamily.GenericSerif, 8f);
 
         public Form1()
         {
@@ -46,6 +49,7 @@ namespace JSON_GUI_Editor
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            /*
             JSONNode tempNode1 = new JSONObject();
             JSONNode tempNode2 = new JSONObject();
             JSONNode tempNode3 = new JSONObject();
@@ -64,8 +68,13 @@ namespace JSON_GUI_Editor
 
             node1.Nodes.Add(node2);
             node2.Nodes.Add(node3);
-
-            tview_object.Nodes.Add(node1);
+            */
+            JSONNode n = new JSONObject();
+            n["test"] = new JSONNumber(1234);
+            n["asdf"] = new JSONObject();
+            n["asdf"]["123"] = new JSONBool(true);
+            JSONFormUtil.MakeTreeView(n, tview_object);
+            //tview_object.Nodes.Add(node1);
         }
 
         private void tview_object_DoubleClick(object sender, EventArgs e)
@@ -96,32 +105,34 @@ namespace JSON_GUI_Editor
                 Label lb_key = new Label()
                 {
                     Text = "Key",
-                    Height = 20,
+                    Height = FormConstValue.keyvalueHeight,
+                    Font = smallFont,
                     Location = new Point(posX, posY)
                 };
                 TextBox tbox_key = new TextBox()
                 {
                     Width = 100,
-                    Height = 20,
+                    Height = FormConstValue.inputboxHeight,
                     Location = new Point(posX, posY + stepY)
                 };
                 ComboBox cbox_type = new ComboBox()
                 {
                     DataSource = typeList,
                     Width = 100,
-                    Height = 20,
+                    Height = FormConstValue.inputboxHeight,
                     Location = new Point(posX + stepX, posY + stepY)
                 };
                 Label lb_value = new Label()
                 {
                     Text = "Value",
-                    Height = 20,
+                    Height = FormConstValue.keyvalueHeight,
+                    Font = smallFont,
                     Location = new Point(posX + stepX * 2, posY)
                 };
                 TextBox tbox_value = new TextBox()
                 {
                     Width = 100,
-                    Height = 20,
+                    Height = FormConstValue.inputboxHeight,
                     Location = new Point(posX + stepX * 2, posY + stepY)
                 };
 
@@ -139,6 +150,18 @@ namespace JSON_GUI_Editor
             {
                 this.Controls.Add(control);
             }
+        }
+
+        private void selectToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TemplateManage f = new TemplateManage();
+            f.Show(this);
+        }
+
+        private void selectTemplateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TemplateSelect f = new TemplateSelect();
+            f.Show(this);
         }
     }
 }

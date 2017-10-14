@@ -33,13 +33,13 @@ namespace JSONGUIEditor.Parser
              "|" + Token_ObjectStart + "|" + Token_ArrayStart;
 
         static public string Key_ValueMatch =
-            Token_MultipleWhiteSpace + "(" +
+            "(" +
             Full_String + ")" + Token_MultipleWhiteSpace +
             Token_Colon + Token_MultipleWhiteSpace + "(" +
             Token_Value + ")" + Token_MultipleWhiteSpace;
         //we always need to check whitespace
         static public string ValuesMatch = 
-            Token_MultipleWhiteSpace + "(" +
+            "(" +
             Token_Value + ")" + Token_MultipleWhiteSpace;
 
         /* This may not be needed

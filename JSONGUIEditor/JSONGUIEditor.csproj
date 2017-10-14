@@ -51,6 +51,7 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormConstValue.cs" />
     <Compile Include="Parser\Exception\JSONException.cs" />
     <Compile Include="Parser\Exception\JSONNotArrayException.cs" />
     <Compile Include="Parser\Exception\JSONNotBooleanException.cs" />
@@ -61,6 +62,7 @@
     <Compile Include="Parser\Exception\JSONSyntaxErrorNotClose.cs" />
     <Compile Include="Parser\JSONBool.cs" />
     <Compile Include="Parser\JSONComplexityTree.cs" />
+    <Compile Include="Parser\JSONFormUtil.cs" />
     <Compile Include="Parser\JSONNode.cs" />
     <Compile Include="Parser\Exception\JSONWrongTypeException.cs" />
     <Compile Include="Parser\IJSON.cs" />
@@ -76,6 +78,18 @@
     <Compile Include="Parser\State\JSONType.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TemplateForm\TemplateManage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TemplateForm\TemplateManage.Designer.cs">
+      <DependentUpon>TemplateManage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TemplateForm\TemplateSelect.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TemplateForm\TemplateSelect.Designer.cs">
+      <DependentUpon>TemplateSelect.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -88,6 +102,12 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="TemplateForm\TemplateManage.resx">
+      <DependentUpon>TemplateManage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TemplateForm\TemplateSelect.resx">
+      <DependentUpon>TemplateSelect.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
