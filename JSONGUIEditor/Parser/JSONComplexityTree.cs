@@ -13,10 +13,13 @@ namespace JSONGUIEditor.Parser
         public int Complex { get; set; } = 0;
         public MyTree<V> parent { get; set; } = null;
         public JSONNode parsedNode { get; set; } = null;
-        public void AddComplex()
+        public int AddComplex()
         {
-            Complex++;
-            if (parent != null) parent.AddComplex();
+            foreach (MyTree<V> v in this)
+            {
+                Complex += v.AddComplex();
+            }
+            return Complex;
         }
     }
 }

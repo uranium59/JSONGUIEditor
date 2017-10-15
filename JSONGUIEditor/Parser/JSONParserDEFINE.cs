@@ -23,7 +23,6 @@ namespace JSONGUIEditor.Parser
         static public string Token_WhiteSpace = "\\s";
         static public string Token_MultipleWhiteSpace = Token_WhiteSpace + "*";
         static public string Token_Number = "[0-9]";
-        static public string Token_Alphabet = "a-zA-Z";
         static public string Token_Exponential = "[eE][+-]?";
 
         static public string Full_Exponential_number = "[-+]?"+Token_Number+ "*\\.?" + Token_Number + "+(" + Token_Exponential+ "?" + Token_Number + "+)?";
@@ -36,11 +35,11 @@ namespace JSONGUIEditor.Parser
             "(" +
             Full_String + ")" + Token_MultipleWhiteSpace +
             Token_Colon + Token_MultipleWhiteSpace + "(" +
-            Token_Value + ")" + Token_MultipleWhiteSpace;
+            Token_Value + ")";
         //we always need to check whitespace
         static public string ValuesMatch = 
             "(" +
-            Token_Value + ")" + Token_MultipleWhiteSpace;
+            Token_Value + ")";
 
         /* This may not be needed
     static public string Full_Object_Regex = "(?=\"([^\"]*)\"\\s*:\\s*("

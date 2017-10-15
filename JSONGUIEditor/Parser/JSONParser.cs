@@ -27,6 +27,7 @@ namespace JSONGUIEditor.Parser
             try
             {
                 CompTree = CalculateComplexity(s);
+                CompTree.AddComplex();
             }
             catch(JSONSyntaxErrorNotClose e)
             {
@@ -57,7 +58,7 @@ namespace JSONGUIEditor.Parser
                     case '[':
                         {
                             if (isQuote) break;
-                            cursor.AddComplex();
+                            cursor.Complex++;
                             MyTree<object> child = new MyTree<object>()
                             {
                                 Index = i,
@@ -70,11 +71,11 @@ namespace JSONGUIEditor.Parser
                     case ']':
                     case '}':
                         if (isQuote) break;
-                        cursor.StrCount = (++i) - cursor.Index;
+                        cursor.StrCount = i - cursor.Index + 1;
                         cursor = cursor.parent;
                         break;
                     case '"':
-                        isQuote = !isQuote;
+                        isQuote ^= true;
                         break;
                 }
             }

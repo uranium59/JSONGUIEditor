@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NUnit.Framework;
@@ -52,7 +53,16 @@ namespace JSONParserUnitTest
         {
             Stopwatch s = new Stopwatch();
             s.Start();
-            JSON.Parse((JSONNode n) => { Console.WriteLine("finished"); s.Stop(); Console.WriteLine(s.ElapsedTicks); return null; }, longlongstring);
+            Task t = Task.Factory.StartNew(() =>
+            {
+                JSONParser.ParseStart((JSONNode n) =>
+                { return null;
+                }, longlongstring);
+            });
+            t.Wait();
+            s.Stop();
+            Console.WriteLine(s.ElapsedTicks);
+            Console.WriteLine("test function finished");
         }
         [Test, Order(101)]
         public void TestBigStringSingleThread()
@@ -60,6 +70,7 @@ namespace JSONParserUnitTest
             Stopwatch s = new Stopwatch();
             s.Start();
             MyTree<object> mt = JSONParser.CalculateComplexity(longlongstring);
+            mt.AddComplex();
             JSONNode n = JSONParseThread.Parse(mt[0], longlongstring);
             s.Stop();
             Console.WriteLine(s.ElapsedTicks);
@@ -70,6 +81,7 @@ namespace JSONParserUnitTest
             Stopwatch s = new Stopwatch();
             s.Start();
             MyTree<object> t = JSONParser.CalculateComplexity(longlongstring);
+            t.AddComplex();
             s.Stop();
             Console.WriteLine(s.ElapsedTicks);
             Console.WriteLine(t[0].Count);

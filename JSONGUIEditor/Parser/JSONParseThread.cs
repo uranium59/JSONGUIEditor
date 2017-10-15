@@ -11,9 +11,12 @@ namespace JSONGUIEditor.Parser
     public static class JSONParseThread
     {
         //if complexity is bigger than threshold, add thread into threadpool
-        public const int ComplexityThreshold = 7;
+        public const int ComplexityThreshold = 10;
         public const bool UsingThread = true;
         
+        static public Regex RegKeyValue = new Regex(JSONParserDEFINE.Key_ValueMatch);
+        static public Regex RegValueOnly = new Regex(JSONParserDEFINE.ValuesMatch);
+
         static public JSONNode Parse(MyTree<object> t, string s)
         {
             JSONNode rtn = null;
@@ -25,7 +28,7 @@ namespace JSONGUIEditor.Parser
             if(s[si]=='{')
             {
                 rtn = new JSONObject();
-                rg = new Regex(JSONParserDEFINE.Key_ValueMatch);
+                rg = RegKeyValue;
                 while(ni < ei)
                 {
                     while (char.IsWhiteSpace(s[ni])) ni++;//find next non whitespace
@@ -37,16 +40,17 @@ namespace JSONGUIEditor.Parser
                     ni = (m.Length + m.Index);
                     if(m.Groups[3].Value[0] == '{' || m.Groups[3].Value[0] == '[')
                     {
-                        rtn[m.Groups[1].Value.Substring(1, m.Groups[1].Value.Length - 2)] = Parse(t[ti], s);
-                        ni = t[ti].Index + t[ti].StrCount;
-                        while (char.IsWhiteSpace(s[ni])) ni++;//find next non whitespace
+                        MyTree<object> child = t[ti];
+                        rtn[m.Groups[1].Value.Substring(1, m.Groups[1].Value.Length - 2)] = Parse(child, s);
+                        ni = child.Index + child.StrCount;
                         ti++;
                     }
                     else
                     {
                         rtn[m.Groups[1].Value.Substring(1, m.Groups[1].Value.Length-2)] = m.Groups[3].Value.ParseValue();
                     }
-                    if(s[ni] != ',' && s[ni] != '}')
+                    while (char.IsWhiteSpace(s[ni])) ni++;//find next non whitespace
+                    if (s[ni] != ',' && s[ni] != '}')
                     {
                         throw new JSONSyntaxErrorCommaNotExist();
                     }
@@ -56,7 +60,7 @@ namespace JSONGUIEditor.Parser
             else if(s[si] == '[')
             {
                 rtn = new JSONArray();
-                rg = new Regex(JSONParserDEFINE.ValuesMatch);
+                rg = RegValueOnly;
                 while (ni < ei)
                 {
                     while (char.IsWhiteSpace(s[ni])) ni++;//find next non whitespace
@@ -68,15 +72,16 @@ namespace JSONGUIEditor.Parser
                     ni = (m.Length + m.Index);
                     if (m.Groups[1].Value[0] == '{' || m.Groups[1].Value[0] == '[')
                     {
-                        rtn.Add(Parse(t[ti], s));
-                        ni = t[ti].Index + t[ti].StrCount;
-                        while (char.IsWhiteSpace(s[ni])) ni++;//find next non whitespace
+                        MyTree<object> child = t[ti];
+                        rtn.Add(Parse(child, s));
+                        ni = child.Index + child.StrCount;
                         ti++;
                     }
                     else
                     {
                         rtn.Add(m.Groups[1].Value.ParseValue());
                     }
+                    while (char.IsWhiteSpace(s[ni])) ni++;//find next non whitespace
                     if (s[ni] != ',' && s[ni] != ']')
                     {
                         throw new JSONSyntaxErrorCommaNotExist();
@@ -104,43 +109,44 @@ namespace JSONGUIEditor.Parser
                 {
                     l.Add(Task<JSONNode>.Factory.StartNew(()=>ParseThread(c, s)));
                 }
-                else
-                {
-                    c.parsedNode = Parse(c, s);
-                }
             }
 
             if (s[si] == '{')
             {
                 rtn = new JSONObject();
-                rg = new Regex(JSONParserDEFINE.Key_ValueMatch);
+                rg = RegKeyValue;
                 while (ni < ei)
                 {
+                    while (char.IsWhiteSpace(s[ni])) ni++;//find next non whitespace
                     Match m = rg.Match(s, ni);
                     if (m.Index != ni)
                     {
-                        throw new JSONSyntaxErrorKeyValueNotExist();
+                        throw new JSONSyntaxErrorKeyValueNotExist(ni);
                     }
                     ni = (m.Length + m.Index);
-                    if (m.Groups[3].Value == "{" || m.Groups[3].Value == "[")
+                    string keystr = m.Groups[1].Value;
+                    string valuestr = m.Groups[3].Value;
+                    if (valuestr[0] == '{' || valuestr[0] == '[')
                     {
-                        if (t[ti].Complex > ComplexityThreshold)
+                        MyTree<object> child = t[ti];
+                        if (child.Complex > ComplexityThreshold)
                         {
-                            rtn[m.Groups[1].Value.Substring(1, m.Groups[1].Value.Length - 2)] = l[li].Result;//wait for child parsing
+                            rtn[keystr.Substring(1, keystr.Length - 2)] = l[li].Result;//wait for child parsing
                             li++;
                         }
                         else
                         {
-                            rtn[m.Groups[1].Value.Substring(1, m.Groups[1].Value.Length - 2)] = t[ti].parsedNode;
+                            child.parsedNode = Parse(child, s);
+                            rtn[keystr.Substring(1, keystr.Length - 2)] = child.parsedNode;
                         }
-                        ni = t[ti].Index + t[ti].StrCount;
-                        while (char.IsWhiteSpace(s[ni])) ni++;//find next non whitespace
+                        ni = child.Index + child.StrCount;
                         ti++;
                     }
                     else
                     {
-                        rtn[m.Groups[1].Value.Substring(1, m.Groups[1].Value.Length - 2)] = m.Groups[3].Value.ParseValue();
+                        rtn[keystr.Substring(1, keystr.Length - 2)] = valuestr.ParseValue();
                     }
+                    while (char.IsWhiteSpace(s[ni])) ni++;//find next non whitespace
                     if (s[ni] != ',' && s[ni] != '}')
                     {
                         throw new JSONSyntaxErrorCommaNotExist();
@@ -151,34 +157,38 @@ namespace JSONGUIEditor.Parser
             else if (s[si] == '[')
             {
                 rtn = new JSONArray();
-                rg = new Regex(JSONParserDEFINE.ValuesMatch);
+                rg = RegValueOnly;
                 while (ni < ei)
                 {
+                    while (char.IsWhiteSpace(s[ni])) ni++;//find next non whitespace
                     Match m = rg.Match(s, ni);
                     if (m.Index != ni)
                     {
-                        throw new JSONSyntaxErrorKeyValueNotExist();
+                        throw new JSONSyntaxErrorKeyValueNotExist(ni);
                     }
                     ni = (m.Length + m.Index);
-                    if (m.Groups[1].Value == "{" || m.Groups[1].Value == "[")
+                    string valuestr = m.Groups[1].Value;
+                    if (valuestr[0] == '{' || valuestr[0] == '[')
                     {
-                        if (t[ti].Complex > ComplexityThreshold)
+                        MyTree<object> child = t[ti];
+                        if (child.Complex > ComplexityThreshold)
                         {
                             rtn.Add(l[li].Result); //wait for child parsing
                             li++;
                         }
                         else
                         {
-                            rtn.Add(t[ti].parsedNode); //wait for child parsing
+                            child.parsedNode = Parse(child, s);
+                            rtn.Add(child.parsedNode); //wait for child parsing
                         }
-                        ni = t[ti].Index + t[ti].StrCount;
-                        while (char.IsWhiteSpace(s[ni])) ni++;//find next non whitespace
+                        ni = child.Index + child.StrCount;
                         ti++;
                     }
                     else
                     {
-                        rtn.Add(m.Groups[1].Value.ParseValue());
+                        rtn.Add(valuestr.ParseValue());
                     }
+                    while (char.IsWhiteSpace(s[ni])) ni++;//find next non whitespace
                     if (s[ni] != ',' && s[ni] != ']')
                     {
                         throw new JSONSyntaxErrorCommaNotExist();
@@ -192,10 +202,6 @@ namespace JSONGUIEditor.Parser
 
         static public JSONNode ParseValue(this string s)
         {//실제 값을 파싱하는 부분
-            if(s[0] == '\"' && s[s.Length-1] == '\"')
-            {
-                return new JSONString(s.Substring(1, s.Length - 2));
-            }
             double d;
             if(double.TryParse(s, out d))
             {
@@ -205,6 +211,10 @@ namespace JSONGUIEditor.Parser
             if(bool.TryParse(s, out b))
             {
                 return new JSONBool(b);
+            }
+            if (s[0] == '\"' && s[s.Length - 1] == '\"')
+            {
+                return new JSONString(s.Substring(1, s.Length - 2));
             }
 
             return new JSONNull();
