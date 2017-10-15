@@ -11,106 +11,22 @@ namespace JSONGUIEditor.Parser
     public static class JSONParseThread
     {
         //if complexity is bigger than threshold, add thread into threadpool
-        public const int ComplexityThreshold = 10;
+        public const int ThreadRunThreshold = 30;
+        public const int ComplexityHighThreshold = 30;
+        public const int ComplexityLowThreshold = 5;
         public const bool UsingThread = true;
-        
-        static public Regex RegKeyValue = new Regex(JSONParserDEFINE.Key_ValueMatch);
-        static public Regex RegValueOnly = new Regex(JSONParserDEFINE.ValuesMatch);
 
-        static public JSONNode Parse(MyTree<object> t, string s)
+        static public Regex RegKeyValue = new Regex(JSONParserDEFINE.Key_ValueMatch, RegexOptions.Compiled);
+        static public Regex RegValueOnly = new Regex(JSONParserDEFINE.ValuesMatch, RegexOptions.Compiled);
+
+        static public JSONNode Parse(ComplexTree<object> t, string s)
         {
             JSONNode rtn = null;
             int si = t.Index;//startindex
             int ni = si + 1;//nowindex
-            int ei = si + t.StrCount;//end index
+            int ei = t.EndPoint;//end index
             int ti = 0;//tree index
             Regex rg;
-            if(s[si]=='{')
-            {
-                rtn = new JSONObject();
-                rg = RegKeyValue;
-                while(ni < ei)
-                {
-                    while (char.IsWhiteSpace(s[ni])) ni++;//find next non whitespace
-                    Match m = rg.Match(s, ni);
-                    if(m.Index != ni)
-                    {
-                        throw new JSONSyntaxErrorKeyValueNotExist();
-                    }
-                    ni = (m.Length + m.Index);
-                    if(m.Groups[3].Value[0] == '{' || m.Groups[3].Value[0] == '[')
-                    {
-                        MyTree<object> child = t[ti];
-                        rtn[m.Groups[1].Value.Substring(1, m.Groups[1].Value.Length - 2)] = Parse(child, s);
-                        ni = child.Index + child.StrCount;
-                        ti++;
-                    }
-                    else
-                    {
-                        rtn[m.Groups[1].Value.Substring(1, m.Groups[1].Value.Length-2)] = m.Groups[3].Value.ParseValue();
-                    }
-                    while (char.IsWhiteSpace(s[ni])) ni++;//find next non whitespace
-                    if (s[ni] != ',' && s[ni] != '}')
-                    {
-                        throw new JSONSyntaxErrorCommaNotExist();
-                    }
-                    ni++;
-                }
-            }
-            else if(s[si] == '[')
-            {
-                rtn = new JSONArray();
-                rg = RegValueOnly;
-                while (ni < ei)
-                {
-                    while (char.IsWhiteSpace(s[ni])) ni++;//find next non whitespace
-                    Match m = rg.Match(s, ni);
-                    if(m.Index != ni)
-                    {
-                        throw new JSONSyntaxErrorKeyValueNotExist();
-                    }
-                    ni = (m.Length + m.Index);
-                    if (m.Groups[1].Value[0] == '{' || m.Groups[1].Value[0] == '[')
-                    {
-                        MyTree<object> child = t[ti];
-                        rtn.Add(Parse(child, s));
-                        ni = child.Index + child.StrCount;
-                        ti++;
-                    }
-                    else
-                    {
-                        rtn.Add(m.Groups[1].Value.ParseValue());
-                    }
-                    while (char.IsWhiteSpace(s[ni])) ni++;//find next non whitespace
-                    if (s[ni] != ',' && s[ni] != ']')
-                    {
-                        throw new JSONSyntaxErrorCommaNotExist();
-                    }
-                    ni++;
-                }
-            }
-
-            return rtn;
-        }//for single thread
-        
-        static public JSONNode ParseThread(MyTree<object> t, string s)
-        {
-            JSONNode rtn = null;
-            int si = t.Index;//startindex
-            int ni = si + 1;//nowindex
-            int ei = si + t.StrCount;//end index
-            int ti = 0;//tree index
-            int li = 0;//task list index
-            Regex rg;
-            List<Task<JSONNode>> l = new List<Task<JSONNode>>();
-            foreach (MyTree<object> c in t)
-            {
-                if (c.Complex > ComplexityThreshold)
-                {
-                    l.Add(Task<JSONNode>.Factory.StartNew(()=>ParseThread(c, s)));
-                }
-            }
-
             if (s[si] == '{')
             {
                 rtn = new JSONObject();
@@ -119,32 +35,21 @@ namespace JSONGUIEditor.Parser
                 {
                     while (char.IsWhiteSpace(s[ni])) ni++;//find next non whitespace
                     Match m = rg.Match(s, ni);
-                    if (m.Index != ni)
+                    if (!m.Success | m.Index != ni)
                     {
-                        throw new JSONSyntaxErrorKeyValueNotExist(ni);
+                        throw new JSONSyntaxErrorKeyValueNotExist();
                     }
-                    ni = (m.Length + m.Index);
-                    string keystr = m.Groups[1].Value;
-                    string valuestr = m.Groups[3].Value;
-                    if (valuestr[0] == '{' || valuestr[0] == '[')
+                    if (m.Groups[2].Value[0] != '{' && m.Groups[2].Value[0] != '[')
                     {
-                        MyTree<object> child = t[ti];
-                        if (child.Complex > ComplexityThreshold)
-                        {
-                            rtn[keystr.Substring(1, keystr.Length - 2)] = l[li].Result;//wait for child parsing
-                            li++;
-                        }
-                        else
-                        {
-                            child.parsedNode = Parse(child, s);
-                            rtn[keystr.Substring(1, keystr.Length - 2)] = child.parsedNode;
-                        }
-                        ni = child.Index + child.StrCount;
-                        ti++;
+                        ni = (m.Length + m.Index);
+                        rtn[m.Groups[1].Value.Substring(1, m.Groups[1].Value.Length - 2)] = m.Groups[2].Value.ParseValue();
                     }
                     else
                     {
-                        rtn[keystr.Substring(1, keystr.Length - 2)] = valuestr.ParseValue();
+                        ComplexTree<object> child = t[ti];
+                        rtn[m.Groups[1].Value.Substring(1, m.Groups[1].Value.Length - 2)] = Parse(child, s);
+                        ni = child.EndPoint;
+                        ti++;
                     }
                     while (char.IsWhiteSpace(s[ni])) ni++;//find next non whitespace
                     if (s[ni] != ',' && s[ni] != '}')
@@ -162,31 +67,21 @@ namespace JSONGUIEditor.Parser
                 {
                     while (char.IsWhiteSpace(s[ni])) ni++;//find next non whitespace
                     Match m = rg.Match(s, ni);
-                    if (m.Index != ni)
+                    if (!m.Success | m.Index != ni)
                     {
-                        throw new JSONSyntaxErrorKeyValueNotExist(ni);
+                        throw new JSONSyntaxErrorKeyValueNotExist();
                     }
-                    ni = (m.Length + m.Index);
-                    string valuestr = m.Groups[1].Value;
-                    if (valuestr[0] == '{' || valuestr[0] == '[')
+                    if (m.Groups[1].Value[0] != '{' && m.Groups[1].Value[0] != '[')
                     {
-                        MyTree<object> child = t[ti];
-                        if (child.Complex > ComplexityThreshold)
-                        {
-                            rtn.Add(l[li].Result); //wait for child parsing
-                            li++;
-                        }
-                        else
-                        {
-                            child.parsedNode = Parse(child, s);
-                            rtn.Add(child.parsedNode); //wait for child parsing
-                        }
-                        ni = child.Index + child.StrCount;
-                        ti++;
+                        ni = (m.Length + m.Index);
+                        rtn.Add(m.Groups[1].Value.ParseValue());
                     }
                     else
                     {
-                        rtn.Add(valuestr.ParseValue());
+                        ComplexTree<object> child = t[ti];
+                        rtn.Add(Parse(child, s));
+                        ni = child.EndPoint;
+                        ti++;
                     }
                     while (char.IsWhiteSpace(s[ni])) ni++;//find next non whitespace
                     if (s[ni] != ',' && s[ni] != ']')
@@ -197,6 +92,189 @@ namespace JSONGUIEditor.Parser
                 }
             }
 
+            return rtn;
+        }//for single thread
+
+
+        static private void ThreadMaking(int start, ComplexTree<object> t, string s)
+        {
+            int end = (start + ThreadRunThreshold) > t.Count ? t.Count : start + ThreadRunThreshold;
+            for (int i = start; i < end; ++i)
+            {
+                ComplexTree<object> c = t[i];
+                if (c.Complex > ComplexityHighThreshold)
+                {
+                    c.task = Task<JSONNode>.Factory.StartNew(() => { return ParseThread(c, s); }, TaskCreationOptions.LongRunning);
+                }
+                else if (c.Complex > ComplexityLowThreshold)
+                {
+                    c.task = Task<JSONNode>.Factory.StartNew(() => { return Parse(c, s); }, TaskCreationOptions.LongRunning);
+                }
+            }
+        }
+
+        static public JSONNode ParseThread(ComplexTree<object> t, string s)
+        {
+            List<Task> taskList = new List<Task>();
+            List<Task> CollectTask = new List<Task>();
+            if (t.Count > ThreadRunThreshold)
+            {
+                for (int i = 0; i < t.Count; i += ThreadRunThreshold)
+                {
+                    int p = i;
+                    taskList.Add(Task.Factory.StartNew(() => ThreadMaking(p, t, s), TaskCreationOptions.None));
+                }
+            }
+            else
+            {
+                foreach (ComplexTree<object> c in t)
+                {
+                    if (c.Complex > ComplexityHighThreshold)
+                    {
+                        c.task = Task<JSONNode>.Factory.StartNew(() => { return ParseThread(c, s); }, TaskCreationOptions.LongRunning);
+                    }
+                    else if (c.Complex > ComplexityLowThreshold)
+                    {
+                        c.task = Task<JSONNode>.Factory.StartNew(() => { return Parse(c, s); }, TaskCreationOptions.LongRunning);
+                    }
+                }
+            }
+            /*
+            Task.Run(() =>
+            {
+                foreach (ComplexTree<object> c in t)
+                {
+                    if (c.Complex > ComplexityLowThreshold)
+                    {
+                        l.Add(Task<JSONNode>.Factory.StartNew(() => { return Parse(c, s); }, TaskCreationOptions.LongRunning));
+                    }
+                    else if (c.Complex > ComplexityHighThreshold)
+                    {
+                        l.Add(Task<JSONNode>.Factory.StartNew(() => { return ParseThread(c, s); }, TaskCreationOptions.LongRunning));
+                    }
+                }
+            }
+            );*/
+            //Task.WaitAll(taskList.ToArray());
+
+            JSONNode rtn = null;
+            int si = t.Index;//startindex
+            int ni = si + 1;//nowindex
+            int ei = t.EndPoint;//end index
+            int ti = 0;//tree index
+            Regex rg;
+            
+            if (s[si] == '{')
+            {
+                rtn = new JSONObject();
+                rg = RegKeyValue;
+                while (ni < ei)
+                {
+                    while (char.IsWhiteSpace(s[ni])) ni++;//find next non whitespace
+                    StringBuilder sb = new StringBuilder();
+                    bool isQuoteMode = false;
+                    Match m = rg.Match(s, ni);
+                    if (!m.Success | m.Index != ni)
+                    {
+                        throw new JSONSyntaxErrorKeyValueNotExist(ni);
+                    }
+                    string keystr = m.Groups[1].Value;
+                    string valuestr = m.Groups[2].Value;
+                    if (valuestr[0] != '{' && valuestr[0] != '[')
+                    {
+                        ni = (m.Length + m.Index);
+                        rtn[keystr.Substring(1, keystr.Length - 2)] = valuestr.ParseValue();
+                        while (char.IsWhiteSpace(s[ni])) ni++;//find next non whitespace
+                    }
+                    else
+                    {
+                        ComplexTree<object> child = t[ti];
+                        ni = child.EndPoint;
+                        while (char.IsWhiteSpace(s[ni])) ni++;//find next non whitespace
+                        if (child.Complex > ComplexityLowThreshold)
+                        {
+                            if (child.task == null)
+                            {
+                                ComplexTree<object> waitChild = child;
+                                string tempkey = keystr.Substring(1, keystr.Length - 2);
+                                CollectTask.Add(Task.Factory.StartNew(() =>
+                                {
+                                    taskList[ti / ThreadRunThreshold].Wait();
+                                    rtn[tempkey] = waitChild.task.Result;
+                                }));
+                            }//when above task not finished
+                            else
+                                rtn[keystr.Substring(1, keystr.Length - 2)] = child.task.Result;//wait for child parsing
+                        }
+                        else
+                        {
+                            rtn[keystr.Substring(1, keystr.Length - 2)] = Parse(child, s);
+                        }
+                        ti++;
+                    }
+                    if (s[ni] != ',' && s[ni] != '}')
+                    {
+                        throw new JSONSyntaxErrorCommaNotExist();
+                    }
+                    ni++;
+                }
+            }
+            else if (s[si] == '[')
+            {
+                rtn = new JSONArray();
+                rg = RegValueOnly;
+                while (ni < ei)
+                {
+                    while (char.IsWhiteSpace(s[ni])) ni++;//find next non whitespace
+                    Match m = rg.Match(s, ni);
+                    if (!m.Success | m.Index != ni)
+                    {
+                        throw new JSONSyntaxErrorKeyValueNotExist(ni);
+                    }
+                    string valuestr = m.Groups[1].Value;
+                    if (valuestr[0] != '{' && valuestr[0] != '[')
+                    {
+                        ni = (m.Length + m.Index);
+                        rtn.Add(valuestr.ParseValue());
+                        while (char.IsWhiteSpace(s[ni])) ni++;//find next non whitespace
+                    }
+                    else
+                    {
+                        ComplexTree<object> child = t[ti];
+                        ni = child.EndPoint;
+                        while (char.IsWhiteSpace(s[ni])) ni++;//find next non whitespace
+                        if (child.Complex > ComplexityLowThreshold)
+                        {
+                            if (child.task == null)
+                            {
+                                int tempindex = rtn.Count;
+                                int childindex = ti;
+                                ComplexTree<object> waitChild = child;
+                                rtn.Add(new JSONNull());
+                                CollectTask.Add(Task.Factory.StartNew(() =>
+                                {
+                                    taskList[childindex / ThreadRunThreshold].Wait();
+                                    rtn[tempindex] = waitChild.task.Result;
+                                }));
+                            }//when above task not finished
+                            else
+                                rtn.Add(child.task.Result); //wait for child parsing
+                        }
+                        else
+                        {
+                            rtn.Add(Parse(child, s)); //wait for child parsing
+                        }
+                        ti++;
+                    }
+                    if (s[ni] != ',' && s[ni] != ']')
+                    {
+                        throw new JSONSyntaxErrorCommaNotExist();
+                    }
+                    ni++;
+                }
+            }
+
+            Task.WaitAll(CollectTask.ToArray());
             return rtn;
         }//for multithread
 
@@ -212,7 +290,7 @@ namespace JSONGUIEditor.Parser
             {
                 return new JSONBool(b);
             }
-            if (s[0] == '\"' && s[s.Length - 1] == '\"')
+            if (s[0] == s[s.Length - 1])
             {
                 return new JSONString(s.Substring(1, s.Length - 2));
             }

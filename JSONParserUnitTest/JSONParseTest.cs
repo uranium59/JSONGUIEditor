@@ -16,13 +16,18 @@ namespace JSONParserUnitTest
         [SetUp]
         public void SetUp()
         {
-            longlongstring = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory +"FakeJSON.json");
+            longlongstring = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ReallyBigJSON.json");
+            //longlongstring = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory +"FakeJSON.json");
+            JSONParseThread.RegKeyValue.Match("123");
+            JSONParseThread.RegValueOnly.Match("test");
+
+            //ThreadPool.SetMaxThreads(65536, 30000);
         }
 
         [Test, Order(0)]
         public void ComplexityBasic()
         {
-            MyTree<object> t = JSONParser.CalculateComplexity("{\"test\":{\"as{df\":123}, \"qq\":{}}");
+            ComplexTree<object> t = JSONParser.CalculateComplexity("{\"test\":{\"as{df\":123}, \"qq\":{}}");
         }
 
         [Test, Order(1)]
@@ -37,14 +42,14 @@ namespace JSONParserUnitTest
         public void ParseTest2()
         {
             string jsonstring = "{\"test\":12345}";
-            MyTree<object> t = JSONParser.CalculateComplexity(jsonstring);
+            ComplexTree<object> t = JSONParser.CalculateComplexity(jsonstring);
             JSONNode n = JSONParseThread.Parse(t[0], jsonstring);
         }
         [Test, Order(3)]
         public void ParseTest3()
         {
             string jsonstring = "[1,\"t\",true]";
-            MyTree<object> t = JSONParser.CalculateComplexity(jsonstring);
+            ComplexTree<object> t = JSONParser.CalculateComplexity(jsonstring);
             JSONNode n = JSONParseThread.Parse(t[0], jsonstring);
         }
 
@@ -53,15 +58,24 @@ namespace JSONParserUnitTest
         {
             Stopwatch s = new Stopwatch();
             s.Start();
-            Task t = Task.Factory.StartNew(() =>
-            {
-                JSONParser.ParseStart((JSONNode n) =>
-                { return null;
-                }, longlongstring);
-            });
-            t.Wait();
+            
+            ComplexTree<object> mt = JSONParser.CalculateComplexity(longlongstring);
+            mt.AddComplex();
+            JSONNode n = JSONParseThread.ParseThread(mt[0], longlongstring);
             s.Stop();
             Console.WriteLine(s.ElapsedTicks);
+            Console.WriteLine(n.Count);
+            Console.WriteLine(n[0]["guid"].value + "");
+            /*
+            Task t = Task.Factory.StartNew(()=>JSONParser.ParseStart((JSONNode n) =>
+            {
+                s.Stop();
+                Console.WriteLine(s.ElapsedTicks);
+                File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + "testout.txt", s.ElapsedTicks + "");
+                return null;
+            }, longlongstring));
+            t.Wait();
+            */
             Console.WriteLine("test function finished");
         }
         [Test, Order(101)]
@@ -69,7 +83,7 @@ namespace JSONParserUnitTest
         {
             Stopwatch s = new Stopwatch();
             s.Start();
-            MyTree<object> mt = JSONParser.CalculateComplexity(longlongstring);
+            ComplexTree<object> mt = JSONParser.CalculateComplexity(longlongstring);
             mt.AddComplex();
             JSONNode n = JSONParseThread.Parse(mt[0], longlongstring);
             s.Stop();
@@ -80,7 +94,7 @@ namespace JSONParserUnitTest
         {
             Stopwatch s = new Stopwatch();
             s.Start();
-            MyTree<object> t = JSONParser.CalculateComplexity(longlongstring);
+            ComplexTree<object> t = JSONParser.CalculateComplexity(longlongstring);
             t.AddComplex();
             s.Stop();
             Console.WriteLine(s.ElapsedTicks);

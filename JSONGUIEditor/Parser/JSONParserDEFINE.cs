@@ -25,11 +25,11 @@ namespace JSONGUIEditor.Parser
         static public string Token_Number = "[0-9]";
         static public string Token_Exponential = "[eE][+-]?";
 
-        static public string Full_Exponential_number = "[-+]?"+Token_Number+ "*\\.?" + Token_Number + "+(" + Token_Exponential+ "?" + Token_Number + "+)?";
-        static public string Full_String = Token_Quote + "(\\\\\\\"|[^" + Token_Quote + "])*?" + Token_Quote;
+        static public string Full_Exponential_number = "[-]?"+Token_Number+ "+(?>\\." + Token_Number + "+)?(?>" + Token_Exponential+ "?" + Token_Number + "+)?";
+        static public string Full_String = Token_Quote + "(?>\\\\\\\"|[^" + Token_Quote + "])*?" + Token_Quote;
 
-        static public string Token_Value = Full_String + "|" + Token_True + "|" + Token_False + "|" + Token_Null + "|" + Full_Exponential_number +
-             "|" + Token_ObjectStart + "|" + Token_ArrayStart;
+        static public string Token_Value = Token_ObjectStart + "|" + Token_ArrayStart + "|" + Token_True + "|" + Token_False + "|" + Full_Exponential_number +
+             "|" + Full_String + "|" + Token_Null;
 
         static public string Key_ValueMatch =
             "(" +

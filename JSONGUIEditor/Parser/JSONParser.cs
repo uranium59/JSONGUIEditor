@@ -17,13 +17,9 @@ namespace JSONGUIEditor.Parser
 
         //문자열 파싱용 함수
         #region
-        static public void ParseStart(JSON.ParseCallback c)
+        static async public void ParseStart(JSON.ParseCallback c, string s = "")
         {
-            ParseStart(c, "");
-        }
-        static async public void ParseStart(JSON.ParseCallback c, string s)
-        {
-            MyTree<object> CompTree = null ;
+            ComplexTree<object> CompTree = null ;
             try
             {
                 CompTree = CalculateComplexity(s);
@@ -44,22 +40,21 @@ namespace JSONGUIEditor.Parser
             c(t.Result);
         }
 
-        static public MyTree<object> CalculateComplexity(string s)
+        static public ComplexTree<object> CalculateComplexity(string s)
         {
             bool isQuote = false;
-            MyTree<object> rtn = new MyTree<object>();
-            MyTree<object> cursor = rtn;
+            ComplexTree<object> rtn = new ComplexTree<object>();
+            ComplexTree<object> cursor = rtn;
+            int quoteposition = 0;
             for (int i = 0; i < s.Length; i++)
             {
-                if (cursor == null) throw new JSONSyntaxErrorNotClose(i - 1);
                 switch (s[i])
                 {
-                    case '{':
                     case '[':
+                    case '{':
                         {
                             if (isQuote) break;
-                            cursor.Complex++;
-                            MyTree<object> child = new MyTree<object>()
+                            ComplexTree<object> child = new ComplexTree<object>()
                             {
                                 Index = i,
                                 parent = cursor
@@ -71,13 +66,26 @@ namespace JSONGUIEditor.Parser
                     case ']':
                     case '}':
                         if (isQuote) break;
-                        cursor.StrCount = i - cursor.Index + 1;
+                        cursor.EndPoint = (++i);
                         cursor = cursor.parent;
+                        if (cursor == null) throw new JSONSyntaxErrorNotClose(i - 1);
                         break;
                     case '"':
-                        isQuote ^= true;
+                        if (s[i - 1] != '\\')
+                        {
+                            isQuote ^= true;
+                            quoteposition = isQuote?i:-1;
+                        }
                         break;
                 }
+            }
+            if(!ReferenceEquals(rtn, cursor))
+            {
+                throw new JSONSyntaxErrorNotClose(s.Length);
+            }
+            if(quoteposition > -1)
+            {
+                throw new JSONSyntaxErrorNotClose(quoteposition);
             }
             return rtn;
         }

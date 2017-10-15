@@ -41,6 +41,7 @@ TestResult.xml
 [Dd]ebugPS/
 [Rr]eleasePS/
 dlldata.c
+ReallyBigJSON.json
 
 # .NET Core
 project.lock.json
