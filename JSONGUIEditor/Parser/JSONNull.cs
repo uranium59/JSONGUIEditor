@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace JSONGUIEditor.Parser
 {
-    class JSONNull :JSONNode
+    public class JSONNull :JSONNode
     {
         public JSONNull()
         {

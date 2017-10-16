@@ -50,6 +50,11 @@ namespace JSONGUIEditor.Parser
             {
                 switch (s[i])
                 {
+                    case ',':
+                    case ':':
+                        if (isQuote) break;
+                        cursor.separator.Add(i);
+                        break;
                     case '[':
                     case '{':
                         {
@@ -65,11 +70,14 @@ namespace JSONGUIEditor.Parser
                         }
                     case ']':
                     case '}':
-                        if (isQuote) break;
-                        cursor.EndPoint = (++i);
-                        cursor = cursor.parent;
-                        if (cursor == null) throw new JSONSyntaxErrorNotClose(i - 1);
-                        break;
+                        {
+                            if (isQuote) break;
+                            cursor.separator.Add(i);
+                            cursor.EndPoint = i;
+                            cursor = cursor.parent;
+                            if (cursor == null) throw new JSONSyntaxErrorNotClose(i - 1);
+                            break;
+                        }
                     case '"':
                         if (s[i - 1] != '\\')
                         {

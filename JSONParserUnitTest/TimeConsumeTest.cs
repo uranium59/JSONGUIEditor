@@ -106,5 +106,42 @@ namespace JSONParserUnitTest
             s.Stop();
             Console.WriteLine(s.Elapsed);
         }
+
+        [Test, Order(10)]
+        public void TrimVSFindIndex()
+        {
+            string[] strarr = new string[100000];
+            for (int i = 0; i < 100000; ++i)
+            {
+                strarr[i] = random.NextDouble() + "";
+                int rndrange = random.Next(0, 5);
+                for (int j = 0; j < rndrange; ++j)
+                {
+                    strarr[i] += " ";
+                }
+            }
+
+            string[] result = new string[100000];
+            
+            Stopwatch s = Stopwatch.StartNew();
+            for(int i = 0; i < 100000; ++i)
+            {
+                result[i] = strarr[i].Substring(0, strarr[i].Length);
+                result[i] = result[i].TrimEnd();
+            }
+            s.Stop();
+            Console.WriteLine(s.Elapsed);
+
+            s = Stopwatch.StartNew();
+            for(int i = 0; i < 100000; ++i)
+            {
+                string target = strarr[i];
+                int lastnonwhite = target.Length - 1;
+                while (char.IsWhiteSpace(target[lastnonwhite])) lastnonwhite--;//find next non whitespace
+                result[i] = target.Substring(0, lastnonwhite);
+            }
+            s.Stop();
+            Console.WriteLine(s.Elapsed);
+        }
     }
 }

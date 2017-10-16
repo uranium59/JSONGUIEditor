@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace JSONGUIEditor.Parser.Exception
 {
-    public class JSONSyntaxErrorKeyValueNotExist :JSONException
+    public class JSONSyntaxErrorKeyNotExist :JSONException
     {
-        public JSONSyntaxErrorKeyValueNotExist()
+        public JSONSyntaxErrorKeyNotExist()
         {
 
         }
-        public JSONSyntaxErrorKeyValueNotExist(int index)
+        public JSONSyntaxErrorKeyNotExist(int index)
         {
 
         }

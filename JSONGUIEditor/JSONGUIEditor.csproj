@@ -77,8 +77,11 @@
     <Compile Include="Parser\Exception\JSONNotBooleanException.cs" />
     <Compile Include="Parser\Exception\JSONNotNumberException.cs" />
     <Compile Include="Parser\Exception\JSONNotObjectException.cs" />
+    <Compile Include="Parser\Exception\JSONSyntaxErrorCannotParseValue.cs" />
+    <Compile Include="Parser\Exception\JSONSyntaxErrorCollonNotExist.cs" />
     <Compile Include="Parser\Exception\JSONSyntaxErrorCommaNotExist.cs" />
-    <Compile Include="Parser\Exception\JSONSyntaxErrorKeyValueNotExist.cs" />
+    <Compile Include="Parser\Exception\JSONSyntaxErrorValueNotExist.cs" />
+    <Compile Include="Parser\Exception\JSONSyntaxErrorKeyNotExist.cs" />
     <Compile Include="Parser\Exception\JSONSyntaxErrorNotClose.cs" />
     <Compile Include="Parser\JSONBool.cs" />
     <Compile Include="Parser\JSONComplexityTree.cs" />
