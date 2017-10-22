@@ -101,6 +101,12 @@
     <Compile Include="Parser\State\JSONType.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TemplateForm\TemplateAdd.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TemplateForm\TemplateAdd.Designer.cs">
+      <DependentUpon>TemplateAdd.cs</DependentUpon>
+    </Compile>
     <Compile Include="TemplateForm\TemplateManage.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -140,6 +146,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Template.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

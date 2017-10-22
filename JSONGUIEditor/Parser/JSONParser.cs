@@ -45,7 +45,7 @@ namespace JSONGUIEditor.Parser
             bool isQuote = false;
             ComplexTree<object> rtn = new ComplexTree<object>();
             ComplexTree<object> cursor = rtn;
-            int quoteposition = 0;
+            int quoteposition = -1;
             for (int i = 0; i < s.Length; i++)
             {
                 switch (s[i])

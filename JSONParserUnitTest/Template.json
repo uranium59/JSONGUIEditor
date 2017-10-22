@@ -1,0 +1,14 @@
+﻿[
+  {
+    "name": "user Template",
+    "date": "2017-10-21 00:00:00",
+    "template": "{\"id\":\"\",\"phone\":\"\"}",
+    "description": "Simple User Info Template"
+  },
+  {
+    "name": "card Template",
+    "date": "2017-10-21 00:00:00",
+    "template": "{\"id\":1,\"name\":\"\",\"cost\":0,\"health\":0,\"attack\":0}",
+    "description": "Hearthstone Like Card Template"
+  }
+]

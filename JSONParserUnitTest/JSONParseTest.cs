@@ -115,5 +115,12 @@ namespace JSONParserUnitTest
             s.Stop();
             Console.WriteLine(s.Elapsed);
         }
+        [Test, Order(202)]
+        public void TemplateTextTest()
+        {
+            string templatestr = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "Template.json");
+
+            SimpleJSON.JSONNode n = SimpleJSON.JSONNode.Parse(templatestr);
+        }
     }
 }

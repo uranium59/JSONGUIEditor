@@ -39,6 +39,7 @@
             this.itemHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.tview_object = new System.Windows.Forms.TreeView();
             this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
+            this.addTemplateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuBar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
             this.SuspendLayout();
@@ -73,7 +74,8 @@
             // 
             this.itemTemplate.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.selectToolStripMenuItem,
-            this.selectTemplateToolStripMenuItem});
+            this.selectTemplateToolStripMenuItem,
+            this.addTemplateToolStripMenuItem});
             this.itemTemplate.Name = "itemTemplate";
             this.itemTemplate.Size = new System.Drawing.Size(68, 20);
             this.itemTemplate.Text = "&Template";
@@ -112,6 +114,12 @@
             this.tview_object.TabIndex = 1;
             this.tview_object.DoubleClick += new System.EventHandler(this.tview_object_DoubleClick);
             // 
+            // addTemplateToolStripMenuItem
+            // 
+            this.addTemplateToolStripMenuItem.Name = "addTemplateToolStripMenuItem";
+            this.addTemplateToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.addTemplateToolStripMenuItem.Text = "AddTemplate";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
@@ -143,6 +151,7 @@
         private System.Windows.Forms.BindingSource bindingSource1;
         private System.Windows.Forms.ToolStripMenuItem selectToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem selectTemplateToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem addTemplateToolStripMenuItem;
     }
 }
 

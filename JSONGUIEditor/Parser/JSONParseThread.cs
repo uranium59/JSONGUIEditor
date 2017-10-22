@@ -32,6 +32,18 @@ namespace JSONGUIEditor.Parser
             if (s[si] == '{')
             {
                 rtn = new JSONObject();
+                if(t.separator.Count == 1)
+                {
+                    if (s[t.separator[sepi]] == '}')
+                    {
+                        return rtn;
+                    }
+                    else
+                    {
+                        throw new JSONSyntaxErrorCommaNotExist();
+                    }
+                }
+
                 while (sepi < t.separator.Count)
                 {
                     int nextSeparator = t.separator[sepi];
@@ -83,6 +95,19 @@ namespace JSONGUIEditor.Parser
             else if (s[si] == '[')
             {
                 rtn = new JSONArray();
+
+                if (t.separator.Count == 1)
+                {
+                    if (s[t.separator[sepi]] == ']')
+                    {
+                        return rtn;
+                    }
+                    else
+                    {
+                        throw new JSONSyntaxErrorCommaNotExist();
+                    }
+                }
+
                 while (sepi < t.separator.Count)
                 {
                     int nextSeparator = t.separator[sepi];
@@ -138,6 +163,19 @@ namespace JSONGUIEditor.Parser
             if (s[si] == '{')
             {
                 rtn = new JSONObject();
+
+                if (t.separator.Count == 1)
+                {
+                    if (s[t.separator[sepi]] == '}')
+                    {
+                        return rtn;
+                    }
+                    else
+                    {
+                        throw new JSONSyntaxErrorCommaNotExist();
+                    }
+                }
+
                 while (sepi < t.separator.Count)
                 {
                     int nextSeparator = t.separator[sepi];
@@ -207,6 +245,19 @@ namespace JSONGUIEditor.Parser
             else if (s[si] == '[')
             {
                 rtn = new JSONArray();
+
+                if (t.separator.Count == 1)
+                {
+                    if (s[t.separator[sepi]] == ']')
+                    {
+                        return rtn;
+                    }
+                    else
+                    {
+                        throw new JSONSyntaxErrorCommaNotExist();
+                    }
+                }
+
                 while (sepi < t.separator.Count)
                 {
                     int nextSeparator = t.separator[sepi];

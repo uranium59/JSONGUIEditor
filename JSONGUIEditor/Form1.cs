@@ -152,6 +152,9 @@ namespace JSONGUIEditor
             }
         }
 
+
+        GroupBox nowSelectedNode = null;
+
         private void selectToolStripMenuItem_Click(object sender, EventArgs e)
         {
             TemplateManage f = new TemplateManage();
@@ -160,8 +163,9 @@ namespace JSONGUIEditor
 
         private void selectTemplateToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            TemplateSelect f = new TemplateSelect();
-            f.Show(this);
+            TemplateSelect f = new TemplateSelect(nowSelectedNode);
+            if(!f.IsDisposed)
+                f.Show(this);
         }
     }
 }
