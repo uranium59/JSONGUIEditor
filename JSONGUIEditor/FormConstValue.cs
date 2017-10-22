@@ -10,5 +10,9 @@ namespace JSONGUIEditor
     {
         static public int keyvalueHeight = 12;
         static public int inputboxHeight = 17;
+        static public int MarginHeight = 10;
+
+        static public int stepX = 110;
+        static public int stepY = 25;
     }
 }
