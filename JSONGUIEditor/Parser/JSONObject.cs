@@ -114,8 +114,9 @@ namespace JSONGUIEditor.Parser
             {
                 if (!o.addnullobject && e.Value == null) continue;
                 rtn += JSONParser.StringWithEscape(e.Key) + ":";
-                rtn += e.Value.Stringify(o);
+                rtn += e.Value.Stringify(o) + ",";
             }
+            rtn = rtn.Substring(0, rtn.Length - 1);
             rtn += "}";
             return rtn;
         }//들여쓰기 조절할 방법 추가해야 함.

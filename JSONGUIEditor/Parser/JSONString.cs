@@ -52,5 +52,9 @@ namespace JSONGUIEditor.Parser
         {
             return "\"" + JSONParser.StringWithEscape(_data) + "\"";
         }
+        public override string Stringify(JSONStringifyOption o)
+        {
+            return "\"" + JSONParser.StringWithEscape(_data) + "\"";
+        }
     }
 }

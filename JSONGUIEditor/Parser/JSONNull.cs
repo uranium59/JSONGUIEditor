@@ -27,5 +27,9 @@ namespace JSONGUIEditor.Parser
         {
             return "null";
         }
+        public override string Stringify(JSONStringifyOption o)
+        {
+            return "null";
+        }
     }
 }

@@ -40,5 +40,9 @@ namespace JSONGUIEditor.Parser
         {
             return _data.ToString();
         }
+        public override string Stringify(JSONStringifyOption o)
+        {
+            return _data.ToString();
+        }
     }
 }
