@@ -24,8 +24,8 @@ namespace JSONGUIEditor.TemplateForm
         {//Dont Use This!!!
             throw new NotImplementedException();
         }
-        GroupBox nowSelected = null;
-        public TemplateSelect(GroupBox g)
+        Panel nowSelected = null;
+        public TemplateSelect(Panel g)
         {//maybe move this to another position...
             if(g == null)
             {

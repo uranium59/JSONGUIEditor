@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Drawing;
 using System.Threading.Tasks;
 
 namespace JSONGUIEditor
@@ -14,5 +15,7 @@ namespace JSONGUIEditor
 
         static public int stepX = 110;
         static public int stepY = 25;
+
+        static public Color baseColor = Color.FromArgb(255, 240, 240, 240);
     }
 }
