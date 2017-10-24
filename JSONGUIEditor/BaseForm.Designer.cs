@@ -42,10 +42,11 @@
             this.selectTemplateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addTemplateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.itemView = new System.Windows.Forms.ToolStripMenuItem();
+            this.vToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.itemHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.tview_object = new System.Windows.Forms.TreeView();
-            this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.MainPanel = new System.Windows.Forms.Panel();
+            this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.menuBar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
             this.SuspendLayout();
@@ -149,9 +150,18 @@
             // 
             // itemView
             // 
+            this.itemView.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.vToolStripMenuItem});
             this.itemView.Name = "itemView";
             this.itemView.Size = new System.Drawing.Size(45, 20);
             this.itemView.Text = "&View";
+            // 
+            // vToolStripMenuItem
+            // 
+            this.vToolStripMenuItem.Name = "vToolStripMenuItem";
+            this.vToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
+            this.vToolStripMenuItem.Text = "View All Text";
+            this.vToolStripMenuItem.Click += new System.EventHandler(this.vToolStripMenuItem_Click);
             // 
             // itemHelp
             // 
@@ -177,7 +187,7 @@
             this.MainPanel.Size = new System.Drawing.Size(497, 364);
             this.MainPanel.TabIndex = 2;
             // 
-            // Form1
+            // BaseForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -186,7 +196,7 @@
             this.Controls.Add(this.tview_object);
             this.Controls.Add(this.menuBar);
             this.MainMenuStrip = this.menuBar;
-            this.Name = "Form1";
+            this.Name = "BaseForm";
             this.Text = "JSON_Editor";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.menuBar.ResumeLayout(false);
@@ -216,6 +226,7 @@
         private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem quitToolStripMenuItem;
         private System.Windows.Forms.Panel MainPanel;
+        private System.Windows.Forms.ToolStripMenuItem vToolStripMenuItem;
     }
 }
 

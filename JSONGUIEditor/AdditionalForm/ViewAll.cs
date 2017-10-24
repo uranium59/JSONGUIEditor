@@ -11,22 +11,23 @@ using System.Windows.Forms;
 namespace JSONGUIEditor.AdditionalForm
 {
     using JSONGUIEditor.Parser;
-    public partial class ModifyForm : Form
+    public partial class ViewAll : Form
     {
-        public ModifyForm()
-        {
-            throw new NotImplementedException(); //Dont Use This!
-        }
-        private bool _modified = false;
-        private Control _Target = null;
+        public BaseForm baseForm { get; set; }
 
-        public ModifyForm(JSONNode n, Control target)
+        public ViewAll()
+        {
+            throw new NotImplementedException();
+        }
+
+        public ViewAll(JSONNode n)
         {
             InitializeComponent();
             textBox1.Text = n.Stringify();
-            _Target = target;
+            textBox1.Focus();
+            textBox1.SelectionLength = 0;
+            KeyPreview = true;
 
-            this.KeyPreview = true;
             this.KeyPress += ViewAll_KeyPress;
         }
 
@@ -34,11 +35,7 @@ namespace JSONGUIEditor.AdditionalForm
         {
             this.Close();
         }
-
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-            _modified = true;
-        }
+        private bool _modified = false;
 
         private bool CloseFormAfterModify()
         {
@@ -59,16 +56,31 @@ namespace JSONGUIEditor.AdditionalForm
 
         private void ModifyMain()
         {
+            JSON.Parse(ModifyFinish, textBox1.Text);
             this.Close();
+        }
+        private JSONNode ModifyFinish(JSONNode n)
+        {
+            return baseForm.ReceiveNode(n);
         }
 
         private void ViewAll_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)Keys.Escape)
             {
-                if (CloseFormAfterModify())
+                if(CloseFormAfterModify())
                     this.Close();
             }
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            _modified = true;
+        }
+
+        private void Modify_Click(object sender, EventArgs e)
+        {
+            ModifyMain();
         }
     }
 }

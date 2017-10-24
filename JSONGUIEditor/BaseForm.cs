@@ -51,19 +51,19 @@ namespace JSONGUIEditor
 
         private void UpdateResource(string s)
         {
-            tview_object.Nodes.Clear();
-            MainPanel.Controls.Clear();
-
             JSON.Parse(ReceiveNode, s);
         }
 
         JSONNode RootNode = null;
-        private JSONNode ReceiveNode(JSONNode n)
+        public JSONNode ReceiveNode(JSONNode n)
         {
+            tview_object.Nodes.Clear();
+            MainPanel.Controls.Clear();
+
             JSONFormUtil.MakeTreeView(n, tview_object);
             //tview_object.Nodes.Add(node1);
             RootNode = n;
-            MappingKey(tview_object.TopNode, n);
+            //MappingKey(tview_object.TopNode, n);
 
             Panel p = CreateJSONNodeGroupBox(n, null, 0);
             p.Location = new Point(0, 35);
@@ -276,7 +276,8 @@ namespace JSONGUIEditor
         {
             Control c = (Control)sender;
             JSONNode n = (JSONNode)c.Tag;
-            new ModifyForm(n, c).Show();
+            ModifyForm m = new ModifyForm(n, c);
+            m.Show(this);
         }
 
         Panel nowSelectedNode = null;
@@ -353,7 +354,31 @@ namespace JSONGUIEditor
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (isChanged)
+            {
+                DialogResult d = MessageBox.Show("변경사항이 저장되지 않았습니다. 저장하시겠습니까?", "경고", MessageBoxButtons.YesNoCancel);
+                if (d == DialogResult.Cancel)
+                    return;
+                if (d == DialogResult.No)
+                {
+                    Application.Exit();
+                    return;
+                }
+                else
+                {
+                    saveToolStripMenuItem_Click(sender, e);
+                }
+            }
 
+            OpenFileDialog o = new OpenFileDialog();
+            o.Filter = "JSON File|*.json";
+            o.ReadOnlyChecked = true;
+            o.ShowDialog();
+            if(o.FileName != "")
+            {
+                string s = File.ReadAllText(o.FileName);
+                JSON.Parse(ReceiveNode, s);
+            }
         }
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
@@ -375,6 +400,13 @@ namespace JSONGUIEditor
             }
             else
                 UpdateResource("{}");
+        }
+
+        private void vToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ViewAll v = new ViewAll(RootNode);
+            v.baseForm = this;
+            v.Show(this);
         }
     }
 }
