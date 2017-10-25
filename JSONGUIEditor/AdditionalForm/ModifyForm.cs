@@ -27,7 +27,7 @@ namespace JSONGUIEditor.AdditionalForm
             _Target = target;
 
             this.KeyPreview = true;
-            this.KeyPress += ViewAll_KeyPress;
+            this.KeyPress += ModifyForm_KeyPress;
         }
 
         private void Cancel_Click(object sender, EventArgs e)
@@ -62,7 +62,7 @@ namespace JSONGUIEditor.AdditionalForm
             this.Close();
         }
 
-        private void ViewAll_KeyPress(object sender, KeyPressEventArgs e)
+        private void ModifyForm_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)Keys.Escape)
             {

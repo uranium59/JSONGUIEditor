@@ -64,8 +64,13 @@ namespace JSONGUIEditor
             //tview_object.Nodes.Add(node1);
             RootNode = n;
             //MappingKey(tview_object.TopNode, n);
-
-            Panel p = CreateJSONNodeGroupBox(n, null, 0);
+            BasePanelMake(n);
+            return null;
+        }
+        
+        private void BasePanelMake(JSONNode n)
+        {
+            Panel p = CreateJSONNodeGroupBox(n, null);
             p.Location = new Point(0, 35);
             p.Tag = n;
             p.Name = "root";
@@ -73,8 +78,9 @@ namespace JSONGUIEditor
             {
                 Text = "+",
                 Font = smallFont,
-                Location = new Point(30, 10),
-                Size = new Size(18, 20)
+                Location = new Point(45, 10),
+                Size = new Size(18, 20),
+                Tag = n
             };
             MainPanel.Controls.Add(btn_value);
             btn_value = new Button()
@@ -89,37 +95,8 @@ namespace JSONGUIEditor
             MainPanel.Controls.Add(btn_value);
             MainPanel.Controls.Add(p);
             MainPanel.Tag = RootNode;
-            return null;
         }
-
-        Dictionary<string, JSONNode> mappingKey = new Dictionary<string, JSONNode>();
-
-        private void MappingKey(TreeNode topNode, JSONNode node)
-        {
-            if (topNode == null)
-            {
-                return;
-            }
-
-            IEnumerator enumerator = topNode.Nodes.GetEnumerator();
-
-            if (node is JSONObject json)
-            {
-                int index = 0;
-                string[] keys = json.GetAllKeys();
-                foreach (JSONNode n in node)
-                {
-                    enumerator.MoveNext();
-
-                    mappingKey.Add(keys[index++], n);
-
-                    if (n is JSONObject j)
-                    {
-                        MappingKey((TreeNode)enumerator.Current, j);
-                    }
-                }
-            }
-        }
+            
         private void tview_object_DoubleClick(object sender, EventArgs e)
         {
             TreeNode node = tview_object.SelectedNode;
@@ -141,7 +118,7 @@ namespace JSONGUIEditor
             return false;
         }
 
-        private Panel CreateJSONNodeGroupBox(JSONNode n, Panel parent, int intend = 0)
+        private Panel CreateJSONNodeGroupBox(JSONNode n, Panel parent)
         {
             Panel rtn = new Panel()
             {
@@ -161,7 +138,7 @@ namespace JSONGUIEditor
                 string[] keys = o.GetAllKeys();
                 foreach(string s in keys)
                 {
-                    nowY += CreateGroupChild(o[s], s, rtn, nowY, intend, true);
+                    nowY += CreateGroupChild(o[s], s, rtn, nowY, true);
                     nowY += FormConstValue.stepY;
                 }
             }
@@ -169,32 +146,35 @@ namespace JSONGUIEditor
             {
                 for(int i = 0; i < n.Count; ++i)
                 {
-                    nowY += CreateGroupChild(n[i], i + "", rtn, nowY, intend, false);
+                    nowY += CreateGroupChild(n[i], i + "", rtn, nowY, false);
                     nowY += FormConstValue.stepY;
                 }
             }
 
             return rtn;
         }
-        private int CreateGroupChild(JSONNode n, string index, Panel target, int nowY, int intend, bool Fixed)
+        private int CreateGroupChild(JSONNode n, string index, Panel target, int nowY, bool Fixed)
         {
             TextBox tbox_key = new TextBox()
             {
-                Width = 100,
+                Width = 80,
                 Height = FormConstValue.inputboxHeight,
                 Location = new Point(0, nowY),
                 Text = index,
-                Enabled = Fixed
+                Enabled = Fixed,
+                Tag = n
             };
             target.Controls.Add(tbox_key);
             ComboBox cbox_type = new ComboBox()
             {
-                Width = 100,
+                Width = 80,
                 Height = FormConstValue.inputboxHeight,
-                Location = new Point(FormConstValue.stepX, nowY)
+                Location = new Point(FormConstValue.stepX, nowY),
+                Tag = n
             };
             cbox_type.Items.AddRange(typeList);
             cbox_type.SelectedText = n.type.GetTypeString();
+            cbox_type.SelectedIndexChanged += ChangeType;
             target.Controls.Add(cbox_type);
             if (n.type == JSONType.Object || n.type == JSONType.Array)
             {
@@ -204,31 +184,34 @@ namespace JSONGUIEditor
                     Text = "Value",
                     Height = FormConstValue.keyvalueHeight,
                     Font = smallFont,
-                    Location = new Point(FormConstValue.stepX * 7 / 3, nowY + 2)
+                    Location = new Point(FormConstValue.stepX * 3, nowY + 2)
                 };
                 target.Controls.Add(lb_value);
                 Button btn_value = new Button()
                 {
-                    Text = "+",
-                    Font = smallFont,
-                    Location = new Point(FormConstValue.stepX * 5 / 2 - 38, nowY),
-                    Size = new Size(18, 20)
-                };
-                target.Controls.Add(btn_value);
-                btn_value = new Button()
-                {
                     Text = "M",
                     Font = smallFont,
-                    Location = new Point(FormConstValue.stepX * 5 / 2 - 59, nowY),
+                    Location = new Point(FormConstValue.stepX * 5 / 2 - 25, nowY),
                     Size = new Size(18, 20),
                     Tag = n
                 };
                 btn_value.Click += ShowModifyForm;
                 target.Controls.Add(btn_value);
-                Panel g = CreateJSONNodeGroupBox(n, target, intend + 1);
+                Panel g = CreateJSONNodeGroupBox(n, target);
+                btn_value = new Button()
+                {
+                    Text = "+",
+                    Font = smallFont,
+                    Location = new Point(FormConstValue.stepX * 5 / 2 + 10, nowY),
+                    Size = new Size(18, 20),
+                    Tag = n
+                };
+                btn_value.Click += AddNewNodeButton;
+                target.Controls.Add(btn_value);
                 nowY += FormConstValue.stepY;
                 g.BackColor = FormConstValue.baseColor;
                 g.Location = new Point(FormConstValue.stepX, nowY);
+                nowY += g.Height;
                 target.Controls.Add(g);
             }
             else
@@ -252,6 +235,42 @@ namespace JSONGUIEditor
                 target.Controls.Add(tbox_value);
             }
             return nowY;
+        }
+        public void AddNewNode(Panel p, JSONNode n)
+        {
+            JSONString s = new JSONString("type a string");
+            if (n is JSONArray)
+            {
+                n.Add(s);
+                TreeNode t = JSONFormUtil.FindTreeNode(tview_object.TopNode, n);
+                TreeNode newTreenode = new TreeNode();
+                newTreenode.Tag = s;
+                newTreenode.Text = s.type.GetTypeString();
+                t.Nodes.Add(newTreenode);
+                CreateGroupChild(s, (n.Count - 1) + "", p, p.Height - p.Margin.Bottom, false);
+                return;
+            }
+
+            string newnodename = "newNode";
+            int trycount = 0;
+
+            bool success = false;
+            while(!success)
+            {
+                if(n.IsExist(newnodename + trycount))
+                {
+                    trycount++;
+                    continue;
+                }
+                n.Add(newnodename + trycount, s);
+                TreeNode t = JSONFormUtil.FindTreeNode(tview_object.TopNode, n);
+                TreeNode newTreenode = new TreeNode();
+                newTreenode.Tag = s;
+                newTreenode.Text = s.type.GetTypeString();
+                t.Nodes.Add(newTreenode);
+                CreateGroupChild(s, newnodename + trycount, p, p.Height, true);
+                success = true;
+            }
         }
 
         private void PanelBoxClick(object sender, EventArgs e)
@@ -278,6 +297,16 @@ namespace JSONGUIEditor
             JSONNode n = (JSONNode)c.Tag;
             ModifyForm m = new ModifyForm(n, c);
             m.Show(this);
+        }
+        private void AddNewNodeButton(object sender, EventArgs e)
+        {
+            Control c = (Control)sender;
+            Panel p = JSONFormUtil.NextPanelFind(c);
+            AddNewNode(p, (JSONNode)c.Tag);
+        }
+        private void ChangeType(object sender, EventArgs e)
+        {
+            ComboBox c = (ComboBox)sender;
         }
 
         Panel nowSelectedNode = null;

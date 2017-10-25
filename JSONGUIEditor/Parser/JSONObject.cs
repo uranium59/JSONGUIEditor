@@ -21,7 +21,10 @@ namespace JSONGUIEditor.Parser
         //isxxx 함수들을 정리한 파트
         #region 
         public override bool IsObject() { return true; }
-
+        public override bool IsExist(string s)
+        {
+            return _data.ContainsKey(s);
+        }
         #endregion
 
         //연산자 오버라이딩

@@ -13,8 +13,8 @@ namespace JSONGUIEditor
         static public int inputboxHeight = 17;
         static public int MarginHeight = 10;
 
-        static public int stepX = 110;
-        static public int stepY = 25;
+        static public int stepX = 85;
+        static public int stepY = 20;
 
         static public Color baseColor = Color.FromArgb(255, 240, 240, 240);
     }

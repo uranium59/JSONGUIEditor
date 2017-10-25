@@ -40,6 +40,7 @@ namespace JSONGUIEditor.Parser
         public virtual bool IsObject() { return false; }
         public virtual bool IsNull() { return false; }
         public virtual bool IsBool() { return false; }
+        public virtual bool IsExist(string s) { return false; }
         #endregion
 
         //연산자 오버라이팅

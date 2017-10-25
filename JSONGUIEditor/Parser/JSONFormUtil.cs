@@ -16,7 +16,7 @@ namespace JSONGUIEditor.Parser
             return true;
         }
 
-        static private TreeNode TreeNodeMake(JSONNode n)
+        static public TreeNode TreeNodeMake(JSONNode n)
         {
             TreeNode rtn = new TreeNode();
             rtn.Tag = n;
@@ -37,6 +37,32 @@ namespace JSONGUIEditor.Parser
                 rtn.Nodes.Add(t);
             }
             return rtn;
+        }
+
+        static public TreeNode FindTreeNode(TreeNode t, JSONNode n)
+        {
+            if (ReferenceEquals(t.Tag, n)) return t;
+
+            foreach(TreeNode child in t.Nodes)
+            {
+                if (FindTreeNode(child, n) != null) return FindTreeNode(child, n);
+            }
+            return null;
+        }
+
+        static public Panel NextPanelFind(Control c)
+        {
+            Control next = c.Parent.GetNextControl(c, false);
+            while (next != null)
+            {
+                if (next is Panel)
+                {
+                    return (Panel)next;
+                }
+                next = c.Parent.GetNextControl(next, false);
+            }
+
+            return null;
         }
     }
 }
