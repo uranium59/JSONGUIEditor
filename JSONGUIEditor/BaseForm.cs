@@ -27,6 +27,7 @@ namespace JSONGUIEditor
         public BaseForm()
         {
             InitializeComponent();
+            MainPanel.Click += PanelBoxClick;
 
             typeList = new object[]
             {
@@ -122,13 +123,13 @@ namespace JSONGUIEditor
         {
             Panel rtn = new Panel()
             {
-                Height = FormConstValue.inputboxHeight + FormConstValue.keyvalueHeight + FormConstValue.MarginHeight,
+                Height = 10,
                 AutoSize = true,
-                Tag = n,
                 Parent = parent,
+                Tag = n
             };
-            rtn.Click += PanelBoxClick;
-            rtn.BackColor = Color.Empty;
+            //rtn.Click += PanelBoxClick;
+            rtn.BackColor = FormConstValue.baseColor;
 
             int nowY = 5;
 
@@ -139,7 +140,6 @@ namespace JSONGUIEditor
                 foreach(string s in keys)
                 {
                     nowY += CreateGroupChild(o[s], s, rtn, nowY, true);
-                    nowY += FormConstValue.stepY;
                 }
             }
             else
@@ -147,7 +147,6 @@ namespace JSONGUIEditor
                 for(int i = 0; i < n.Count; ++i)
                 {
                     nowY += CreateGroupChild(n[i], i + "", rtn, nowY, false);
-                    nowY += FormConstValue.stepY;
                 }
             }
 
@@ -155,27 +154,39 @@ namespace JSONGUIEditor
         }
         private int CreateGroupChild(JSONNode n, string index, Panel target, int nowY, bool Fixed)
         {
+            Panel p = new Panel()
+            {
+                Height = 10,
+                AutoSize = true,
+                Location = new Point(0, nowY),
+                Tag = n,
+                Parent = target,
+            };
+            p.Click += PanelBoxClick;
+            p.BackColor = FormConstValue.baseColor;
+            target.Controls.Add(p);
             TextBox tbox_key = new TextBox()
             {
+                Name = "keybox",
                 Width = 80,
                 Height = FormConstValue.inputboxHeight,
-                Location = new Point(0, nowY),
+                Location = new Point(0, 0),
                 Text = index,
                 Enabled = Fixed,
                 Tag = n
             };
-            target.Controls.Add(tbox_key);
+            p.Controls.Add(tbox_key);
             ComboBox cbox_type = new ComboBox()
             {
-                Width = 80,
+                Width = 70,
                 Height = FormConstValue.inputboxHeight,
-                Location = new Point(FormConstValue.stepX, nowY),
+                Location = new Point(FormConstValue.stepX, 0),
                 Tag = n
             };
             cbox_type.Items.AddRange(typeList);
             cbox_type.SelectedText = n.type.GetTypeString();
             cbox_type.SelectedIndexChanged += ChangeType;
-            target.Controls.Add(cbox_type);
+            p.Controls.Add(cbox_type);
             if (n.type == JSONType.Object || n.type == JSONType.Array)
             {
 
@@ -184,35 +195,33 @@ namespace JSONGUIEditor
                     Text = "Value",
                     Height = FormConstValue.keyvalueHeight,
                     Font = smallFont,
-                    Location = new Point(FormConstValue.stepX * 3, nowY + 2)
+                    Location = new Point(FormConstValue.stepX * 3, 2)
                 };
-                target.Controls.Add(lb_value);
+                p.Controls.Add(lb_value);
                 Button btn_value = new Button()
                 {
                     Text = "M",
                     Font = smallFont,
-                    Location = new Point(FormConstValue.stepX * 5 / 2 - 25, nowY),
+                    Location = new Point(FormConstValue.stepX * 5 / 2 - 25, 0),
                     Size = new Size(18, 20),
                     Tag = n
                 };
                 btn_value.Click += ShowModifyForm;
-                target.Controls.Add(btn_value);
-                Panel g = CreateJSONNodeGroupBox(n, target);
+                p.Controls.Add(btn_value);
+                Panel g = CreateJSONNodeGroupBox(n, p);
                 btn_value = new Button()
                 {
                     Text = "+",
                     Font = smallFont,
-                    Location = new Point(FormConstValue.stepX * 5 / 2 + 10, nowY),
+                    Location = new Point(FormConstValue.stepX * 5 / 2 + 10, 0),
                     Size = new Size(18, 20),
                     Tag = n
                 };
                 btn_value.Click += AddNewNodeButton;
-                target.Controls.Add(btn_value);
-                nowY += FormConstValue.stepY;
+                p.Controls.Add(btn_value);
                 g.BackColor = FormConstValue.baseColor;
-                g.Location = new Point(FormConstValue.stepX, nowY);
-                nowY += g.Height;
-                target.Controls.Add(g);
+                g.Location = new Point(FormConstValue.stepX, FormConstValue.stepY);
+                p.Controls.Add(g);
             }
             else
             {
@@ -220,7 +229,7 @@ namespace JSONGUIEditor
                 {
                     Width = 100,
                     Height = FormConstValue.inputboxHeight,
-                    Location = new Point(FormConstValue.stepX * 2, nowY),
+                    Location = new Point(FormConstValue.stepX * 2, 0),
                     Tag = n
                 };
                 tbox_value.TextChanged += (txt, arg) =>
@@ -232,8 +241,18 @@ namespace JSONGUIEditor
                     }
                 };
                 tbox_value.Text = n.value;
-                target.Controls.Add(tbox_value);
+                p.Controls.Add(tbox_value);
+                Button delete_Button = new Button()
+                {
+                    Text = "-",
+                    Font = smallFont,
+                    Location = new Point(FormConstValue.stepX * 3 + 20, 0),
+                    Size = new Size(18, 20),
+                    Tag = n
+                };
+                p.Controls.Add(delete_Button);
             }
+            nowY += p.Height;
             return nowY;
         }
         public void AddNewNode(Panel p, JSONNode n)
@@ -301,12 +320,150 @@ namespace JSONGUIEditor
         private void AddNewNodeButton(object sender, EventArgs e)
         {
             Control c = (Control)sender;
-            Panel p = JSONFormUtil.NextPanelFind(c);
+            Panel p = JSONFormUtil.NextPanelFind(c, (JSONNode)c.Tag);
             AddNewNode(p, (JSONNode)c.Tag);
         }
         private void ChangeType(object sender, EventArgs e)
         {
             ComboBox c = (ComboBox)sender;
+            JSONNode n = (JSONNode)c.Tag;
+            TreeNode t = JSONFormUtil.FindTreeNode(tview_object.TopNode, n);
+            JSONNode newnode;
+            switch(c.SelectedIndex)
+            {
+                case 0:
+                    newnode = new JSONArray();
+                    break;
+                case 1:
+                    newnode = new JSONBool(true);
+                    break;
+                case 2:
+                    newnode = new JSONNull();
+                    break;
+                case 3:
+                    newnode = new JSONNumber(0);
+                    break;
+                case 4:
+                    newnode = new JSONObject();
+                    break;
+                case 5:
+                    newnode = new JSONString("type a string");
+                    break;
+                default:
+                    newnode = new JSONNull();
+                    break;
+            }
+            t.Nodes.Clear();
+            t.Text = newnode.type.GetTypeString();
+            t.Tag = newnode;
+            JSONNode pNode = n.parent;
+            for(int i = 0; i < pNode.Count; ++i)
+            {
+                if(ReferenceEquals(pNode[i], n))
+                {
+                    pNode[i] = newnode;
+                    break;
+                }
+            }
+            Panel p = (Panel)c.Parent;
+
+            Control keybox = FindControl(p, "keybox");
+            string original_key = keybox.Text;
+            bool original_fixed = keybox.Enabled;
+
+            p.Controls.Clear();
+
+            TextBox tbox_key = new TextBox()
+            {
+                Name = "keybox",
+                Width = 80,
+                Height = FormConstValue.inputboxHeight,
+                Location = new Point(0, 0),
+                Text = original_key,
+                Enabled = original_fixed,
+                Tag = newnode
+            };
+            p.Controls.Add(tbox_key);
+            ComboBox cbox_type = new ComboBox()
+            {
+                Width = 70,
+                Height = FormConstValue.inputboxHeight,
+                Location = new Point(FormConstValue.stepX, 0),
+                Tag = newnode
+            };
+            cbox_type.Items.AddRange(typeList);
+            cbox_type.SelectedText = newnode.type.GetTypeString();
+            cbox_type.SelectedIndexChanged += ChangeType;
+            p.Controls.Add(cbox_type);
+            if (newnode.type == JSONType.Object || newnode.type == JSONType.Array)
+            {
+
+                Label lb_value = new Label()
+                {
+                    Text = "Value",
+                    Height = FormConstValue.keyvalueHeight,
+                    Font = smallFont,
+                    Location = new Point(FormConstValue.stepX * 3, 2)
+                };
+                p.Controls.Add(lb_value);
+                Button btn_value = new Button()
+                {
+                    Text = "M",
+                    Font = smallFont,
+                    Location = new Point(FormConstValue.stepX * 5 / 2 - 25, 0),
+                    Size = new Size(18, 20),
+                    Tag = newnode
+                };
+                btn_value.Click += ShowModifyForm;
+                p.Controls.Add(btn_value);
+                Panel g = CreateJSONNodeGroupBox(newnode, p);
+                btn_value = new Button()
+                {
+                    Text = "+",
+                    Font = smallFont,
+                    Location = new Point(FormConstValue.stepX * 5 / 2 + 10, 0),
+                    Size = new Size(18, 20),
+                    Tag = newnode
+                };
+                btn_value.Click += AddNewNodeButton;
+                p.Controls.Add(btn_value);
+                g.BackColor = FormConstValue.baseColor;
+                g.Location = new Point(FormConstValue.stepX, FormConstValue.stepY);
+                p.Controls.Add(g);
+            }
+            else
+            {
+                TextBox tbox_value = new TextBox()
+                {
+                    Width = 100,
+                    Height = FormConstValue.inputboxHeight,
+                    Location = new Point(FormConstValue.stepX * 2, 0),
+                    Tag = newnode
+                };
+                tbox_value.TextChanged += (txt, arg) =>
+                {
+                    if (txt is TextBox tbox)
+                    {
+                        JSONNode tagNode = tbox.Tag as JSONNode;
+                        tagNode.value = tbox.Text;
+                    }
+                };
+                tbox_value.Text = newnode.value;
+                p.Controls.Add(tbox_value);
+                Button delete_Button = new Button()
+                {
+                    Text = "-",
+                    Font = smallFont,
+                    Location = new Point(FormConstValue.stepX * 3 + 20, 0),
+                    Size = new Size(18, 20),
+                    Tag = newnode
+                };
+                p.Controls.Add(delete_Button);
+            }
+        }
+        private void RemoveNode(object sender, EventArgs e)
+        {
+
         }
 
         Panel nowSelectedNode = null;
@@ -436,6 +593,20 @@ namespace JSONGUIEditor
             ViewAll v = new ViewAll(RootNode);
             v.baseForm = this;
             v.Show(this);
+        }
+
+
+
+
+
+        public static Control FindControl(Panel root, string name)
+        {
+            if (root == null) throw new ArgumentNullException("root");
+            foreach (Control child in root.Controls)
+            {
+                if (child.Name == name) return child;
+            }
+            return null;
         }
     }
 }

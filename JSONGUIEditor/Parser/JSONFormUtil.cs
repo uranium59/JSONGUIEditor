@@ -50,12 +50,12 @@ namespace JSONGUIEditor.Parser
             return null;
         }
 
-        static public Panel NextPanelFind(Control c)
+        static public Panel NextPanelFind(Control c, JSONNode n)
         {
             Control next = c.Parent.GetNextControl(c, false);
             while (next != null)
             {
-                if (next is Panel)
+                if (next is Panel && ReferenceEquals(next.Tag, n))
                 {
                     return (Panel)next;
                 }
@@ -64,5 +64,6 @@ namespace JSONGUIEditor.Parser
 
             return null;
         }
+
     }
 }
