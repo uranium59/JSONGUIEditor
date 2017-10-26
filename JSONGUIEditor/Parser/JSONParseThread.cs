@@ -12,7 +12,7 @@ namespace JSONGUIEditor.Parser
     {
         //if complexity is bigger than threshold, add thread into threadpool
         public const int ThreadRunThreshold = 100;
-        public const int ComplexityHighThreshold = 40;
+        public const int ComplexityHighThreshold = 50;
         public const int ComplexityLowThreshold = 20;
         public const bool UsingThread = true;
         static public JSONNull null_pointer = new JSONNull();
@@ -29,6 +29,7 @@ namespace JSONGUIEditor.Parser
             int ni = si + 1;//nowindex
             int ti = 0;//tree index
             int sepi = 0;//separator index
+            int nextSeparator;
             if (s[si] == '{')
             {
                 rtn = new JSONObject();
@@ -46,7 +47,7 @@ namespace JSONGUIEditor.Parser
 
                 while (sepi < t.separator.Count)
                 {
-                    int nextSeparator = t.separator[sepi];
+                    nextSeparator = t.separator[sepi];
 
                     string keystr;
 
@@ -110,7 +111,7 @@ namespace JSONGUIEditor.Parser
 
                 while (sepi < t.separator.Count)
                 {
-                    int nextSeparator = t.separator[sepi];
+                    nextSeparator = t.separator[sepi];
                     while (char.IsWhiteSpace(s[ni])) ni++;//find next non whitespace
 
                     if (s[ni] != '{' && s[ni] != '[')
@@ -140,7 +141,7 @@ namespace JSONGUIEditor.Parser
         static public JSONNode ParseThread(ComplexTree<object> t, string s)
         {
             List<Task> taskList = new List<Task>();
-            List<Task> CollectTask = new List<Task>();
+            //List<Task> CollectTask = new List<Task>();
 
             Parallel.ForEach<ComplexTree<object>>(t, c =>
             {
@@ -159,7 +160,8 @@ namespace JSONGUIEditor.Parser
             int ni = si + 1;//nowindex
             int ti = 0;//tree index
             int sepi = 0;//separator index
-            
+            int nextSeparator;
+
             if (s[si] == '{')
             {
                 rtn = new JSONObject();
@@ -178,7 +180,7 @@ namespace JSONGUIEditor.Parser
 
                 while (sepi < t.separator.Count)
                 {
-                    int nextSeparator = t.separator[sepi];
+                    nextSeparator = t.separator[sepi];
                     //while (char.IsWhiteSpace(s[ni])) ni++;//find next non whitespace
                     if (s[nextSeparator] != ':')
                     {
@@ -260,7 +262,7 @@ namespace JSONGUIEditor.Parser
 
                 while (sepi < t.separator.Count)
                 {
-                    int nextSeparator = t.separator[sepi];
+                    nextSeparator = t.separator[sepi];
                     while (char.IsWhiteSpace(s[ni])) ni++;//find next non whitespace
 
                     if (s[ni] != '{' && s[ni] != '[')
@@ -292,7 +294,7 @@ namespace JSONGUIEditor.Parser
                 }
             }
 
-            Task.WaitAll(CollectTask.ToArray());
+            //Task.WaitAll(CollectTask.ToArray());
             return rtn;
         }//for multithread
 

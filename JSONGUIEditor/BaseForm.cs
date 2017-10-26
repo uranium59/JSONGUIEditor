@@ -463,7 +463,25 @@ namespace JSONGUIEditor
         }
         private void RemoveNode(object sender, EventArgs e)
         {
+            Control c = (Control)sender;
+            JSONNode n = (JSONNode)c.Tag;
+            TreeNode t = JSONFormUtil.FindTreeNode(tview_object.TopNode, (JSONNode)c.Tag);
+            TreeNode tP = t.Parent;
+            tP.Nodes.Remove(t);
+            Control cP = c.Parent;
+            Control cPP = cP.Parent;
+            cPP.Controls.Remove(cP);
 
+            JSONNode pNode = n.parent;
+            for (int i = 0; i < pNode.Count; ++i)
+            {
+                if (ReferenceEquals(pNode[i], n))
+                {
+                    //pNode[i] = newnode;
+                    break;
+                }
+            }
+            
         }
 
         Panel nowSelectedNode = null;

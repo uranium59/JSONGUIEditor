@@ -7,11 +7,12 @@ using System.Threading.Tasks;
 
 namespace JSONGUIEditor.Parser
 {
+    using JSONGUIEditor.Parser.State;
     public class JSONArray : JSONNode, IEnumerable
     {
+        public override JSONType type { get; } = JSONType.Array;
         public JSONArray()
         {
-            type = State.JSONType.Array;
         }
 
         //내부변수

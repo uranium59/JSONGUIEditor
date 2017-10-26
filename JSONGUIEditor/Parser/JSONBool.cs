@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace JSONGUIEditor.Parser
 {
+    using JSONGUIEditor.Parser.State;
     public class JSONBool :JSONNode
     {
+        public override JSONType type { get; } = JSONType.Bool;
         public JSONBool()
         {
-            type = State.JSONType.Bool;
         }
         public JSONBool(bool b)
         {
-            type = State.JSONType.Bool;
             _data = b;
         }
 

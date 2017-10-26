@@ -18,7 +18,7 @@ namespace JSONGUIEditor.Parser
         //내부 변수 선언
         #region
         public JSONNode parent { get; set; }
-        public JSONType type { get; protected set; }
+        public virtual JSONType type { get; } = JSONType.Null;
         public int depth { get; set; } = 0;
         public virtual int Count { get => 0; }
         #endregion

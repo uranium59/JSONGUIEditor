@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -65,6 +66,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdditionalForm\ErrorShowForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AdditionalForm\ErrorShowForm.Designer.cs">
+      <DependentUpon>ErrorShowForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="AdditionalForm\ModifyForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -131,6 +138,9 @@
     <Compile Include="TemplateForm\TemplateSelect.Designer.cs">
       <DependentUpon>TemplateSelect.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="AdditionalForm\ErrorShowForm.resx">
+      <DependentUpon>ErrorShowForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="AdditionalForm\ModifyForm.resx">
       <DependentUpon>ModifyForm.cs</DependentUpon>
     </EmbeddedResource>

@@ -6,17 +6,17 @@ using System.Threading.Tasks;
 
 namespace JSONGUIEditor.Parser
 {
+    using JSONGUIEditor.Parser.State;
     class JSONString :JSONNode
     {
+        public override JSONType type { get; } = JSONType.String;
         //생성자
         public JSONString ()
         {
-            type = State.JSONType.String;
             _data = "";
         }
         public JSONString(string s)
         {
-            type = State.JSONType.String;
             _data = s;
         }
 

@@ -17,10 +17,11 @@ namespace JSONParserUnitTest
         [SetUp]
         public void SetUp()
         {
+            //longlongstring = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "hugefile.json");
             //longlongstring = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ReallyBigJSON.json");
             longlongstring = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory +"FakeJSON.json");
 
-            //ThreadPool.SetMaxThreads(65536, 30000);
+            ThreadPool.SetMaxThreads(65536, 30000);
         }
 
         [Test, Order(0)]
@@ -33,7 +34,7 @@ namespace JSONParserUnitTest
         public void ParseTest1()
         {
             JSONParser.ParseStart((JSONNode n) => { Console.WriteLine("finished"); return null; }, "{\"test\":123}");
-            
+
             Console.WriteLine("test function finished");
         }
 
@@ -56,15 +57,13 @@ namespace JSONParserUnitTest
         [Test, Order(100)]
         public void TestReallyBigString()
         {
-            
+
             ComplexTree<object> mt = JSONParser.CalculateComplexity(longlongstring);
             mt[0].AddComplex();
             Stopwatch s = Stopwatch.StartNew();
             JSONNode n = JSONParseThread.ParseThread(mt[0], longlongstring);
             s.Stop();
             Console.WriteLine(s.Elapsed);
-            Console.WriteLine(n.Count);
-            Console.WriteLine(n[100]["guid"].value + "");
             /*
             Task t = Task.Factory.StartNew(()=>JSONParser.ParseStart((JSONNode n) =>
             {
@@ -121,6 +120,25 @@ namespace JSONParserUnitTest
             string templatestr = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "Template.json");
 
             SimpleJSON.JSONNode n = SimpleJSON.JSONNode.Parse(templatestr);
+        }
+        [Test, Order(300)]
+        public void MakeHugeString()
+        {
+            StreamWriter sw = File.AppendText(AppDomain.CurrentDomain.BaseDirectory + "hugefile.json");
+            sw.Write("{");
+            for(int i = 0; i < 30; ++i)
+            {
+                sw.Write("\"" + i + "\" : " + longlongstring);
+                if( i == 29)
+                {
+                    sw.Write("}");
+                }
+                else
+                {
+                    sw.Write(",");
+                }
+            }
+            sw.Close();
         }
     }
 }

@@ -10,7 +10,6 @@ namespace JSONGUIEditor.Parser
     {
         public JSONNull()
         {
-            this.type = State.JSONType.Null;
         }
 
         //데이터

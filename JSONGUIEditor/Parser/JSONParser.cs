@@ -50,6 +50,19 @@ namespace JSONGUIEditor.Parser
             {
                 switch (s[i])
                 {
+                    case '"':
+                        if (s[i - 1] != '\\')
+                        {
+                            isQuote ^= true;
+                            if (isQuote)
+                            {
+                                quoteposition = i;
+                                i = s.IndexOf('"', i + 1) - 1;
+                            }
+                            else
+                                quoteposition = -1;
+                        }
+                        break;
                     case ',':
                     case ':':
                         if (isQuote) break;
@@ -78,13 +91,6 @@ namespace JSONGUIEditor.Parser
                             if (cursor == null) throw new JSONSyntaxErrorNotClose(i - 1);
                             break;
                         }
-                    case '"':
-                        if (s[i - 1] != '\\')
-                        {
-                            isQuote ^= true;
-                            quoteposition = isQuote?i:-1;
-                        }
-                        break;
                 }
             }
             if(!ReferenceEquals(rtn, cursor))

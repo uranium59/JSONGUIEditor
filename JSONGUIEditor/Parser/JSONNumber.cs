@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace JSONGUIEditor.Parser
 {
+    using JSONGUIEditor.Parser.State;
     public class JSONNumber : JSONNode
     {
+        public override JSONType type { get; } = JSONType.Number;
         public JSONNumber()
         {
-            type = State.JSONType.Number;
         }
         public JSONNumber(double d)
         {
-            type = State.JSONType.Number;
             _data = d;
         }
         private double _data = 0.0;

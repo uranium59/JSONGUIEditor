@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 
 namespace JSONGUIEditor.Parser
 {
+    using JSONGUIEditor.Parser.State;
     public class JSONObject : JSONNode
     {
+        public override JSONType type { get; } = JSONType.Object;
         public JSONObject()
         {
             type = State.JSONType.Object;
@@ -88,6 +90,7 @@ namespace JSONGUIEditor.Parser
         }
         public override void Add(JSONNode value)
         {
+            value.parent = this;
             _data.Add("", value);
         }
         public override JSONNode remove(string key)
