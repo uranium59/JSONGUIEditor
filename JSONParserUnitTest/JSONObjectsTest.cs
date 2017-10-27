@@ -92,23 +92,7 @@ namespace JSONParserUnitTest
             Assert.IsTrue(n["b"].value == "asdf");
             Assert.IsTrue(n["b"].Stringify() == "\"asdf\"");
         }
-
-        [Test, Order(7)]
-        public void DepthTest()
-        {
-            //Depth 는 최상단 루트 오브젝트에 도달하기 위해 거쳐야 하는 단계 수를 의미합니다.
-            //Depth 는 최상단을 0으로(자기자신이므로 거리가 없으므로), 한단계씩 내려갈때 1씩 증가합니다.
-            Assert.IsTrue(n.depth == 0);
-            Assert.IsTrue(n["b"].depth == 1);
-            JSONNode temp = new JSONObject();
-            temp["t"] = 123;
-            Assert.IsTrue(temp["t"].depth == 1);
-            n["e"] = temp;
-            //다른 오브젝트에 해당 오브젝트를 할당하면 자동적으로 depth가 증가합니다.
-            Assert.IsTrue(temp["t"].depth == 2);
-        }
-
-        
+                
         [Test, Order(10)]
         public void JSONArrayTest()
         { 

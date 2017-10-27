@@ -18,6 +18,9 @@ namespace JSONGUIEditor.Parser
             _data = b;
         }
 
+        static public JSONBool TrueStatic = new JSONBool(true);
+        static public JSONBool FalseStatic = new JSONBool(false);
+
         private bool _data = false;
 
         //isxxx 함수들을 정리한 파트

@@ -18,8 +18,8 @@ namespace JSONParserUnitTest
         [SetUp]
         public void SetUp()
         {
-            //longlongstring = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "hugefile.json");
-            longlongstring = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ReallyBigJSON.json");
+            longlongstring = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "hugefile.json");
+            //longlongstring = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ReallyBigJSON.json");
             //longlongstring = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory +"FakeJSON.json");
 
             ThreadPool.SetMaxThreads(65536, 30000);
@@ -138,10 +138,10 @@ namespace JSONParserUnitTest
         {
             StreamWriter sw = File.AppendText(AppDomain.CurrentDomain.BaseDirectory + "hugefile.json");
             sw.Write("{");
-            for(int i = 0; i < 30; ++i)
+            for(int i = 0; i < 50; ++i)
             {
                 sw.Write("\"" + i + "\" : " + longlongstring);
-                if( i == 29)
+                if( i == 49)
                 {
                     sw.Write("}");
                 }

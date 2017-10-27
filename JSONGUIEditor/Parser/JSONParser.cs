@@ -15,19 +15,26 @@ namespace JSONGUIEditor.Parser
 
         }
 
+
+        static private bool initialized { get; set; } = false;
+        static private void Initialize()
+        {
+
+        }
+
         //문자열 파싱용 함수
         #region
         static async public void ParseStart(JSON.ParseCallback c, string s = "")
         {
-            if (!JSONParseThread.Initialized) JSONParseThread.Initialize();
+            if (!initialized) Initialize();
 
-            ComplexTree<object> CompTree = null ;
+            ComplexTree<object> CompTree = null;
             try
             {
                 CompTree = CalculateComplexity(s);
                 CompTree.AddComplex();
             }
-            catch(JSONSyntaxErrorNotClose)
+            catch (JSONSyntaxErrorNotClose e)
             {
 
             }
@@ -40,110 +47,78 @@ namespace JSONGUIEditor.Parser
             t.Start();
             await t;
             c(t.Result);
+            //JSONParseThread._s = "";
         }
-
-        static private readonly Action[] _check = new Action[128];
-        static private bool funcInit { get; set; } = false;
-        static private ComplexTree<object> cursor;
-        static private bool isQuote;
-        static private int quoteposition;
-        static private string target;
-        static private int i = 0;
 
         static public ComplexTree<object> CalculateComplexity(string s)
         {
-            target = s;
-            if (!funcInit) InitialCheckFunc();
+            bool isQuote = false;
             ComplexTree<object> rtn = new ComplexTree<object>();
-            cursor = rtn;
-            isQuote = false;
-            quoteposition = -1;
-            for(i = 0; i < target.Length;)
+            ComplexTree<object> cursor = rtn;
+            int quoteposition = -1;
+            for (int i = 0; i < s.Length; i++)
             {
-                _check[target[i]]();
+                switch (s[i])
+                {
+                    case '"':
+                        if (s[i - 1] != '\\')
+                        {
+                            isQuote ^= true;
+                            if (isQuote)
+                            {
+                                quoteposition = i;
+                                i = s.IndexOf('"', i + 1) - 1;
+                            }
+                            else
+                                quoteposition = -1;
+                        }
+                        else
+                            i = s.IndexOf('"', i + 1) - 1;
+                        break;
+                    case ',':
+                    case ':':
+                        if (isQuote) break;
+                        cursor.separator.Add(i);
+                        break;
+                    case '[':
+                    case '{':
+                        {
+                            if (isQuote) break;
+                            ComplexTree<object> child = new ComplexTree<object>()
+                            {
+                                Index = i,
+                                parent = cursor
+                            };
+                            cursor.Add(child);
+                            cursor = child;
+                            break;
+                        }
+                    case ']':
+                    case '}':
+                        {
+                            if (isQuote) break;
+                            cursor.separator.Add(i);
+                            cursor.EndPoint = i;
+                            cursor = cursor.parent;
+                            if (cursor == null) throw new JSONSyntaxErrorNotClose(i - 1);
+                            break;
+                        }
+                }
             }
-            if(!ReferenceEquals(rtn, cursor))
+            if (!ReferenceEquals(rtn, cursor))
             {
-                throw new JSONSyntaxErrorNotClose(target.Length);
+                throw new JSONSyntaxErrorNotClose(s.Length);
             }
-            if(quoteposition > -1)
+            if (quoteposition > -1)
             {
                 throw new JSONSyntaxErrorNotClose(quoteposition);
             }
-            cursor = null;
-            target = null;
             return rtn;
         }
 
-        static private void Quote()
+        static private JSONType ValueTypeDetect(string s)
         {
-            if (target[i - 1] != '\\')
-            {
-                isQuote ^= true;
-                if (isQuote)
-                {
-                    quoteposition = i;
-                    i = target.IndexOf('"', i + 1);
-                    Quote();
-                }
-                else
-                {
-                    ++i;
-                    quoteposition = -1;
-                }
-            }
-            else
-            {
-                Quote();
-                ++i;
-            }
-            return;
-        }
-        static private void OpenBracket()
-        {
-            if (isQuote) return;
-            ComplexTree<object> child = new ComplexTree<object>()
-            {
-                Index = i,
-                parent = cursor
-            };
-            cursor.Add(child);
-            cursor = child;
-            ++i;
-            return;
-        }
-        static private void Separator()
-        {
-            if (!isQuote)
-                cursor.separator.Add(i);
-            ++i;
-            return;
-        }
-        static private void CloseBracket()
-        {
-            if (isQuote) return;
-            cursor.separator.Add(i);
-            cursor.EndPoint = i;
-            cursor = cursor.parent;
-            if (cursor == null) throw new JSONSyntaxErrorNotClose(i - 1);
-            ++i;
-            return;
-        }
-
-
-        static private void InitialCheckFunc()
-        {
-            _check[','] = _check[':'] = Separator;
-            _check['{'] = _check['['] = OpenBracket;
-            _check['}'] = _check[']'] = CloseBracket;
-            _check['"'] = Quote;
-
-            for (var i = 0; i < 128; i++) _check[i] = (_check[i] ?? donothing);
-            funcInit = true;
-        }
-        static private void donothing()
-        {
-            ++i;
+            return 0;
         }
         #endregion
 

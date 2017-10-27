@@ -31,14 +31,6 @@ namespace JSONGUIEditor.Parser
 
         //연산자 오버라이딩
         #region
-        public override void RefreshDepth(int p)
-        {
-            base.RefreshDepth(p);
-            foreach(var t in _data)
-            {
-                t.Value.RefreshDepth(depth);
-            }
-        }
         public override JSONNode this[string s]
         {
             get
@@ -49,12 +41,11 @@ namespace JSONGUIEditor.Parser
             set
             {
                 if (value == null)
-                    value = new JSONNull();
+                    value = JSONNull.NullStatic;
                 if (_data.ContainsKey(s))
                     _data[s] = value;
                 else
                     _data.Add(s, value);
-                value.RefreshDepth(depth);
                 value.parent = this;
             }
         }
@@ -64,7 +55,7 @@ namespace JSONGUIEditor.Parser
             {
                 if(i < 0 || i >= _data.Count)
                 {
-                    return new JSONNull();
+                    return JSONNull.NullStatic;
                 }
                 else
                 {
@@ -74,12 +65,11 @@ namespace JSONGUIEditor.Parser
             set
             {
                 if (value == null)
-                    value = new JSONNull();
+                    value = JSONNull.NullStatic;
                 if (i < 0 || i >= _data.Count)
                     return;
                 string key = _data.ElementAt(i).Key;
                 _data[key] = value;
-                value.RefreshDepth(depth);
                 value.parent = this;
             }
         }
