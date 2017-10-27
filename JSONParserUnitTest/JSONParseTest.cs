@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NUnit.Framework;
 using Newtonsoft.Json.Linq;
+using System.Text.Json;
 
 namespace JSONParserUnitTest
 {
@@ -18,10 +19,12 @@ namespace JSONParserUnitTest
         public void SetUp()
         {
             //longlongstring = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "hugefile.json");
-            //longlongstring = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ReallyBigJSON.json");
-            longlongstring = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory +"FakeJSON.json");
+            longlongstring = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ReallyBigJSON.json");
+            //longlongstring = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory +"FakeJSON.json");
 
             ThreadPool.SetMaxThreads(65536, 30000);
+
+            if (!JSONParseThread.Initialized) JSONParseThread.Initialize();
         }
 
         [Test, Order(0)]
@@ -57,10 +60,9 @@ namespace JSONParserUnitTest
         [Test, Order(100)]
         public void TestReallyBigString()
         {
-
+            Stopwatch s = Stopwatch.StartNew();
             ComplexTree<object> mt = JSONParser.CalculateComplexity(longlongstring);
             mt[0].AddComplex();
-            Stopwatch s = Stopwatch.StartNew();
             JSONNode n = JSONParseThread.ParseThread(mt[0], longlongstring);
             s.Stop();
             Console.WriteLine(s.Elapsed);
@@ -79,9 +81,9 @@ namespace JSONParserUnitTest
         [Test, Order(101)]
         public void TestBigStringSingleThread()
         {
+            Stopwatch s = Stopwatch.StartNew();
             ComplexTree<object> mt = JSONParser.CalculateComplexity(longlongstring);
             mt[0].AddComplex();
-            Stopwatch s = Stopwatch.StartNew();
             JSONNode n = JSONParseThread.Parse(mt[0], longlongstring);
             s.Stop();
             Console.WriteLine(s.Elapsed);
@@ -120,6 +122,16 @@ namespace JSONParserUnitTest
             string templatestr = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "Template.json");
 
             SimpleJSON.JSONNode n = SimpleJSON.JSONNode.Parse(templatestr);
+        }
+        [Test, Order(203)]
+        public void SystemTextJSONTest()
+        {
+
+            Stopwatch s = Stopwatch.StartNew();
+            JsonParser j = new JsonParser();
+            Object o = j.Parse(longlongstring);
+            s.Stop();
+            Console.WriteLine(s.Elapsed);
         }
         [Test, Order(300)]
         public void MakeHugeString()

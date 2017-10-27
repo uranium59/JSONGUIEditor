@@ -19,13 +19,15 @@ namespace JSONGUIEditor.Parser
         #region
         static async public void ParseStart(JSON.ParseCallback c, string s = "")
         {
+            if (!JSONParseThread.Initialized) JSONParseThread.Initialize();
+
             ComplexTree<object> CompTree = null ;
             try
             {
                 CompTree = CalculateComplexity(s);
                 CompTree.AddComplex();
             }
-            catch(JSONSyntaxErrorNotClose e)
+            catch(JSONSyntaxErrorNotClose)
             {
 
             }
@@ -40,73 +42,108 @@ namespace JSONGUIEditor.Parser
             c(t.Result);
         }
 
+        static private readonly Action[] _check = new Action[128];
+        static private bool funcInit { get; set; } = false;
+        static private ComplexTree<object> cursor;
+        static private bool isQuote;
+        static private int quoteposition;
+        static private string target;
+        static private int i = 0;
+
         static public ComplexTree<object> CalculateComplexity(string s)
         {
-            bool isQuote = false;
+            target = s;
+            if (!funcInit) InitialCheckFunc();
             ComplexTree<object> rtn = new ComplexTree<object>();
-            ComplexTree<object> cursor = rtn;
-            int quoteposition = -1;
-            for (int i = 0; i < s.Length; i++)
+            cursor = rtn;
+            isQuote = false;
+            quoteposition = -1;
+            for(i = 0; i < target.Length;)
             {
-                switch (s[i])
-                {
-                    case '"':
-                        if (s[i - 1] != '\\')
-                        {
-                            isQuote ^= true;
-                            if (isQuote)
-                            {
-                                quoteposition = i;
-                                i = s.IndexOf('"', i + 1) - 1;
-                            }
-                            else
-                                quoteposition = -1;
-                        }
-                        break;
-                    case ',':
-                    case ':':
-                        if (isQuote) break;
-                        cursor.separator.Add(i);
-                        break;
-                    case '[':
-                    case '{':
-                        {
-                            if (isQuote) break;
-                            ComplexTree<object> child = new ComplexTree<object>()
-                            {
-                                Index = i,
-                                parent = cursor
-                            };
-                            cursor.Add(child);
-                            cursor = child;
-                            break;
-                        }
-                    case ']':
-                    case '}':
-                        {
-                            if (isQuote) break;
-                            cursor.separator.Add(i);
-                            cursor.EndPoint = i;
-                            cursor = cursor.parent;
-                            if (cursor == null) throw new JSONSyntaxErrorNotClose(i - 1);
-                            break;
-                        }
-                }
+                _check[target[i]]();
             }
             if(!ReferenceEquals(rtn, cursor))
             {
-                throw new JSONSyntaxErrorNotClose(s.Length);
+                throw new JSONSyntaxErrorNotClose(target.Length);
             }
             if(quoteposition > -1)
             {
                 throw new JSONSyntaxErrorNotClose(quoteposition);
             }
+            cursor = null;
+            target = null;
             return rtn;
         }
 
-        static private JSONType ValueTypeDetect(string s)
+        static private void Quote()
         {
-            return 0;
+            if (target[i - 1] != '\\')
+            {
+                isQuote ^= true;
+                if (isQuote)
+                {
+                    quoteposition = i;
+                    i = target.IndexOf('"', i + 1);
+                    Quote();
+                }
+                else
+                {
+                    ++i;
+                    quoteposition = -1;
+                }
+            }
+            else
+            {
+                Quote();
+                ++i;
+            }
+            return;
+        }
+        static private void OpenBracket()
+        {
+            if (isQuote) return;
+            ComplexTree<object> child = new ComplexTree<object>()
+            {
+                Index = i,
+                parent = cursor
+            };
+            cursor.Add(child);
+            cursor = child;
+            ++i;
+            return;
+        }
+        static private void Separator()
+        {
+            if (!isQuote)
+                cursor.separator.Add(i);
+            ++i;
+            return;
+        }
+        static private void CloseBracket()
+        {
+            if (isQuote) return;
+            cursor.separator.Add(i);
+            cursor.EndPoint = i;
+            cursor = cursor.parent;
+            if (cursor == null) throw new JSONSyntaxErrorNotClose(i - 1);
+            ++i;
+            return;
+        }
+
+
+        static private void InitialCheckFunc()
+        {
+            _check[','] = _check[':'] = Separator;
+            _check['{'] = _check['['] = OpenBracket;
+            _check['}'] = _check[']'] = CloseBracket;
+            _check['"'] = Quote;
+
+            for (var i = 0; i < 128; i++) _check[i] = (_check[i] ?? donothing);
+            funcInit = true;
+        }
+        static private void donothing()
+        {
+            ++i;
         }
         #endregion
 

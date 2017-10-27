@@ -8,7 +8,6 @@ namespace JSONGUIEditor.Parser.Exception
 {
     public class JSONWrongTypeException : JSONException
     {
-        JSONParsePosition position;
         public JSONWrongTypeException():base()
         {
             _Message = "Cannot Convert Type into JSONNode";

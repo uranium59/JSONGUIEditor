@@ -58,7 +58,7 @@ namespace JSONGUIEditor.TemplateForm
             {
                 templateJSON = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + TemplateFile);
             }
-            catch(FileNotFoundException e)
+            catch(FileNotFoundException)
             {
                 File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + TemplateFile, "[]");
                 templateJSON = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + TemplateFile);
