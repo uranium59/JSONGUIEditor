@@ -27,6 +27,7 @@ namespace JSONGUIEditor.Parser
         static async public void ParseStart(JSON.ParseCallback c, string s = "")
         {
             if (!initialized) Initialize();
+            if (!JSONParseThread.Initialized) JSONParseThread.Initialize();
 
             ComplexTree<object> CompTree = null;
             try

@@ -23,7 +23,8 @@ namespace JSONParserUnitTest
             //longlongstring = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory +"FakeJSON.json");
 
             ThreadPool.SetMaxThreads(65536, 65535);
-
+            //ThreadPool.SetMinThreads(2000, 2000);
+            
             if (!JSONParseThread.Initialized) JSONParseThread.Initialize();
         }
 
@@ -64,6 +65,8 @@ namespace JSONParserUnitTest
             ComplexTree<object> mt = JSONParser.CalculateComplexity(longlongstring);
             mt[0].AddComplex();
             JSONNode n = JSONParseThread.ParseThread(mt[0], longlongstring);
+            //Task t = Task.Factory.StartNew(() => { JSONNode n = JSONParseThread.ParseThread(mt[0], longlongstring); });
+            //t.Wait();
             s.Stop();
             Console.WriteLine(s.Elapsed);
             Console.WriteLine(mt[0][0].Complex);
@@ -83,6 +86,7 @@ namespace JSONParserUnitTest
         public void TestBigStringSingleThread()
         {
             Stopwatch s = Stopwatch.StartNew();
+            JSONParseThread.Initialize();
             ComplexTree<object> mt = JSONParser.CalculateComplexity(longlongstring);
             mt[0].AddComplex();
             JSONNode n = JSONParseThread.Parse(mt[0], longlongstring);
@@ -95,6 +99,7 @@ namespace JSONParserUnitTest
         {
             Stopwatch s = new Stopwatch();
             s.Start();
+            JSONParseThread.Initialize();
             ComplexTree<object> t = JSONParser.CalculateComplexity(longlongstring);
             t[0].AddComplex();
             s.Stop();
@@ -138,12 +143,12 @@ namespace JSONParserUnitTest
         [Test, Order(300)]
         public void MakeHugeString()
         {
-            StreamWriter sw = File.AppendText(AppDomain.CurrentDomain.BaseDirectory + "hugefile.json");
+            StreamWriter sw = File.AppendText(AppDomain.CurrentDomain.BaseDirectory + "hugefile2.json");
             sw.Write("{");
-            for(int i = 0; i < 50; ++i)
+            for(int i = 0; i < 25; ++i)
             {
                 sw.Write("\"" + i + "\" : " + longlongstring);
-                if( i == 49)
+                if( i == 24)
                 {
                     sw.Write("}");
                 }

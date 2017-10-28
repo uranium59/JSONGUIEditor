@@ -12,7 +12,7 @@ namespace JSONGUIEditor.Parser
         {
         }
 
-        static public JSONNull NullStatic = new JSONNull();
+        static public readonly JSONNull NullStatic = new JSONNull();
 
         //데이터
         //같은게 있을리가.

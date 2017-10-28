@@ -18,10 +18,9 @@ namespace JSONGUIEditor.Parser
         public int AddComplex()
         {
             Complex = Count;
-            Parallel.ForEach<ComplexTree<V>>(this, (c) =>
-            {
+            
+            foreach(ComplexTree<V> c in this)
                 Complex += c.AddComplex();
-            });
             return Complex;
         }
     }
