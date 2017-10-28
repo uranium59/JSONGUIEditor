@@ -14,12 +14,12 @@ namespace JSONGUIEditor.Parser
         //if complexity is bigger than threshold, add thread into threadpool
         public const int ThreadRunThreshold = 100;
         public const int ComplexityHighThreshold = 200;
-        public const int ComplexityLowThreshold = 50;
+        public const int ComplexityLowThreshold = 20;
         public const bool UsingThread = true;
         static public JSONNull null_pointer = new JSONNull();
         static public TaskFactory taskFactory = Task.Factory;
         static public TaskFactory<JSONNode> taskFactoryNode = Task<JSONNode>.Factory;
-        static private readonly Func<string, JSONNode>[] _parse = new Func<string, JSONNode>[128];
+        static private readonly Func<string,int,int, JSONNode>[] _parse = new Func<string,int,int, JSONNode>[128];
         static public bool Initialized { get; set; } = false;
 
         //static public Regex RegKeyValue = new Regex(JSONParserDEFINE.Key_ValueMatch, RegexOptions.Compiled);
@@ -35,10 +35,9 @@ namespace JSONGUIEditor.Parser
         }
 
         static public void Entry(ComplexTree<object> t, string _s)
-        {
+        {//maybe not use...?
             if (t.Complex > ComplexityHighThreshold) ParseThread(t, _s);
             else Parse(t, _s);
-            
         }
         
         static public JSONNode Parse(ComplexTree<object> t, string _s)
@@ -68,18 +67,19 @@ namespace JSONGUIEditor.Parser
                 {
                     nextSeparator = t.separator[sepi];
 
-                    //while (char.IsWhiteSpace(s[ni])) ni++;//find next non whitespace
+                    while (_s[ni] <= ' ') ni++;//find next non whitespace
                     if(_s[nextSeparator] != ':')
                     {
                         throw new JSONSyntaxErrorCollonNotExist();
                     }
-                    string keystr;
 
-                    string key = _s.Substring(ni, nextSeparator - ni);
-                    key = key.Trim();
-                    if (key[0] == key[key.Length - 1] && key[0] == '"')
+                    int nei = nextSeparator - 1;
+                    while (_s[nei] <= ' ') --nei;//find end non whitespace
+
+                    string keystr;
+                    if (_s[nei] == '"' && _s[ni] == '"')
                     {
-                        keystr = key.Substring(1, key.Length - 2);
+                        keystr = _s.Substring(ni + 1, nei - ni - 1);
                     }
                     else
                     {
@@ -93,9 +93,9 @@ namespace JSONGUIEditor.Parser
                     char k = _s[ni];
                     if (k != '{' && k != '[')
                     {
-                        string value = _s.Substring(ni, nextSeparator - ni);
-                        value = value.TrimEnd();
-                        rtn[keystr] = _parse[k](value);
+                        nei = nextSeparator - 1;
+                        while (_s[nei] <= ' ') --nei;//find end non whitespace
+                        rtn[keystr] = _parse[k](_s, ni, nei);
                     }
                     else
                     {
@@ -113,7 +113,6 @@ namespace JSONGUIEditor.Parser
             else if (_s[si] == '[')
             {
                 rtn = new JSONArray();
-
                 if (t.separator.Count == 1)
                 {
                     if (_s[t.separator[sepi]] == ']')
@@ -134,9 +133,9 @@ namespace JSONGUIEditor.Parser
                     char k = _s[ni];
                     if (k != '{' && k != '[')
                     {
-                        string value = _s.Substring(ni, nextSeparator - ni);
-                        value = value.TrimEnd();
-                        rtn.Add(_parse[k](value));
+                        int nei = nextSeparator - 1;
+                        while (_s[nei] <= ' ') --nei;//find end non whitespace
+                        rtn.Add(_parse[k](_s, ni, nei));
                     }
                     else
                     {
@@ -198,18 +197,19 @@ namespace JSONGUIEditor.Parser
                 while (sepi < t.separator.Count)
                 {
                     nextSeparator = t.separator[sepi];
-                    //while (char.IsWhiteSpace(s[ni])) ni++;//find next non whitespace
+                    while (_s[ni]<=' ') ni++;//find next non whitespace
                     if (_s[nextSeparator] != ':')
                     {
                         throw new JSONSyntaxErrorCollonNotExist(nextSeparator);
                     }
 
-                    string key = _s.Substring(ni, nextSeparator - ni);
-                    key = key.Trim();
+                    int nei = nextSeparator - 1;
+                    while (_s[nei] <= ' ') --nei;//find end non whitespace
+                    
                     string keystr;
-                    if (key[0] == key[key.Length - 1] && key[0] == '"')
+                    if (_s[nei] == '"' && _s[ni] == '"')
                     {
-                        keystr = key.Substring(1, key.Length - 2);
+                        keystr = _s.Substring(ni+1, nei-ni-1);
                     }
                     else
                     {
@@ -224,35 +224,24 @@ namespace JSONGUIEditor.Parser
                     char k = _s[ni];
                     if (k != '{' && k != '[')
                     {
-                        string value = _s.Substring(ni, nextSeparator - ni);
-                        value = value.TrimEnd();
-                        rtn[keystr] = _parse[k](value);
+                        nei = nextSeparator - 1;
+                        while (_s[nei] <= ' ') --nei;//find end non whitespace
+                        rtn[keystr] = _parse[k](_s, ni, nei);
                     }
                     else
                     {
                         ComplexTree<object> child = t[ti];
-                        rtn[keystr] = child.task == null ? Parse(child, _s) : child.task.Result;
-                        /*
-                        if (child.Complex > ComplexityLowThreshold)
-                        {
-                        rtn[keystr] = child.task.Result;//wait for child parsing
-                        if (child.task == null)
-                        {
-                            string tempkey = keystr;
-                            CollectTask.Add(taskFactory.StartNew(() =>
-                            {
-                                taskList[ti / ThreadRunThreshold].Wait();
-                                rtn[tempkey] = child.task.Result;
-                            }));
-                        }//when above task not finished
-                        else
-                            rtn[keystr] = child.task.Result;//wait for child parsing
-                        }
-                        else
+                        if(child.task == null)
                         {
                             rtn[keystr] = Parse(child, _s);
                         }
-                        */
+                        else
+                        {
+                            child.nodeIndex = rtn.Count;
+                            rtn[keystr] = JSONNull.NullStatic;
+                        }
+
+                        //rtn[keystr] = child.task == null ? Parse(child, _s) : child.task.Result;
                         ti++;
                     }
                     if (_s[nextSeparator] != ',' && _s[nextSeparator] != '}')
@@ -287,24 +276,24 @@ namespace JSONGUIEditor.Parser
                     char k = _s[ni];
                     if (k != '{' && k != '[')
                     {
-                        string value = _s.Substring(ni, nextSeparator - ni);
-                        value = value.TrimEnd();
-                        rtn.Add(_parse[k](value));
+                        int nei = nextSeparator - 1;
+                        while (_s[nei] <= ' ') --nei;//find end non whitespace
+                        rtn.Add(_parse[k](_s, ni, nei));
                     }
                     else
                     {
                         ComplexTree<object> child = t[ti];
-                        rtn.Add( child.task == null ? Parse(child, _s) : child.task.Result );
-                        /*
-                        if (child.Complex > ComplexityLowThreshold)
+
+                        if (child.task == null)
                         {
-                            rtn.Add(child.task.Result);
+                            rtn.Add(Parse(child, _s));
                         }
                         else
                         {
-                            rtn.Add(Parse(child, _s)); //wait for child parsing
+                            child.nodeIndex = rtn.Count;
+                            rtn.Add(JSONNull.NullStatic);
                         }
-                        */
+                        //rtn.Add( child.task == null ? Parse(child, _s) :child.task.Result);
                         ti++;
                     }
                     if (_s[nextSeparator] != ',' && _s[nextSeparator] != ']')
@@ -316,7 +305,12 @@ namespace JSONGUIEditor.Parser
                 }
             }
 
-            //Task.WaitAll(CollectTask.ToArray());
+            
+            Parallel.ForEach<ComplexTree<object>>(t, tree =>
+            {
+                if (tree.task != null) rtn[tree.nodeIndex] = tree.task.Result;
+            });
+            
             return rtn;
         }//for multithread
 
@@ -347,41 +341,42 @@ namespace JSONGUIEditor.Parser
             throw new JSONSyntaxErrorCannotParseValue();
         }
 
-        static public JSONNode NumberParse(string s)
+        static public JSONNode NumberParse(string s, int ni, int nei)
         {
+            string value = s.Substring(ni, nei + 1 - ni);
             int i;
-            if(int.TryParse(s,out i))
+            if(int.TryParse(value,out i))
                 return new JSONNumber(i);
             double d;
-            if (double.TryParse(s, out d))
+            if (double.TryParse(value, out d))
             {
                 return new JSONNumber(d);
             }
             throw new JSONSyntaxErrorCannotParseValue();
         }
-        static public JSONNode TrueParse(string s)
+        static public JSONNode TrueParse(string s, int ni, int nei)
         {
-            if (s.Length == 4 && s[1] == 'r' && s[2] == 'u' && s[3] == 'e')
+            if (nei - ni == 3 && s[ni + 1] == 'r' && s[ni + 2] == 'u' && s[nei] == 'e')
                 return JSONBool.TrueStatic;
             throw new JSONSyntaxErrorCannotParseValue();
         }
-        static public JSONNode FalseParse(string s)
+        static public JSONNode FalseParse(string s, int ni, int nei)
         {
-            if (s.Length == 5 && s[1] == 'a' && s[2] == 'l' && s[3] == 's' && s[4] == 'e')
+            if (nei - ni == 4 && s[ni + 1] == 'a' && s[ni + 2] == 'l' && s[ni + 3] == 's' && s[nei] == 'e')
                 return JSONBool.FalseStatic;
             throw new JSONSyntaxErrorCannotParseValue();
         }
-        static public JSONNode StringParse(string s)
+        static public JSONNode StringParse(string s, int ni, int nei)
         {
-            if (s[0] == s[s.Length - 1] && s[0] == '"')
+            if (s[ni] == '"' && s[nei] == '"')
             {
-                return new JSONString(s.Substring(1, s.Length - 2));
+                return new JSONString(s.Substring(ni + 1, nei - 1 - ni));
             }
             throw new JSONSyntaxErrorCannotParseValue();
         }
-        static public JSONNode NullParse(string s)
+        static public JSONNode NullParse(string s, int ni, int nei)
         {
-            if (s.Length == 4 && s[1] == 'u' && s[2] == s[3] && s[3] == 'l')
+            if (nei - ni == 3 && s[ni + 1] == 'u' && s[ni + 2] == 'l' && s[nei] == 'l')
             {
                 return JSONNull.NullStatic;
             }

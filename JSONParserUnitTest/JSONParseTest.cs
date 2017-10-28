@@ -18,11 +18,11 @@ namespace JSONParserUnitTest
         [SetUp]
         public void SetUp()
         {
-            longlongstring = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "hugefile.json");
-            //longlongstring = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ReallyBigJSON.json");
+            //longlongstring = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "hugefile.json");
+            longlongstring = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ReallyBigJSON.json");
             //longlongstring = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory +"FakeJSON.json");
 
-            ThreadPool.SetMaxThreads(65536, 30000);
+            ThreadPool.SetMaxThreads(65536, 65535);
 
             if (!JSONParseThread.Initialized) JSONParseThread.Initialize();
         }
@@ -66,6 +66,7 @@ namespace JSONParserUnitTest
             JSONNode n = JSONParseThread.ParseThread(mt[0], longlongstring);
             s.Stop();
             Console.WriteLine(s.Elapsed);
+            Console.WriteLine(mt[0][0].Complex);
             /*
             Task t = Task.Factory.StartNew(()=>JSONParser.ParseStart((JSONNode n) =>
             {
@@ -87,6 +88,7 @@ namespace JSONParserUnitTest
             JSONNode n = JSONParseThread.Parse(mt[0], longlongstring);
             s.Stop();
             Console.WriteLine(s.Elapsed);
+            Console.WriteLine(n[0][0].value);
         }
         [Test, Order(102)]
         public void ComplexityTimeConsumeTest()

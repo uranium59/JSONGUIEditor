@@ -58,6 +58,7 @@ namespace JSONGUIEditor.Parser
             int quoteposition = -1;
             for (int i = 0; i < s.Length; i++)
             {
+                while (s[i] <= ' ') i++;
                 switch (s[i])
                 {
                     case '"':
@@ -72,7 +73,7 @@ namespace JSONGUIEditor.Parser
                             else
                                 quoteposition = -1;
                         }
-                        else
+                        else//cause \" can only exist in " "
                             i = s.IndexOf('"', i + 1) - 1;
                         break;
                     case ',':
