@@ -18,8 +18,8 @@ namespace JSONGUIEditor.Parser
             _data = b;
         }
 
-        static public JSONBool TrueStatic = new JSONBool(true);
-        static public JSONBool FalseStatic = new JSONBool(false);
+        static public readonly JSONBool TrueStatic = new JSONBool(true);
+        static public readonly JSONBool FalseStatic = new JSONBool(false);
 
         private bool _data = false;
 

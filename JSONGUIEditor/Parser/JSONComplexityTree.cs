@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,18 +11,10 @@ namespace JSONGUIEditor.Parser
     {
         public int Index { get; set; }
         public int EndPoint { get; set; } = 0;
-        public int Complex { get; set; }
         public int nodeIndex { get; set; }
-        public Task<JSONNode> task { get; set; } = null;
-        public List<int> separator = new List<int>();
+        public JSONNode node { get; set; }
+        public Thread task { get; set; } = null;
+        public Queue<int> separator = new Queue<int>();
         public ComplexTree<V> parent { get; set; } = null;
-        public int AddComplex()
-        {
-            Complex = Count;
-            
-            foreach(ComplexTree<V> c in this)
-                Complex += c.AddComplex();
-            return Complex;
-        }
     }
 }

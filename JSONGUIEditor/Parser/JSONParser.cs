@@ -33,7 +33,6 @@ namespace JSONGUIEditor.Parser
             try
             {
                 CompTree = CalculateComplexity(s);
-                CompTree.AddComplex();
             }
             catch (JSONSyntaxErrorNotClose e)
             {
@@ -44,10 +43,11 @@ namespace JSONGUIEditor.Parser
                 c(new JSONObject());
                 return;
             }
-            Task<JSONNode> t = new Task<JSONNode>(() => { return JSONParseThread.ParseThread(CompTree[0], s); });
+            JSONParseThread.s = s;
+            Task t = new Task(() => { JSONParseThread.ParseThread(CompTree[0]); });
             t.Start();
             await t;
-            c(t.Result);
+            c(CompTree[0].node);
             //JSONParseThread._s = "";
         }
 
@@ -80,7 +80,7 @@ namespace JSONGUIEditor.Parser
                     case ',':
                     case ':':
                         if (isQuote) break;
-                        cursor.separator.Add(i);
+                        cursor.separator.Enqueue(i);
                         break;
                     case '[':
                     case '{':
@@ -99,7 +99,7 @@ namespace JSONGUIEditor.Parser
                     case '}':
                         {
                             if (isQuote) break;
-                            cursor.separator.Add(i);
+                            cursor.separator.Enqueue(i);
                             cursor.EndPoint = i;
                             cursor = cursor.parent;
                             if (cursor == null) throw new JSONSyntaxErrorNotClose(i - 1);

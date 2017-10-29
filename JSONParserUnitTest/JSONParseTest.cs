@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NUnit.Framework;
 using Newtonsoft.Json.Linq;
 using System.Text.Json;
@@ -18,8 +18,8 @@ namespace JSONParserUnitTest
         [SetUp]
         public void SetUp()
         {
-            //longlongstring = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "hugefile.json");
-            longlongstring = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ReallyBigJSON.json");
+            longlongstring = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "hugefile.json");
+            //longlongstring = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ReallyBigJSON.json");
             //longlongstring = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory +"FakeJSON.json");
 
             ThreadPool.SetMaxThreads(65536, 65535);
@@ -47,29 +47,30 @@ namespace JSONParserUnitTest
         {
             string jsonstring = "{\"test\":12345}";
             ComplexTree<object> t = JSONParser.CalculateComplexity(jsonstring);
-            t.AddComplex();
-            JSONNode n = JSONParseThread.Parse(t[0], jsonstring);
+            JSONNode n = JSONParseThread.Parse(t[0]);
         }
         [Test, Order(3)]
         public void ParseTest3()
         {
             string jsonstring = "[1,\"t\",true]";
             ComplexTree<object> t = JSONParser.CalculateComplexity(jsonstring);
-            JSONNode n = JSONParseThread.Parse(t[0], jsonstring);
+            JSONNode n = JSONParseThread.Parse(t[0]);
         }
 
         [Test, Order(100)]
         public void TestReallyBigString()
         {
             Stopwatch s = Stopwatch.StartNew();
+
             ComplexTree<object> mt = JSONParser.CalculateComplexity(longlongstring);
-            mt[0].AddComplex();
-            JSONNode n = JSONParseThread.ParseThread(mt[0], longlongstring);
+            JSONParseThread.s = longlongstring;
+            JSONParseThread.ParseThread(mt[0]);
+            JSONNode n = mt[0].node;
             //Task t = Task.Factory.StartNew(() => { JSONNode n = JSONParseThread.ParseThread(mt[0], longlongstring); });
             //t.Wait();
             s.Stop();
             Console.WriteLine(s.Elapsed);
-            Console.WriteLine(mt[0][0].Complex);
+            Console.WriteLine(mt[0][0].Count);
             /*
             Task t = Task.Factory.StartNew(()=>JSONParser.ParseStart((JSONNode n) =>
             {
@@ -88,8 +89,8 @@ namespace JSONParserUnitTest
             Stopwatch s = Stopwatch.StartNew();
             JSONParseThread.Initialize();
             ComplexTree<object> mt = JSONParser.CalculateComplexity(longlongstring);
-            mt[0].AddComplex();
-            JSONNode n = JSONParseThread.Parse(mt[0], longlongstring);
+            JSONParseThread.s = longlongstring;
+            JSONNode n = JSONParseThread.Parse(mt[0]);
             s.Stop();
             Console.WriteLine(s.Elapsed);
             Console.WriteLine(n[0][0].value);
@@ -101,7 +102,6 @@ namespace JSONParserUnitTest
             s.Start();
             JSONParseThread.Initialize();
             ComplexTree<object> t = JSONParser.CalculateComplexity(longlongstring);
-            t[0].AddComplex();
             s.Stop();
             Console.WriteLine(s.Elapsed);
             Console.WriteLine(t[0].Count);
