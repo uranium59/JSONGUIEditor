@@ -18,9 +18,9 @@ namespace JSONParserUnitTest
         [SetUp]
         public void SetUp()
         {
-            longlongstring = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "hugefile.json");
+            //longlongstring = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "hugefile2.json");
             //longlongstring = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "ReallyBigJSON.json");
-            //longlongstring = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory +"FakeJSON.json");
+            longlongstring = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory +"FakeJSON.json");
 
             ThreadPool.SetMaxThreads(65536, 65535);
             //ThreadPool.SetMinThreads(2000, 2000);

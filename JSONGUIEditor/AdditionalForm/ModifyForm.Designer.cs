@@ -63,6 +63,7 @@
             this.Ok.TabIndex = 2;
             this.Ok.Text = "Ok";
             this.Ok.UseVisualStyleBackColor = true;
+            this.Ok.Click += new System.EventHandler(this.Ok_Click);
             // 
             // ModifyForm
             // 

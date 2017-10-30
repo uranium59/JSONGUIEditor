@@ -13,6 +13,8 @@ namespace JSONGUIEditor.AdditionalForm
     using JSONGUIEditor.Parser;
     public partial class ModifyForm : Form
     {
+        public BaseForm baseForm { get; set; }
+
         public ModifyForm()
         {
             throw new NotImplementedException(); //Dont Use This!
@@ -59,7 +61,14 @@ namespace JSONGUIEditor.AdditionalForm
 
         private void ModifyMain()
         {
+            JSONParser.ParseStart(AfterParse, textBox1.Text);
+        }
+
+        private JSONNode AfterParse(JSONNode n)
+        {
+            baseForm.ReceiveNode(n);
             this.Close();
+            return n;
         }
 
         private void ModifyForm_KeyPress(object sender, KeyPressEventArgs e)
@@ -69,6 +78,11 @@ namespace JSONGUIEditor.AdditionalForm
                 if (CloseFormAfterModify())
                     this.Close();
             }
+        }
+
+        private void Ok_Click(object sender, EventArgs e)
+        {
+            ModifyMain();
         }
     }
 }

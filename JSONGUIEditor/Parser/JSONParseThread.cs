@@ -21,6 +21,7 @@ namespace JSONGUIEditor.Parser
         static public bool Initialized { get; set; } = false;
         static public ParallelOptions pOption = new ParallelOptions() { MaxDegreeOfParallelism = -1, CancellationToken = System.Threading.CancellationToken.None };
         static public string s = "";
+        static public bool Parsing = false;
 
         //static public Regex RegKeyValue = new Regex(JSONParserDEFINE.Key_ValueMatch, RegexOptions.Compiled);
         //static public Regex RegValueOnly = new Regex(JSONParserDEFINE.ValuesMatch, RegexOptions.Compiled);
@@ -191,12 +192,12 @@ namespace JSONGUIEditor.Parser
 
             foreach (ComplexTree<object> c in t)
             {
-                if (c.EndPoint - c.Index > ComplexityHighThreshold)
+                if (c.EndPoint - c.Index > ComplexityHighThreshold && t.Count > 1)
                 {
                     c.task = new Thread(() => ParseThread(c));
                     c.task.Start();
                 }
-                else if (c.EndPoint - c.Index > ComplexityLowThreshold)
+                else if (c.EndPoint - c.Index > ComplexityLowThreshold && t.Count > 1)
                 {
                     c.task = new Thread(() => Parse(c));
                     c.task.Start();

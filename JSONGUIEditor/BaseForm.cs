@@ -7,6 +7,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -48,6 +49,9 @@ namespace JSONGUIEditor
             n["asdf"] = new JSONObject();
             n["asdf"]["123"] = new JSONBool(true);
             ReceiveNode(n);
+
+            //AppDomain.CurrentDomain.UnhandledException += Unhandled_Exception;
+            Application.ThreadException += Unhandled_Exception;
         }
 
         private void UpdateResource(string s)
@@ -96,6 +100,12 @@ namespace JSONGUIEditor
             MainPanel.Controls.Add(btn_value);
             MainPanel.Controls.Add(p);
             MainPanel.Tag = RootNode;
+        }
+
+        private void Unhandled_Exception(object sender, ThreadExceptionEventArgs args)
+        {
+            Exception e = (Exception)args.Exception;
+            MessageBox.Show("MyHandler caught : " + e.Message);
         }
             
         private void tview_object_DoubleClick(object sender, EventArgs e)

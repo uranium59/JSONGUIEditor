@@ -13,7 +13,6 @@ namespace Tester
     {
         static void Main(string[] args)
         {
-            System.Runtime.GCSettings.LatencyMode = System.Runtime.GCLatencyMode.Interactive;
 
             string longlongstring = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "hugefile.json");
             Stopwatch s = Stopwatch.StartNew();
@@ -22,9 +21,9 @@ namespace Tester
             if (!JSONParseThread.Initialized) JSONParseThread.Initialize();
             ComplexTree<object> mt = JSONParser.CalculateComplexity(longlongstring);
             JSONParseThread.s = longlongstring;
-            //JSONNode n = JSONParseThread.Parse(mt[0], longlongstring);
-            JSONParseThread.ParseThread(mt[0]);
-            JSONNode n = mt[0].node;
+            JSONNode n = JSONParseThread.Parse(mt[0]);
+            //JSONParseThread.ParseThread(mt[0]);
+            //JSONNode n = mt[0].node;
             
             /*
             JsonParser j = new JsonParser();
@@ -36,7 +35,6 @@ namespace Tester
             s.Stop();
             Console.WriteLine(s.Elapsed);
             string end = Console.ReadLine();
-            System.Runtime.GCSettings.LatencyMode = System.Runtime.GCLatencyMode.Interactive;
         }
     }
 }
