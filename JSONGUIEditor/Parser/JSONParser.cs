@@ -24,7 +24,7 @@ namespace JSONGUIEditor.Parser
 
         //문자열 파싱용 함수
         #region
-        static async public void ParseStart(JSON.ParseCallback c, string s = "")
+        static async public void ParseStart(JSON.ParseCallback c, Action<JSONException> ex, string s = "")
         {
             if (JSONParseThread.Parsing)
                 throw new System.Exception("이미 파싱이 진행중입니다");
@@ -46,16 +46,25 @@ namespace JSONGUIEditor.Parser
                 c(new JSONObject());
                 return;
             }
+
             JSONParseThread.s = s;
+            JSONParseThread.threadException = null;
             Task t = new Task(() => { JSONParseThread.ParseThread(CompTree[0]); });
             t.Start();
             await t;
-            c(CompTree[0].node);
+            JSONParseThread.Parsing = false;
+            if (JSONParseThread.threadException != null)
+            {
+                ex?.Invoke(JSONParseThread.threadException);
+            }
+            else
+                c(CompTree[0].node);
             //JSONParseThread._s = "";
         }
 
         static public ComplexTree<object> CalculateComplexity(string s)
         {
+            bool doublestring = false;
             bool isQuote = false;
             ComplexTree<object> rtn = new ComplexTree<object>();
             ComplexTree<object> cursor = rtn;
@@ -71,8 +80,10 @@ namespace JSONGUIEditor.Parser
                             isQuote ^= true;
                             if (isQuote)
                             {
+                                if (doublestring) throw new JSONSyntaxErrorCommaNotExist(i);
                                 quoteposition = i;
                                 i = s.IndexOf('"', i + 1) - 1;
+                                doublestring = true;
                             }
                             else
                                 quoteposition = -1;
@@ -84,11 +95,13 @@ namespace JSONGUIEditor.Parser
                     case ':':
                         if (isQuote) break;
                         cursor.separator.Enqueue(i);
+                        doublestring = false;
                         break;
                     case '[':
                     case '{':
                         {
                             if (isQuote) break;
+                            doublestring = false;
                             ComplexTree<object> child = new ComplexTree<object>()
                             {
                                 Index = i,
@@ -102,6 +115,7 @@ namespace JSONGUIEditor.Parser
                     case '}':
                         {
                             if (isQuote) break;
+                            doublestring = false;
                             cursor.separator.Enqueue(i);
                             cursor.EndPoint = i;
                             cursor = cursor.parent;

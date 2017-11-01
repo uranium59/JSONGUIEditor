@@ -37,7 +37,7 @@ namespace JSONParserUnitTest
         [Test, Order(1)]
         public void ParseTest1()
         {
-            JSONParser.ParseStart((JSONNode n) => { Console.WriteLine("finished"); return null; }, "{\"test\":123}");
+            JSONParser.ParseStart((JSONNode n) => { Console.WriteLine("finished"); return null; }, null, "{\"test\":123}");
 
             Console.WriteLine("test function finished");
         }

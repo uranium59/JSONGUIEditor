@@ -8,9 +8,11 @@ namespace JSONGUIEditor.Parser.Exception
 {
     class JSONSyntaxErrorNotClose : JSONException
     {
-        public JSONSyntaxErrorNotClose()
-        { }
-        public JSONSyntaxErrorNotClose(int index)
+        public JSONSyntaxErrorNotClose():base()
+        {
+            throw new NotImplementedException();
+        }
+        public JSONSyntaxErrorNotClose(int index):base()
         {
 
         }

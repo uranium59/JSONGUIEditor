@@ -41,11 +41,11 @@ namespace JSONGUIEditor.Parser
         //문자열 생성용
         public override string Stringify()
         {
-            return _data.ToString();
+            return _data.ToString().ToLower();
         }
         public override string Stringify(JSONStringifyOption o)
         {
-            return _data.ToString();
+            return _data.ToString().ToLower();
         }
     }
 }

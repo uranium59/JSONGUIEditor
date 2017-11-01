@@ -63,7 +63,7 @@ namespace JSONGUIEditor.TemplateForm
                 File.WriteAllText(AppDomain.CurrentDomain.BaseDirectory + TemplateFile, "[]");
                 templateJSON = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + TemplateFile);
             }
-            JSON.Parse(new JSON.ParseCallback(AddJSONNodeToList), templateJSON);
+            JSON.Parse(new JSON.ParseCallback(AddJSONNodeToList), JSONExceptionCatch, templateJSON);
         }
 
         private JSONNode AddJSONNodeToList(JSONNode n)
@@ -95,7 +95,7 @@ namespace JSONGUIEditor.TemplateForm
             TemplateName.Text = n["name"];
             TemplateDescription.Text = n["description"];
             TemplateObjectList.Items.Clear();
-            JSON.Parse(new JSON.ParseCallback(MakeTemplateObjectList), n["template"].value.Replace("\\\"", "\""));
+            JSON.Parse(new JSON.ParseCallback(MakeTemplateObjectList), JSONExceptionCatch, n["template"].value.Replace("\\\"", "\""));
         }
         private JSONNode MakeTemplateObjectList(JSONNode n)
         {
@@ -124,6 +124,11 @@ namespace JSONGUIEditor.TemplateForm
                 }
             }
             return null;
+        }
+
+        private void JSONExceptionCatch(Parser.Exception.JSONException ex)
+        {
+
         }
     }
 }

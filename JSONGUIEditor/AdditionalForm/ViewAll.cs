@@ -56,7 +56,7 @@ namespace JSONGUIEditor.AdditionalForm
 
         private void ModifyMain()
         {
-            JSON.Parse(ModifyFinish, textBox1.Text);
+            JSON.Parse(ModifyFinish, baseForm.JSONExceptionCatch, textBox1.Text);
             this.Close();
         }
         private JSONNode ModifyFinish(JSONNode n)

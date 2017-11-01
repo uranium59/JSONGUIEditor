@@ -13,23 +13,13 @@ namespace JSONGUIEditor.Parser
     {
         public delegate JSONNode ParseCallback(JSONNode n);
 
-        static public void Parse(ParseCallback c)
+        static public void Parse(ParseCallback c, Action<JSONException> ex)
         {
-            JSONParser.ParseStart(c);
+            JSONParser.ParseStart(c, ex);
         }
-        static public void Parse(ParseCallback c, string s)
+        static public void Parse(ParseCallback c, Action<JSONException> ex,  string s = "")
         {
-            try
-            {
-                JSONParser.ParseStart(c, s);
-            }
-            catch (JSONSyntaxErrorNotClose e)
-            {
-            }
-            catch(System.Exception e)
-            {
-
-            }
+            JSONParser.ParseStart(c, ex, s);
         }
 
         static public string Stringify(JSONNode n)

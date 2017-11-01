@@ -8,16 +8,15 @@ namespace JSONGUIEditor.Parser.Exception
 {
     public class JSONNotBooleanException : JSONWrongTypeException
     {
-        public JSONNotBooleanException()
+        public JSONNotBooleanException():base()
         {
-            position = new JSONParsePosition();
-            _Message = "Tried Cast boolean but its value is not boolean" + position.ToString();
+            _Message = "Tried Cast boolean but its value is not boolean";
         }
 
-        public JSONNotBooleanException(JSONParsePosition p)
+        public JSONNotBooleanException(int p):base()
         {
             position = p;
-            _Message = "Tried Cast boolean but its value is not boolean\n" + position.ToString();
+            _Message = "Tried Cast boolean but its value is not boolean at " + position;
         }
     }
 }

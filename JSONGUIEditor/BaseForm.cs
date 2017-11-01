@@ -15,6 +15,7 @@ namespace JSONGUIEditor
 {
     using JSONGUIEditor.TemplateForm;
     using JSONGUIEditor.Parser;
+    using JSONGUIEditor.Parser.Exception;
     using JSONGUIEditor.Parser.State;
     using JSONGUIEditor.AdditionalForm;
 
@@ -51,12 +52,11 @@ namespace JSONGUIEditor
             ReceiveNode(n);
 
             //AppDomain.CurrentDomain.UnhandledException += Unhandled_Exception;
-            Application.ThreadException += Unhandled_Exception;
         }
 
         private void UpdateResource(string s)
         {
-            JSON.Parse(ReceiveNode, s);
+            JSON.Parse(ReceiveNode, JSONExceptionCatch, s);
         }
 
         JSONNode RootNode = null;
@@ -102,9 +102,8 @@ namespace JSONGUIEditor
             MainPanel.Tag = RootNode;
         }
 
-        private void Unhandled_Exception(object sender, ThreadExceptionEventArgs args)
+        public void JSONExceptionCatch(JSONException e)
         {
-            Exception e = (Exception)args.Exception;
             MessageBox.Show("MyHandler caught : " + e.Message);
         }
             
@@ -325,6 +324,7 @@ namespace JSONGUIEditor
             Control c = (Control)sender;
             JSONNode n = (JSONNode)c.Tag;
             ModifyForm m = new ModifyForm(n, c);
+            m.baseForm = this;
             m.Show(this);
         }
         private void AddNewNodeButton(object sender, EventArgs e)
@@ -591,7 +591,7 @@ namespace JSONGUIEditor
             if(o.FileName != "")
             {
                 string s = File.ReadAllText(o.FileName);
-                JSON.Parse(ReceiveNode, s);
+                JSON.Parse(ReceiveNode, JSONExceptionCatch, s );
             }
         }
 
