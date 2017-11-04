@@ -28,38 +28,19 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.errorLabel = new System.Windows.Forms.Label();
-            this.OkButton = new System.Windows.Forms.Button();
             this.CancelButton = new System.Windows.Forms.Button();
+            this.textbox = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
-            // 
-            // textBox1
-            // 
-            this.textBox1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.textBox1.Location = new System.Drawing.Point(0, 0);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(284, 189);
-            this.textBox1.TabIndex = 0;
             // 
             // errorLabel
             // 
             this.errorLabel.AutoSize = true;
-            this.errorLabel.Location = new System.Drawing.Point(12, 203);
+            this.errorLabel.Location = new System.Drawing.Point(12, 201);
             this.errorLabel.Name = "errorLabel";
             this.errorLabel.Size = new System.Drawing.Size(38, 12);
             this.errorLabel.TabIndex = 1;
             this.errorLabel.Text = "label1";
-            // 
-            // OkButton
-            // 
-            this.OkButton.Location = new System.Drawing.Point(197, 195);
-            this.OkButton.Name = "OkButton";
-            this.OkButton.Size = new System.Drawing.Size(75, 23);
-            this.OkButton.TabIndex = 2;
-            this.OkButton.Text = "Ok";
-            this.OkButton.UseVisualStyleBackColor = true;
             // 
             // CancelButton
             // 
@@ -70,16 +51,24 @@
             this.CancelButton.Text = "Cancel";
             this.CancelButton.UseVisualStyleBackColor = true;
             // 
+            // textbox
+            // 
+            this.textbox.Dock = System.Windows.Forms.DockStyle.Top;
+            this.textbox.Location = new System.Drawing.Point(0, 0);
+            this.textbox.Name = "textbox";
+            this.textbox.Size = new System.Drawing.Size(284, 189);
+            this.textbox.TabIndex = 4;
+            this.textbox.Text = "";
+            // 
             // ErrorShowForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 262);
             this.ControlBox = false;
+            this.Controls.Add(this.textbox);
             this.Controls.Add(this.CancelButton);
-            this.Controls.Add(this.OkButton);
             this.Controls.Add(this.errorLabel);
-            this.Controls.Add(this.textBox1);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "ErrorShowForm";
@@ -93,10 +82,8 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label errorLabel;
-        private System.Windows.Forms.Button OkButton;
         private System.Windows.Forms.Button CancelButton;
+        private System.Windows.Forms.RichTextBox textbox;
     }
 }

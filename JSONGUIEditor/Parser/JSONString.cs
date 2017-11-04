@@ -50,11 +50,11 @@ namespace JSONGUIEditor.Parser
         //문자열 생성용
         public override string Stringify()
         {
-            return "\"" + JSONParser.StringWithEscape(_data) + "\"";
+            return JSONParser.StringWithEscape(_data);
         }
         public override string Stringify(JSONStringifyOption o)
         {
-            return "\"" + JSONParser.StringWithEscape(_data) + "\"";
+            return JSONParser.StringWithEscape(_data);
         }
     }
 }

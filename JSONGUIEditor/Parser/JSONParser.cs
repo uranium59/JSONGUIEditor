@@ -29,7 +29,6 @@ namespace JSONGUIEditor.Parser
             if (JSONParseThread.Parsing)
                 throw new System.Exception("이미 파싱이 진행중입니다");
             if (!initialized) Initialize();
-            JSONParseThread.Parsing = true;
             if (!JSONParseThread.Initialized) JSONParseThread.Initialize();
 
             ComplexTree<object> CompTree = null;
@@ -47,6 +46,7 @@ namespace JSONGUIEditor.Parser
                 return;
             }
 
+            JSONParseThread.Parsing = true;
             JSONParseThread.s = s;
             JSONParseThread.threadException = null;
             Task t = new Task(() => { JSONParseThread.ParseThread(CompTree[0]); });

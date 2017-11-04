@@ -87,10 +87,11 @@ namespace JSONGUIEditor.Parser
                 _data[i] = value;
             }
         }
-        public override void Add(JSONNode value)
+        public override string Add(JSONNode value)
         {
             value.parent = this;
             _data.Add(value);
+            return (_data.Count -1 ) + "";
         }
         #endregion
         //stringify

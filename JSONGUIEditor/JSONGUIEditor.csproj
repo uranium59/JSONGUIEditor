@@ -93,6 +93,15 @@
     <Compile Include="BaseForm.Designer.cs">
       <DependentUpon>BaseForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="BaseFormCreateSubset.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BaseFormEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BaseFormFile.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="FormConstValue.cs" />
     <Compile Include="Parser\Exception\JSONException.cs" />
     <Compile Include="Parser\Exception\JSONNotArrayException.cs" />

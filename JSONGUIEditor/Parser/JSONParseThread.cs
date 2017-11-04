@@ -425,13 +425,13 @@ namespace JSONGUIEditor.Parser
         static public JSONNode TrueParse(int ni, int nei)
         {
             if (nei - ni == 3 && s[ni + 1] == 'r' && s[ni + 2] == 'u' && s[nei] == 'e')
-                return new JSONBool(true);
+                return JSONBool.TrueStatic.CloneNode();
             throw new JSONSyntaxErrorCannotParseValue();
         }
         static public JSONNode FalseParse(int ni, int nei)
         {
             if (nei - ni == 4 && s[ni + 1] == 'a' && s[ni + 2] == 'l' && s[ni + 3] == 's' && s[nei] == 'e')
-                return new JSONBool(false);
+                return JSONBool.FalseStatic.CloneNode();
             throw new JSONSyntaxErrorCannotParseValue();
         }
         static public JSONNode StringParse(int ni, int nei)
@@ -446,7 +446,7 @@ namespace JSONGUIEditor.Parser
         {
             if (nei - ni == 3 && s[ni + 1] == 'u' && s[ni + 2] == 'l' && s[nei] == 'l')
             {
-                return new JSONNull();
+                return JSONNull.NullStatic.CloneNode();
             }
             throw new JSONSyntaxErrorCannotParseValue();
         }

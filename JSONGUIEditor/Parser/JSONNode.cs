@@ -34,6 +34,10 @@ namespace JSONGUIEditor.Parser
 
         //연산자 오버라이팅
         #region
+        public JSONNode CloneNode()
+        {
+            return (JSONNode)MemberwiseClone();
+        }
         public static bool operator ==(JSONNode a, object b)
         {
             if (ReferenceEquals(a, b))
@@ -56,7 +60,7 @@ namespace JSONGUIEditor.Parser
         }
         public virtual IEnumerator GetEnumerator()
         {
-            return null;
+            yield break;
         }
 
         public override string ToString()
@@ -78,13 +82,13 @@ namespace JSONGUIEditor.Parser
             get { return null; }
             set { }
         }
-        public virtual void Add(string key, JSONNode value)
+        public virtual string Add(string key, JSONNode value)
         {
-
+            return "";
         }
-        public virtual void Add(JSONNode value)
+        public virtual string Add(JSONNode value)
         {
-
+            return "";
         }
         public virtual JSONNode remove(string key)
         {
@@ -97,46 +101,16 @@ namespace JSONGUIEditor.Parser
 
         //implicit functions
         #region
-        public static implicit operator JSONNode(string s)
-        {
-            return new JSONString(s);
-        }
-        public static implicit operator string(JSONNode n)
-        {
-            return n?.value;
-        }
-        public static implicit operator JSONNode(int i)
-        {
-            return new JSONNumber(i);
-        }
-        public static implicit operator int(JSONNode n)
-        {
-            return (n == null) ? 0 : n.asInt;
-        }
-        public static implicit operator JSONNode(double i)
-        {
-            return new JSONNumber(i);
-        }
-        public static implicit operator double(JSONNode n)
-        {
-            return (n == null) ? 0 : n.asDouble;
-        }
-        public static implicit operator JSONNode(float i)
-        {
-            return new JSONNumber(i);
-        }
-        public static implicit operator float(JSONNode n)
-        {
-            return (n == null) ? 0f : n.asFloat;
-        }
-        public static implicit operator JSONNode(bool b)
-        {
-            return new JSONBool(b);
-        }
-        public static implicit operator bool(JSONNode n)
-        {
-            return (n == null) ? false : n.asBool;
-        }
+        public static implicit operator JSONNode(string s) => new JSONString(s);
+        public static implicit operator string(JSONNode n) => n?.value;
+        public static implicit operator JSONNode(int i) => new JSONNumber(i);
+        public static implicit operator int(JSONNode n) => (n == null) ? 0 : n.asInt;
+        public static implicit operator JSONNode(double i) => new JSONNumber(i);
+        public static implicit operator double(JSONNode n) => (n == null) ? 0 : n.asDouble;
+        public static implicit operator JSONNode(float i) => new JSONNumber(i);
+        public static implicit operator float(JSONNode n) => (n == null) ? 0f : n.asFloat;
+        public static implicit operator JSONNode(bool b) => new JSONBool(b);
+        public static implicit operator bool(JSONNode n) => (n == null) ? false : n.asBool;
         #endregion
         #endregion
 

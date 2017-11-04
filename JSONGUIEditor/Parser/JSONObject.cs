@@ -73,20 +73,33 @@ namespace JSONGUIEditor.Parser
                 value.parent = this;
             }
         }
-        public override void Add(string key, JSONNode value)
+        public override string Add(string key, JSONNode value)
         {
             value.parent = this;
             _data.Add(key, value);
+            return key;
         }
-        public override void Add(JSONNode value)
+        public override string Add(JSONNode value)
         {
             value.parent = this;
-            _data.Add("", value);
+            string key = "newNode";
+            int count = 0;
+            while (_data.ContainsKey(key + count))
+                count++;
+            _data.Add(key + count, value);
+            return key + count;
         }
         public override JSONNode remove(string key)
         {
             JSONNode rtn = _data[key];
             _data.Remove(key);
+            return rtn;
+        }
+        public override JSONNode remove(int index)
+        {
+            string k = _data.ElementAt(index).Key;
+            JSONNode rtn = _data.ElementAt(index).Value;
+            _data.Remove(k);
             return rtn;
         }
         public override IEnumerator GetEnumerator()
