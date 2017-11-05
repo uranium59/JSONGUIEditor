@@ -125,7 +125,6 @@ namespace JSONGUIEditor.TemplateForm
             }
             return null;
         }
-
         private void JSONExceptionCatch(Parser.Exception.JSONException ex)
         {
 

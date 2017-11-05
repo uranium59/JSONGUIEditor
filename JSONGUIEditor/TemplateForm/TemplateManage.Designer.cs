@@ -28,82 +28,248 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.QuitButton = new System.Windows.Forms.Button();
-            this.listBox1 = new System.Windows.Forms.ListBox();
-            this.AddTemplateButton = new System.Windows.Forms.Button();
-            this.InfoTemplateButton = new System.Windows.Forms.Button();
-            this.DeleteTemplateButton = new System.Windows.Forms.Button();
+            this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.txtDesc = new System.Windows.Forms.TextBox();
+            this.lsbTemp = new System.Windows.Forms.ListBox();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.btnTempDel = new System.Windows.Forms.Button();
+            this.txtTemp = new System.Windows.Forms.TextBox();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.btnColSave = new System.Windows.Forms.Button();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.dgvResult = new System.Windows.Forms.DataGridView();
+            this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
+            this.dgcKey = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgctype = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgcValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
+            this.panel1.SuspendLayout();
+            this.panel3.SuspendLayout();
+            this.panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvResult)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
             this.SuspendLayout();
             // 
-            // QuitButton
+            // splitContainer1
             // 
-            this.QuitButton.Location = new System.Drawing.Point(494, 237);
-            this.QuitButton.Name = "QuitButton";
-            this.QuitButton.Size = new System.Drawing.Size(75, 23);
-            this.QuitButton.TabIndex = 0;
-            this.QuitButton.Text = "Quit";
-            this.QuitButton.UseVisualStyleBackColor = true;
-            this.QuitButton.Click += new System.EventHandler(this.QuitButton_Click);
+            this.splitContainer1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
+            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer1.Name = "splitContainer1";
             // 
-            // listBox1
+            // splitContainer1.Panel1
             // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.ItemHeight = 12;
-            this.listBox1.Location = new System.Drawing.Point(13, 13);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(459, 244);
-            this.listBox1.TabIndex = 1;
+            this.splitContainer1.Panel1.Controls.Add(this.lsbTemp);
+            this.splitContainer1.Panel1.Controls.Add(this.panel1);
             // 
-            // AddTemplateButton
+            // splitContainer1.Panel2
             // 
-            this.AddTemplateButton.Location = new System.Drawing.Point(494, 12);
-            this.AddTemplateButton.Name = "AddTemplateButton";
-            this.AddTemplateButton.Size = new System.Drawing.Size(75, 23);
-            this.AddTemplateButton.TabIndex = 2;
-            this.AddTemplateButton.Text = "Add";
-            this.AddTemplateButton.UseVisualStyleBackColor = true;
+            this.splitContainer1.Panel2.Controls.Add(this.panel3);
+            this.splitContainer1.Panel2.Controls.Add(this.panel2);
+            this.splitContainer1.Size = new System.Drawing.Size(647, 483);
+            this.splitContainer1.SplitterDistance = 235;
+            this.splitContainer1.TabIndex = 0;
             // 
-            // InfoTemplateButton
+            // txtDesc
             // 
-            this.InfoTemplateButton.Location = new System.Drawing.Point(494, 41);
-            this.InfoTemplateButton.Name = "InfoTemplateButton";
-            this.InfoTemplateButton.Size = new System.Drawing.Size(75, 23);
-            this.InfoTemplateButton.TabIndex = 3;
-            this.InfoTemplateButton.Text = "Info";
-            this.InfoTemplateButton.UseVisualStyleBackColor = true;
+            this.txtDesc.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtDesc.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtDesc.Location = new System.Drawing.Point(3, 3);
+            this.txtDesc.Multiline = true;
+            this.txtDesc.Name = "txtDesc";
+            this.txtDesc.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtDesc.Size = new System.Drawing.Size(329, 52);
+            this.txtDesc.TabIndex = 2;
             // 
-            // DeleteTemplateButton
+            // lsbTemp
             // 
-            this.DeleteTemplateButton.Location = new System.Drawing.Point(494, 71);
-            this.DeleteTemplateButton.Name = "DeleteTemplateButton";
-            this.DeleteTemplateButton.Size = new System.Drawing.Size(75, 23);
-            this.DeleteTemplateButton.TabIndex = 4;
-            this.DeleteTemplateButton.Text = "Delete";
-            this.DeleteTemplateButton.UseVisualStyleBackColor = true;
+            this.lsbTemp.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lsbTemp.FormattingEnabled = true;
+            this.lsbTemp.ItemHeight = 12;
+            this.lsbTemp.Location = new System.Drawing.Point(0, 0);
+            this.lsbTemp.Name = "lsbTemp";
+            this.lsbTemp.Size = new System.Drawing.Size(233, 448);
+            this.lsbTemp.TabIndex = 1;
+            this.lsbTemp.SelectedIndexChanged += new System.EventHandler(this.lsbTemp_SelectedIndexChanged);
+            // 
+            // panel1
+            // 
+            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.btnTempDel);
+            this.panel1.Controls.Add(this.txtTemp);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel1.Location = new System.Drawing.Point(0, 454);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(233, 27);
+            this.panel1.TabIndex = 0;
+            // 
+            // btnTempDel
+            // 
+            this.btnTempDel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnTempDel.Location = new System.Drawing.Point(174, 1);
+            this.btnTempDel.Name = "btnTempDel";
+            this.btnTempDel.Size = new System.Drawing.Size(58, 23);
+            this.btnTempDel.TabIndex = 3;
+            this.btnTempDel.Text = "Delete";
+            this.btnTempDel.UseVisualStyleBackColor = true;
+            this.btnTempDel.Click += new System.EventHandler(this.btnTempDel_Click);
+            // 
+            // txtTemp
+            // 
+            this.txtTemp.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtTemp.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtTemp.Location = new System.Drawing.Point(-1, 2);
+            this.txtTemp.Name = "txtTemp";
+            this.txtTemp.Size = new System.Drawing.Size(119, 21);
+            this.txtTemp.TabIndex = 0;
+            // 
+            // panel3
+            // 
+            this.panel3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel3.Controls.Add(this.txtDesc);
+            this.panel3.Controls.Add(this.btnColSave);
+            this.panel3.Location = new System.Drawing.Point(3, 419);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(400, 60);
+            this.panel3.TabIndex = 1;
+            // 
+            // btnColSave
+            // 
+            this.btnColSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnColSave.Location = new System.Drawing.Point(334, 5);
+            this.btnColSave.Name = "btnColSave";
+            this.btnColSave.Size = new System.Drawing.Size(61, 48);
+            this.btnColSave.TabIndex = 6;
+            this.btnColSave.Text = "Save";
+            this.btnColSave.UseVisualStyleBackColor = true;
+            this.btnColSave.Click += new System.EventHandler(this.btnColSave_Click);
+            // 
+            // panel2
+            // 
+            this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel2.Controls.Add(this.dgvResult);
+            this.panel2.Location = new System.Drawing.Point(3, 3);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(400, 410);
+            this.panel2.TabIndex = 0;
+            // 
+            // dgvResult
+            // 
+            this.dgvResult.AllowUserToAddRows = false;
+            this.dgvResult.AllowUserToDeleteRows = false;
+            this.dgvResult.AllowUserToOrderColumns = true;
+            this.dgvResult.AutoGenerateColumns = false;
+            this.dgvResult.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.ColumnHeader;
+            this.dgvResult.BackgroundColor = System.Drawing.Color.White;
+            this.dgvResult.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
+            this.dgvResult.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            this.dgvResult.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dgcKey,
+            this.dgctype,
+            this.dgcValue});
+            this.dgvResult.DataSource = this.bindingSource1;
+            this.dgvResult.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvResult.Location = new System.Drawing.Point(0, 0);
+            this.dgvResult.MultiSelect = false;
+            this.dgvResult.Name = "dgvResult";
+            this.dgvResult.RowHeadersVisible = false;
+            this.dgvResult.RowTemplate.Height = 23;
+            this.dgvResult.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvResult.Size = new System.Drawing.Size(400, 410);
+            this.dgvResult.TabIndex = 24;
+            // 
+            // bindingSource1
+            // 
+            this.bindingSource1.DataSource = typeof(JSONGUIEditor.TemplateForm.JsonT);
+            // 
+            // dgcKey
+            // 
+            this.dgcKey.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.dgcKey.DataPropertyName = "key";
+            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.Black;
+            this.dgcKey.DefaultCellStyle = dataGridViewCellStyle1;
+            this.dgcKey.HeaderText = "key";
+            this.dgcKey.Name = "dgcKey";
+            this.dgcKey.ReadOnly = true;
+            // 
+            // dgctype
+            // 
+            this.dgctype.DataPropertyName = "type";
+            this.dgctype.HeaderText = "type";
+            this.dgctype.Name = "dgctype";
+            this.dgctype.ReadOnly = true;
+            this.dgctype.Width = 54;
+            // 
+            // dgcValue
+            // 
+            this.dgcValue.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dgcValue.DataPropertyName = "value";
+            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.Black;
+            this.dgcValue.DefaultCellStyle = dataGridViewCellStyle2;
+            this.dgcValue.HeaderText = "value";
+            this.dgcValue.Name = "dgcValue";
+            this.dgcValue.ReadOnly = true;
             // 
             // TemplateManage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(581, 272);
-            this.ControlBox = false;
-            this.Controls.Add(this.DeleteTemplateButton);
-            this.Controls.Add(this.InfoTemplateButton);
-            this.Controls.Add(this.AddTemplateButton);
-            this.Controls.Add(this.listBox1);
-            this.Controls.Add(this.QuitButton);
+            this.ClientSize = new System.Drawing.Size(647, 483);
+            this.Controls.Add(this.splitContainer1);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "TemplateManage";
             this.Text = "TemplateManage";
+            this.Load += new System.EventHandler(this.TemplateManage_Load);
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
+            this.splitContainer1.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
+            this.panel3.ResumeLayout(false);
+            this.panel3.PerformLayout();
+            this.panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvResult)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
             this.ResumeLayout(false);
 
         }
 
-        #endregion
+		#endregion
 
-        private System.Windows.Forms.Button QuitButton;
-        private System.Windows.Forms.ListBox listBox1;
-        private System.Windows.Forms.Button AddTemplateButton;
-        private System.Windows.Forms.Button InfoTemplateButton;
-        private System.Windows.Forms.Button DeleteTemplateButton;
+		private System.Windows.Forms.SplitContainer splitContainer1;
+		private System.Windows.Forms.ListBox lsbTemp;
+		private System.Windows.Forms.Panel panel1;
+		private System.Windows.Forms.Button btnTempDel;
+		private System.Windows.Forms.TextBox txtTemp;
+		private System.Windows.Forms.Panel panel3;
+		private System.Windows.Forms.Panel panel2;
+		private System.Windows.Forms.BindingSource bindingSource1;
+		private System.Windows.Forms.DataGridView dgvResult;
+		private System.Windows.Forms.Button btnColSave;
+        private System.Windows.Forms.TextBox txtDesc;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dgcKey;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dgctype;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dgcValue;
     }
 }

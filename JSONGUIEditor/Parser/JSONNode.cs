@@ -98,6 +98,10 @@ namespace JSONGUIEditor.Parser
         {
             return null;
         }
+        public virtual string[] GetAllKeys()
+        {
+            return null;
+        }
 
         //implicit functions
         #region

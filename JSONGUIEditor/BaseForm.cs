@@ -397,9 +397,36 @@ namespace JSONGUIEditor
         }
         private void selectTemplateToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            TemplateSelect f = new TemplateSelect(nowSelectedNode);
-            if(!f.IsDisposed)
+            TemplateChoice f = new TemplateChoice();
+            if (!f.IsDisposed)
+            {
+                // 2017.11.02 박성규
+                //Select Template로 부터 Select 버튼클릭시 Json 문자열 전달받기 위한 이벤트 핸들러
+                //f.OnSelectTemplate += F_OnSelectTemplate;
+                f.baseForm = this;
                 f.Show(this);
+            }
+        }
+        public void AddTemplateNodeToBase(JSONNode n)
+        {
+            Panel target;
+            if (nowSelectedNode == null)
+            {
+                target = (Panel)MainPanel.Controls[2];
+            }
+            else
+                target = (Panel)nowSelectedNode.Controls[nowSelectedNode.Controls.Count - 1];
+            JSONNode node = (JSONNode)target.Tag;
+            TreeNode t = JSONFormUtil.FindTreeNode(tview_object.TopNode, node);
+            string key = node.Add(n);
+            TreeNode newTreenode = new TreeNode();
+            newTreenode.Tag = n;
+            newTreenode.Text = n.type.GetTypeString();
+            t.Nodes.Add(newTreenode);
+
+            CreateGroupChild(n, key, target, target.Height, node.type == JSONType.Object ? true : false);
+
+            PanelReSort(target);
         }
 
         private void vToolStripMenuItem_Click(object sender, EventArgs e)
@@ -416,6 +443,19 @@ namespace JSONGUIEditor
                 if (child.Name == name) return child;
             }
             return null;
+        }
+
+        private void addTemplateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if(nowSelectedNode == null)return;
+            JSONNode n = (JSONNode)nowSelectedNode.Tag;
+            if(n.type != JSONType.Object && n.type != JSONType.Array)
+            {
+                MessageBox.Show("배열이나 오브젝트만 템플릿으로 추가할 수 있습니다");
+                return;
+            }
+            TemplateAdd templateAdd = new TemplateAdd(((JSONNode)nowSelectedNode.Tag).Stringify());
+            templateAdd.ShowDialog(this);
         }
     }
 }

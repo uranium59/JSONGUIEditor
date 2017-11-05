@@ -130,7 +130,7 @@ namespace JSONGUIEditor.Parser
             return rtn;
         }//들여쓰기 조절할 방법 추가해야 함.
 
-        public string[] GetAllKeys()
+        public override string[] GetAllKeys()
         {
             return _data.Keys.ToArray();
         }

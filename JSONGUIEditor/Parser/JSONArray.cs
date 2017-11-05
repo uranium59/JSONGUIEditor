@@ -113,6 +113,10 @@ namespace JSONGUIEditor.Parser
             rtn += ']';
             return rtn;
         }
+        public override string[] GetAllKeys()
+        {
+            return Enumerable.Range(0, _data.Count).Select(x => x.ToString()).ToArray();
+        }
         #endregion
     }
 }
