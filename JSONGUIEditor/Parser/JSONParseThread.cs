@@ -15,11 +15,10 @@ namespace JSONGUIEditor.Parser
         //if complexity is bigger than threshold, add thread into threadpool
         //public const int ThreadRunThreshold = 100;
         public const int ComplexityHighThreshold = 100000;
-        public const int ComplexityLowThreshold = 15000;
-        public const bool UsingThread = true;
+        public const int ComplexityLowThreshold = 25000;
         static private readonly Func<int, int, JSONNode>[] _parse = new Func<int, int, JSONNode>[128];
+        static public bool UsingThread = true;
         static public bool Initialized { get; set; } = false;
-        static public ParallelOptions pOption = new ParallelOptions() { MaxDegreeOfParallelism = -1, CancellationToken = System.Threading.CancellationToken.None };
         static public string s = "";
         static public bool Parsing = false;
         static public JSONException threadException { get; set; }
@@ -38,12 +37,11 @@ namespace JSONGUIEditor.Parser
         static public JSONNode Parse(ComplexTree<object> t)
         {
             JSONNode rtn = null;
-            int si = t.Index;//startindex
-            int ni = si + 1;//nowindex
+            int ni = t.StartPoint + 1;//nowindex
             int ti = 0;//tree index
             int nei = 0;
             int nextSeparator;
-            if (s[si] == '{')
+            if (s[t.StartPoint] == '{')
             {
                 rtn = new JSONObject();
                 if (t.separator.Count == 1)
@@ -187,46 +185,30 @@ namespace JSONGUIEditor.Parser
 
         static public void ParseThread(ComplexTree<object> t)
         {
-            JSONNode rtn = null;
-            
-            /*
-            foreach(ComplexTree<object> c in t)
-            {
-                if (c.Complex > ComplexityHighThreshold)
-                {
-                    c.task = new Thread(() => ParseThread(c));
-                    c.task.Start();
-                    //c.task = taskFactoryNode.StartNew(() => ParseThread(c, _s), TaskCreationOptions.DenyChildAttach);
-                }
-                else if (c.Complex > ComplexityLowThreshold)
-                {
-                    c.task = new Thread(() => Parse(c));
-                    c.task.Start();
-                    //c.task = taskFactoryNode.StartNew(() => Parse(c, _s), TaskCreationOptions.DenyChildAttach);
-                }
-            }*/
-
+            //Console.WriteLine("ParseStart " + t.Index);
             foreach (ComplexTree<object> c in t)
             {
-                if (c.EndPoint - c.Index > ComplexityHighThreshold && t.Count > 1)
+                if (c.EndPoint - c.StartPoint > ComplexityHighThreshold && t.Count > 1)
                 {
+                    //Console.WriteLine(c.EndPoint - c.StartPoint);
                     c.task = new Thread(() => ParseThread(c));
                     c.task.Start();
                 }
+                /*
                 else if (c.EndPoint - c.Index > ComplexityLowThreshold && t.Count > 1)
                 {
                     c.task = new Thread(() => Parse(c));
                     c.task.Start();
-                }
+                }*/
             }
 
-            int si = t.Index;//startindex
-            int ni = si + 1;//nowindex
+            JSONNode rtn = null;
+            int ni = t.StartPoint + 1;//nowindex
             int ti = 0;//tree index
             int nei = 0;
             int nextSeparator;
 
-            if (s[si] == '{')
+            if (s[t.StartPoint] == '{')
             {
                 rtn = new JSONObject();
                 t.node = rtn;
@@ -270,9 +252,9 @@ namespace JSONGUIEditor.Parser
                     }
 
                     ni = (nextSeparator + 1);
-                    nextSeparator = t.separator.Dequeue();
                     while (s[ni] <= ' ') ni++;//find next non whitespace
 
+                    nextSeparator = t.separator.Dequeue();
                     nei = nextSeparator - 1;
                     while (s[nei] <= ' ') --nei;//find end non whitespace
 
@@ -399,6 +381,7 @@ namespace JSONGUIEditor.Parser
                     rtn[tree.nodeIndex] = tree.node;
                 }
             }
+            //Console.WriteLine("ParseEnd " + t.Index);
         }//for multithread
 
         static private JSONNode CapsuleParse(ComplexTree<object> t, string _s)

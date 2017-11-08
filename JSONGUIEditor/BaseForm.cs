@@ -322,8 +322,18 @@ namespace JSONGUIEditor
             {
                 if (ReferenceEquals(pn[i], n))
                 {
+                    try
+                    {
+                        pn.Add(c.Text, n);
+                    }
+                    catch
+                    {
+                        MessageBox.Show("동일한 키는 사용할 수 없습니다");
+                        pn.Add(c.Text + "duplicated", n);
+                        c.Text = c.Text + "duplicated";
+                        return;
+                    }
                     pn.remove(i);
-                    pn.Add(c.Text, n);
                     break;
                 }
             }

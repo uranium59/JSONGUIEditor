@@ -9,7 +9,7 @@ namespace JSONGUIEditor.Parser
 {
     public class ComplexTree<V> : List<ComplexTree<V>>
     {
-        public int Index { get; set; }
+        public int StartPoint { get; set; }
         public int EndPoint { get; set; } = 0;
         public int nodeIndex { get; set; }
         public JSONNode node { get; set; }

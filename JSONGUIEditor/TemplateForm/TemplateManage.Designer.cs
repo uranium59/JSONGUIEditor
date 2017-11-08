@@ -32,19 +32,18 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.txtDesc = new System.Windows.Forms.TextBox();
             this.lsbTemp = new System.Windows.Forms.ListBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.btnTempDel = new System.Windows.Forms.Button();
-            this.txtTemp = new System.Windows.Forms.TextBox();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.txtDesc = new System.Windows.Forms.TextBox();
             this.btnColSave = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
             this.dgvResult = new System.Windows.Forms.DataGridView();
-            this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.dgcKey = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgctype = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgcValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -77,18 +76,6 @@
             this.splitContainer1.SplitterDistance = 235;
             this.splitContainer1.TabIndex = 0;
             // 
-            // txtDesc
-            // 
-            this.txtDesc.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtDesc.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtDesc.Location = new System.Drawing.Point(3, 3);
-            this.txtDesc.Multiline = true;
-            this.txtDesc.Name = "txtDesc";
-            this.txtDesc.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtDesc.Size = new System.Drawing.Size(329, 52);
-            this.txtDesc.TabIndex = 2;
-            // 
             // lsbTemp
             // 
             this.lsbTemp.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -106,7 +93,6 @@
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel1.Controls.Add(this.btnTempDel);
-            this.panel1.Controls.Add(this.txtTemp);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel1.Location = new System.Drawing.Point(0, 454);
             this.panel1.Name = "panel1";
@@ -116,23 +102,13 @@
             // btnTempDel
             // 
             this.btnTempDel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnTempDel.Location = new System.Drawing.Point(174, 1);
+            this.btnTempDel.Location = new System.Drawing.Point(160, 1);
             this.btnTempDel.Name = "btnTempDel";
-            this.btnTempDel.Size = new System.Drawing.Size(58, 23);
+            this.btnTempDel.Size = new System.Drawing.Size(72, 23);
             this.btnTempDel.TabIndex = 3;
             this.btnTempDel.Text = "Delete";
             this.btnTempDel.UseVisualStyleBackColor = true;
             this.btnTempDel.Click += new System.EventHandler(this.btnTempDel_Click);
-            // 
-            // txtTemp
-            // 
-            this.txtTemp.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtTemp.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtTemp.Location = new System.Drawing.Point(-1, 2);
-            this.txtTemp.Name = "txtTemp";
-            this.txtTemp.Size = new System.Drawing.Size(119, 21);
-            this.txtTemp.TabIndex = 0;
             // 
             // panel3
             // 
@@ -145,6 +121,18 @@
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(400, 60);
             this.panel3.TabIndex = 1;
+            // 
+            // txtDesc
+            // 
+            this.txtDesc.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtDesc.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtDesc.Location = new System.Drawing.Point(3, 3);
+            this.txtDesc.Multiline = true;
+            this.txtDesc.Name = "txtDesc";
+            this.txtDesc.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtDesc.Size = new System.Drawing.Size(329, 52);
+            this.txtDesc.TabIndex = 2;
             // 
             // btnColSave
             // 
@@ -193,10 +181,6 @@
             this.dgvResult.Size = new System.Drawing.Size(400, 410);
             this.dgvResult.TabIndex = 24;
             // 
-            // bindingSource1
-            // 
-            this.bindingSource1.DataSource = typeof(JSONGUIEditor.TemplateForm.JsonT);
-            // 
             // dgcKey
             // 
             this.dgcKey.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
@@ -229,6 +213,10 @@
             this.dgcValue.Name = "dgcValue";
             this.dgcValue.ReadOnly = true;
             // 
+            // bindingSource1
+            // 
+            this.bindingSource1.DataSource = typeof(JSONGUIEditor.TemplateForm.JsonT);
+            // 
             // TemplateManage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
@@ -245,7 +233,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
             this.panel2.ResumeLayout(false);
@@ -261,7 +248,6 @@
 		private System.Windows.Forms.ListBox lsbTemp;
 		private System.Windows.Forms.Panel panel1;
 		private System.Windows.Forms.Button btnTempDel;
-		private System.Windows.Forms.TextBox txtTemp;
 		private System.Windows.Forms.Panel panel3;
 		private System.Windows.Forms.Panel panel2;
 		private System.Windows.Forms.BindingSource bindingSource1;

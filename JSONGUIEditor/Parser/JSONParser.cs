@@ -36,9 +36,9 @@ namespace JSONGUIEditor.Parser
             {
                 CompTree = CalculateComplexity(s);
             }
-            catch (JSONSyntaxErrorNotClose e)
+            catch (JSONException e)
             {
-
+                ex(e);
             }
             if (CompTree == null || CompTree.Count == 0)
             {//파싱할 트리구조 자체가 없을 경우. 빈 오브젝트 하나를 반환한다.
@@ -104,7 +104,7 @@ namespace JSONGUIEditor.Parser
                             doublestring = false;
                             ComplexTree<object> child = new ComplexTree<object>()
                             {
-                                Index = i,
+                                StartPoint = i,
                                 parent = cursor
                             };
                             cursor.Add(child);
@@ -133,11 +133,6 @@ namespace JSONGUIEditor.Parser
                 throw new JSONSyntaxErrorNotClose(quoteposition);
             }
             return rtn;
-        }
-
-        static private JSONType ValueTypeDetect(string s)
-        {
-            return 0;
         }
         #endregion
 
@@ -179,7 +174,5 @@ namespace JSONGUIEditor.Parser
             return rtn + '\"';
         }
         #endregion
-
-
     }
 }
