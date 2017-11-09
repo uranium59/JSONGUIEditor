@@ -61,6 +61,7 @@
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
             this.splitContainer1.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
@@ -72,8 +73,9 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.panel3);
             this.splitContainer1.Panel2.Controls.Add(this.panel2);
-            this.splitContainer1.Size = new System.Drawing.Size(647, 483);
+            this.splitContainer1.Size = new System.Drawing.Size(739, 604);
             this.splitContainer1.SplitterDistance = 235;
+            this.splitContainer1.SplitterWidth = 5;
             this.splitContainer1.TabIndex = 0;
             // 
             // lsbTemp
@@ -82,10 +84,11 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lsbTemp.FormattingEnabled = true;
-            this.lsbTemp.ItemHeight = 12;
+            this.lsbTemp.ItemHeight = 15;
             this.lsbTemp.Location = new System.Drawing.Point(0, 0);
+            this.lsbTemp.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.lsbTemp.Name = "lsbTemp";
-            this.lsbTemp.Size = new System.Drawing.Size(233, 448);
+            this.lsbTemp.Size = new System.Drawing.Size(233, 559);
             this.lsbTemp.TabIndex = 1;
             this.lsbTemp.SelectedIndexChanged += new System.EventHandler(this.lsbTemp_SelectedIndexChanged);
             // 
@@ -94,17 +97,19 @@
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel1.Controls.Add(this.btnTempDel);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 454);
+            this.panel1.Location = new System.Drawing.Point(0, 569);
+            this.panel1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(233, 27);
+            this.panel1.Size = new System.Drawing.Size(233, 33);
             this.panel1.TabIndex = 0;
             // 
             // btnTempDel
             // 
             this.btnTempDel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnTempDel.Location = new System.Drawing.Point(160, 1);
+            this.btnTempDel.Location = new System.Drawing.Point(150, 1);
+            this.btnTempDel.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnTempDel.Name = "btnTempDel";
-            this.btnTempDel.Size = new System.Drawing.Size(72, 23);
+            this.btnTempDel.Size = new System.Drawing.Size(82, 29);
             this.btnTempDel.TabIndex = 3;
             this.btnTempDel.Text = "Delete";
             this.btnTempDel.UseVisualStyleBackColor = true;
@@ -117,9 +122,10 @@
             this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel3.Controls.Add(this.txtDesc);
             this.panel3.Controls.Add(this.btnColSave);
-            this.panel3.Location = new System.Drawing.Point(3, 419);
+            this.panel3.Location = new System.Drawing.Point(3, 525);
+            this.panel3.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(400, 60);
+            this.panel3.Size = new System.Drawing.Size(490, 74);
             this.panel3.TabIndex = 1;
             // 
             // txtDesc
@@ -127,19 +133,21 @@
             this.txtDesc.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtDesc.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtDesc.Location = new System.Drawing.Point(3, 3);
+            this.txtDesc.Location = new System.Drawing.Point(3, 4);
+            this.txtDesc.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtDesc.Multiline = true;
             this.txtDesc.Name = "txtDesc";
             this.txtDesc.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtDesc.Size = new System.Drawing.Size(329, 52);
+            this.txtDesc.Size = new System.Drawing.Size(409, 64);
             this.txtDesc.TabIndex = 2;
             // 
             // btnColSave
             // 
             this.btnColSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnColSave.Location = new System.Drawing.Point(334, 5);
+            this.btnColSave.Location = new System.Drawing.Point(415, 6);
+            this.btnColSave.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnColSave.Name = "btnColSave";
-            this.btnColSave.Size = new System.Drawing.Size(61, 48);
+            this.btnColSave.Size = new System.Drawing.Size(70, 60);
             this.btnColSave.TabIndex = 6;
             this.btnColSave.Text = "Save";
             this.btnColSave.UseVisualStyleBackColor = true;
@@ -151,9 +159,10 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel2.Controls.Add(this.dgvResult);
-            this.panel2.Location = new System.Drawing.Point(3, 3);
+            this.panel2.Location = new System.Drawing.Point(3, 4);
+            this.panel2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(400, 410);
+            this.panel2.Size = new System.Drawing.Size(490, 513);
             this.panel2.TabIndex = 0;
             // 
             // dgvResult
@@ -173,12 +182,13 @@
             this.dgvResult.DataSource = this.bindingSource1;
             this.dgvResult.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvResult.Location = new System.Drawing.Point(0, 0);
+            this.dgvResult.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.dgvResult.MultiSelect = false;
             this.dgvResult.Name = "dgvResult";
             this.dgvResult.RowHeadersVisible = false;
             this.dgvResult.RowTemplate.Height = 23;
             this.dgvResult.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvResult.Size = new System.Drawing.Size(400, 410);
+            this.dgvResult.Size = new System.Drawing.Size(490, 513);
             this.dgvResult.TabIndex = 24;
             // 
             // dgcKey
@@ -199,7 +209,7 @@
             this.dgctype.HeaderText = "type";
             this.dgctype.Name = "dgctype";
             this.dgctype.ReadOnly = true;
-            this.dgctype.Width = 54;
+            this.dgctype.Width = 64;
             // 
             // dgcValue
             // 
@@ -219,10 +229,11 @@
             // 
             // TemplateManage
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(647, 483);
+            this.ClientSize = new System.Drawing.Size(739, 604);
             this.Controls.Add(this.splitContainer1);
+            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "TemplateManage";

@@ -27,19 +27,24 @@ namespace JSONGUIEditor
             if (copyTarget == null)
                 return;
             Panel target;
+            
             if (nowSelectedNode == null)
             {
                 target = (Panel)MainPanel.Controls[2];
             }
             else
-                target = (Panel)nowSelectedNode.Controls[nowSelectedNode.Controls.Count -1];
-            JSONNode node = (JSONNode)target.Tag;
-            if(node.type != JSONType.Array && node.type != JSONType.Object)
             {
-                MessageBox.Show("선택된 대상은 오브젝트나 배열이 아닙니다");
-                return;
+                JSONNode tmpnode = (JSONNode)nowSelectedNode.Tag;
+                if (tmpnode is JSONObject || tmpnode is JSONArray)
+                    target = (Panel)nowSelectedNode.Controls[nowSelectedNode.Controls.Count - 1];
+                else
+                {
+                    MessageBox.Show("선택된 대상은 오브젝트나 배열이 아닙니다");
+                    return;
+                }
             }
-            if(copyTarget.type != JSONType.Array && copyTarget.type != JSONType.Object)
+            JSONNode node = (JSONNode)target.Tag;
+            if (copyTarget.type != JSONType.Array && copyTarget.type != JSONType.Object)
             {
                 JSONNode copied = copyTarget.CloneNode();
                 TreeNode t = JSONFormUtil.FindTreeNode(tview_object.TopNode, node);
@@ -66,9 +71,7 @@ namespace JSONGUIEditor
                     JSONNode copied = n;
                     TreeNode t = JSONFormUtil.FindTreeNode(tview_object.TopNode, node);
                     string key = node.Add(copied);
-                    TreeNode newTreenode = new TreeNode();
-                    newTreenode.Tag = copied;
-                    newTreenode.Text = copied.type.GetTypeString();
+                    TreeNode newTreenode = JSONFormUtil.TreeNodeMake(copied);
                     t.Nodes.Add(newTreenode);
 
                     CreateGroupChild(copied, key, target, target.Height, node.type == JSONType.Object ? true : false);
@@ -77,24 +80,38 @@ namespace JSONGUIEditor
                     return n;
                 }, JSONExceptionCatch, parseString);
             }
-
         }
 
         private void cutToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if(nowSelectedNode == null) return;
+            if (JSONParseThread.Parsing) return;
             JSONNode node = (JSONNode)nowSelectedNode.Tag;
-            copyTarget = node;
+            string parseString = node.Stringify();
+            JSON.Parse((n) =>
+            {
+                copyTarget = n;
+                return n;
+            }, JSONExceptionCatch, parseString);
             RemoveNode(nowSelectedNode, e);
         }
 
         private void copyToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (nowSelectedNode == null) return;
+            if (JSONParseThread.Parsing) return;
             JSONNode node = (JSONNode)nowSelectedNode.Tag;
-            copyTarget = node;
+            string parseString = node.Stringify();
+            JSON.Parse((n) =>
+            {
+                copyTarget = n;
+                return n;
+            }, JSONExceptionCatch, parseString);
         }
 
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if(nowSelectedNode == null) return;
             RemoveNode(nowSelectedNode, e);
         }
     }

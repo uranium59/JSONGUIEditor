@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26730.12
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JSONGUIEditor", "JSONGUIEditor\JSONGUIEditor.csproj", "{EE39035C-2080-4FC1-903D-4D175B7FE54C}"
 EndProject
@@ -48,10 +48,7 @@ Global
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DD813B74-92EF-49F1-88CD-0B04FB2800CE}
 	EndGlobalSection
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
-	EndGlobalSection
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DD813B74-92EF-49F1-88CD-0B04FB2800CE}
 	EndGlobalSection
 EndGlobal

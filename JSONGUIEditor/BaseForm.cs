@@ -203,9 +203,7 @@ namespace JSONGUIEditor
             JSONString s = new JSONString("type a string");
             string key = n.Add(s);
             TreeNode t = JSONFormUtil.FindTreeNode(tview_object.TopNode, n);
-            TreeNode newTreenode = new TreeNode();
-            newTreenode.Tag = s;
-            newTreenode.Text = s.type.GetTypeString();
+            TreeNode newTreenode = JSONFormUtil.TreeNodeMake(s);
             t.Nodes.Add(newTreenode);
             CreateGroupChild(s, key, p, p.Height - p.Margin.Bottom, (n is JSONObject)?true:false);
             PanelReSort(p);
@@ -285,8 +283,9 @@ namespace JSONGUIEditor
                     pNode[i] = newnode;
                     break;
                 }
-            }
+            } 
             Panel p = (Panel)c.Parent;
+            p.Tag = newnode;
 
             Control keybox = FindControl(p, "keybox");
             string original_key = keybox.Text;
@@ -311,6 +310,7 @@ namespace JSONGUIEditor
             {
                 p.Controls.Add(CreateValueTextBox(newnode));
             }
+            PanelReSort(p);
         }
 
         private void KeyChange(object sender, EventArgs e)
@@ -322,6 +322,7 @@ namespace JSONGUIEditor
             {
                 if (ReferenceEquals(pn[i], n))
                 {
+                    pn.remove(i);
                     try
                     {
                         pn.Add(c.Text, n);
@@ -333,7 +334,6 @@ namespace JSONGUIEditor
                         c.Text = c.Text + "duplicated";
                         return;
                     }
-                    pn.remove(i);
                     break;
                 }
             }
@@ -383,7 +383,7 @@ namespace JSONGUIEditor
                 {
                     if (cc[i] is Panel) break;
                 }
-                int yval = i == 0 ? 2 :cc[i].Location.Y;
+                int yval = i == 0 ? 2 :(i == cc.Count? cc.Count:cc[i].Location.Y);
                 for (; i < cc.Count; ++i)
                 {
                     cc[i].Location = new Point(cc[i].Location.X, yval);
@@ -429,9 +429,7 @@ namespace JSONGUIEditor
             JSONNode node = (JSONNode)target.Tag;
             TreeNode t = JSONFormUtil.FindTreeNode(tview_object.TopNode, node);
             string key = node.Add(n);
-            TreeNode newTreenode = new TreeNode();
-            newTreenode.Tag = n;
-            newTreenode.Text = n.type.GetTypeString();
+            TreeNode newTreenode = JSONFormUtil.TreeNodeMake(n);
             t.Nodes.Add(newTreenode);
 
             CreateGroupChild(n, key, target, target.Height, node.type == JSONType.Object ? true : false);

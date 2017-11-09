@@ -118,7 +118,7 @@ namespace JSONGUIEditor.Parser
         }
         public override string Stringify(JSONStringifyOption o)
         {
-            string rtn = "{";
+            string rtn = "{ ";
             foreach(var e in _data)
             {
                 if (!o.addnullobject && e.Value == null) continue;

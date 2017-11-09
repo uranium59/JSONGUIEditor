@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace JSONGUIEditor.Parser
 {
+    using JSONGUIEditor.Parser.State;
     public class JSONNull :JSONNode
     {
+        public override JSONType type { get; } = JSONType.Null;
         public JSONNull()
         {
         }

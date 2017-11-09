@@ -50,10 +50,11 @@ namespace JSONGUIEditor
         {
             SaveFileDialog s = new SaveFileDialog();
             s.Filter = "JSON File|*.json";
-            s.CheckFileExists = true;
+            s.CheckFileExists = false;
             s.ShowDialog();
             if (s.FileName != "")
             {
+                filePosition = s.FileName;
                 File.WriteAllText(filePosition, RootNode.Stringify());
             }
         }
@@ -68,10 +69,11 @@ namespace JSONGUIEditor
             {
                 SaveFileDialog s = new SaveFileDialog();
                 s.Filter = "JSON File|*.json";
-                s.CheckFileExists = true;
+                s.CheckFileExists = false;
                 s.ShowDialog();
                 if (s.FileName != "")
                 {
+                    filePosition = s.FileName;
                     File.WriteAllText(filePosition, RootNode.Stringify());
                 }
             }

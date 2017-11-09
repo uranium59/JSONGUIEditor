@@ -36,39 +36,43 @@
             // errorLabel
             // 
             this.errorLabel.AutoSize = true;
-            this.errorLabel.Location = new System.Drawing.Point(12, 201);
+            this.errorLabel.Location = new System.Drawing.Point(14, 251);
             this.errorLabel.Name = "errorLabel";
-            this.errorLabel.Size = new System.Drawing.Size(38, 12);
+            this.errorLabel.Size = new System.Drawing.Size(45, 15);
             this.errorLabel.TabIndex = 1;
             this.errorLabel.Text = "label1";
             // 
             // CancelButton
             // 
-            this.CancelButton.Location = new System.Drawing.Point(197, 227);
+            this.CancelButton.Location = new System.Drawing.Point(225, 284);
+            this.CancelButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.CancelButton.Name = "CancelButton";
-            this.CancelButton.Size = new System.Drawing.Size(75, 23);
+            this.CancelButton.Size = new System.Drawing.Size(86, 29);
             this.CancelButton.TabIndex = 3;
             this.CancelButton.Text = "Cancel";
             this.CancelButton.UseVisualStyleBackColor = true;
+            this.CancelButton.Click += new System.EventHandler(this.CancelButton_Click);
             // 
             // textbox
             // 
             this.textbox.Dock = System.Windows.Forms.DockStyle.Top;
             this.textbox.Location = new System.Drawing.Point(0, 0);
+            this.textbox.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textbox.Name = "textbox";
-            this.textbox.Size = new System.Drawing.Size(284, 189);
+            this.textbox.Size = new System.Drawing.Size(325, 235);
             this.textbox.TabIndex = 4;
             this.textbox.Text = "";
             // 
             // ErrorShowForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 262);
+            this.ClientSize = new System.Drawing.Size(325, 328);
             this.ControlBox = false;
             this.Controls.Add(this.textbox);
             this.Controls.Add(this.CancelButton);
             this.Controls.Add(this.errorLabel);
+            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "ErrorShowForm";

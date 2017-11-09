@@ -28,7 +28,7 @@ namespace JSONGUIEditor.Parser
 
         #endregion
 
-        public IEnumerator GetEnumerator()
+        public override IEnumerator GetEnumerator()
         {
             foreach(JSONNode n in _data)
             {
@@ -84,6 +84,7 @@ namespace JSONGUIEditor.Parser
                     value = new JSONNull();
                 if (i < 0 || i >= _data.Count)
                     return;
+                value.parent = this;
                 _data[i] = value;
             }
         }
@@ -102,7 +103,7 @@ namespace JSONGUIEditor.Parser
         }
         public override string Stringify(JSONStringifyOption o)
         {
-            string rtn = "[";
+            string rtn = "[ ";
             foreach(JSONNode n in _data)
             {
                 if (!o.addnullobject && n == null) continue;

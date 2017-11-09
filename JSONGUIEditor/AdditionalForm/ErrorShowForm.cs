@@ -23,6 +23,12 @@ namespace JSONGUIEditor.AdditionalForm
             textbox.Text = s.Substring(startPosition, Math.Min(201, s.Length - startPosition));
             textbox.Select(100, 101);
             textbox.SelectionColor = Color.Red;
+            errorLabel.Text = e.Message;
+        }
+
+        private void CancelButton_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }
